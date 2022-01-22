@@ -20,16 +20,25 @@ public class HardwareMap {
         public MotorControllerGroup flywheel;
 
         public ShooterHardware(){
-            rightFlywheel = new WPI_TalonFX(1); 
+            rightFlywheel = new WPI_TalonFX(2); 
             leftFlywheel = new WPI_TalonFX(1);
             leftFlywheel.setInverted(true);
             flywheel = new MotorControllerGroup(rightFlywheel,leftFlywheel);
 
         }
 
-    };
+    }
+    
+    public class InputHardware {
+        public XboxController driveController;
+        public InputHardware() {
+            driveController = new XboxController(0);
+        }
+    }
+    ;
     
     public ShooterHardware shooterHardware;
+    public InputHardware inputHardware;
 
 
     public HardwareMap() {

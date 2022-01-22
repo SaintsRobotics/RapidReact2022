@@ -5,11 +5,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.shooterSubsystem;
 
 public class ShooterCommand extends CommandBase {
+
+  private shooterSubsystem m_shooterSubsystem;
+
   /** Creates a new ShooterCommand. */
-  public ShooterCommand() {
+  public ShooterCommand(shooterSubsystem shooterSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_shooterSubsystem = shooterSubsystem;
+    addRequirements(m_shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -18,11 +24,15 @@ public class ShooterCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_shooterSubsystem.setFlywheelPower(0.2);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_shooterSubsystem.setFlywheelPower(0);
+  }
 
   // Returns true when the command should end.
   @Override

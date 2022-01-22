@@ -6,10 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.HardwareMap.ShooterHardware;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.shooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -21,11 +23,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   private static final ShooterHardware ShooterHardware = null;
 
-  // The robot's subsystems and commands are defined here...
+  // The robot's subsystems and commands are defined here...\
+  public HardwareMap hardwareMap = new HardwareMap();
   private final shooterSubsystem m_shooterSubsystem = new shooterSubsystem(ShooterHardware);
 
-  private final ShooterCommand m_ShooterCommand = new ShooterCommand();
-
+  private final ShooterCommand m_ShooterCommand = new ShooterCommand(m_shooterSubsystem);
+  private XboxController m_driveController = hardwareMap.inputHardware.driveController;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -38,7 +41,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+
+    new JoystickButton(m_driveController, Button.kStart.value)
+                      .whenHeld(new ShooterCommand(m_shooterSubsystem));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -47,6 +54,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_ShooterCommand;
+    return null;
   }
 }
