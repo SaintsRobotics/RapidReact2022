@@ -53,23 +53,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(), m_rearLeft.getState(), m_frontRight.getState(),
         m_rearRight.getState());
 
-    SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
-
-    SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
-
-    SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
-    SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
-    SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
-
-    SmartDashboard.putNumber("Gyro Angle", Utils.normalizeAngle(m_gyro.getAngle(), 360));
-
-    SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headPidController.getSetpoint()));
+    printToDashboard();
   }
 
   /**
@@ -77,7 +61,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    *
    * @return The pose.
    */
-  public Pose2d getPose() {
+  public Pose2d getCurrentPose() {
     return m_odometry.getPoseMeters();
   }
 
@@ -130,5 +114,36 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.reset();
+  }
+  
+  public SwerveDriveKinematics getKinematics() {
+    return SwerveConstants.kDriveKinematics;
+  }
+
+  public void setSwerveModuleStates(SwerveModuleState[] swerveModuleStates) { 
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_rearLeft.setDesiredState(swerveModuleStates[1]);
+    m_frontRight.setDesiredState(swerveModuleStates[2]);
+    m_rearRight.setDesiredState(swerveModuleStates[3]);
+
+  }
+  private void printToDashboard () {
+    SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
+
+    SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
+
+    SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
+    SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
+    SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
+
+    SmartDashboard.putNumber("Gyro Angle", Utils.normalizeAngle(m_gyro.getAngle(), 360));
+
+    SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headPidController.getSetpoint()));
   }
 }
