@@ -1,11 +1,12 @@
 # RapidReact2022
 
-Commit Message Standard:
-<p>
-<ul>
-  <li>feat: [description of feature]</li>
-  <li>fix: [description of bugfix] </li>
-  <li>refactor: [description of refactor]</li>
-  <li>chore: [description of chore] - documentation changes, typo corrections, etc.</li>
-  <li>Remember to add your name at the end of a commit when not using your own account.</li>
-</ul>
+### Commit Message Prefix
+
+* **docs**: Documentation only changes
+* **feat**: A new feature
+* **fix**: A bug fix
+* **refactor**: A code change that neither fixes a bug nor adds a feature
+* **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+* **test**: Adding missing tests or correcting existing tests
+
+Remember to add your name at the end of a commit when not using your own account.
