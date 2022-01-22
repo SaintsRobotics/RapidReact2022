@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.trajectoryJSON = trajectoryJSON;
     m_robotContainer.trajectory  = trajectory;
-    
+
     m_robotContainer.m_hardwareMap.swerveDrivetrainHardware.gyro.calibrate();
 
     }
