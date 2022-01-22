@@ -42,8 +42,8 @@ public class RobotContainer {
 
   private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
 
-  private String trajectoryJSON = "output/Path.wpilib.json";
-  private Trajectory trajectory = new Trajectory();
+  public String trajectoryJSON;
+  public Trajectory trajectory;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -94,12 +94,7 @@ public class RobotContainer {
 
   public Command pathFollowCommand() {
 
-    try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    } catch (IOException ex) {
-            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-    }
+    
 
     PIDController xPID = new PIDController(Constants.SwerveConstants.kMaxSpeedMetersPerSecond, 0, 0);
     PIDController yPID = new PIDController(Constants.SwerveConstants.kMaxSpeedMetersPerSecond, 0, 0);

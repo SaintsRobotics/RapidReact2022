@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Utils;
@@ -30,12 +31,15 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   private final PIDController m_headPidController = new PIDController(-0.01, 0, 0);
 
+  private final Field2d m_field = new Field2d();
+
   /**
    * Creates a new {@link SwerveDriveSubsystem}.
    * 
    * @param hardware the hardware for the {@link SwerveDriveSubsystem}
    */
   public SwerveDriveSubsystem(SwerveDrivetrainHardware hardware) {
+    SmartDashboard.putData("Field", m_field);
     m_frontLeft = hardware.frontLeft;
     m_rearLeft = hardware.rearLeft;
     m_frontRight = hardware.frontRight;
@@ -54,6 +58,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         m_rearRight.getState());
 
     printToDashboard();
+    m_field.setRobotPose(m_odometry.getPoseMeters());
   }
 
   /**

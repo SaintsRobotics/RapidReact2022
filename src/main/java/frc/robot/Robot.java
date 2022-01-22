@@ -33,9 +33,23 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
+    String trajectoryJSON = "output/S.wpilib.json";
+    Trajectory trajectory = new Trajectory();
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+      trajectory  = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+
     m_robotContainer = new RobotContainer();
-    m_robotContainer.m_hardwareMap.swerveDrivetrainHardware.gyro.calibrate();
+
+    m_robotContainer.trajectoryJSON = trajectoryJSON;
+    m_robotContainer.trajectory  = trajectory;
     
+    m_robotContainer.m_hardwareMap.swerveDrivetrainHardware.gyro.calibrate();
+
+    }
   }
 
   /**
