@@ -39,17 +39,17 @@ public class Robot extends TimedRobot {
     System.out.println("running Robot Init");
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-      trajectory  = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
 
-    m_robotContainer = new RobotContainer();
+      m_robotContainer = new RobotContainer();
 
-    m_robotContainer.trajectoryJSON = trajectoryJSON;
-    /*Code crashes after the breakpoint at line 48 is countinued */
-    m_robotContainer.trajectory  = trajectory;
+      m_robotContainer.trajectoryJSON = trajectoryJSON;
+      /* Code crashes after the breakpoint at line 48 is countinued */
+      m_robotContainer.trajectory = trajectory;
 
-    m_robotContainer.m_hardwareMap.swerveDrivetrainHardware.gyro.calibrate();
+      m_robotContainer.m_hardwareMap.swerveDrivetrainHardware.gyro.calibrate();
 
     }
   }
