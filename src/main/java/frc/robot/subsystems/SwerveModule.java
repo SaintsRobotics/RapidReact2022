@@ -20,6 +20,8 @@ public class SwerveModule {
 
   private final AbsoluteEncoder m_turningEncoder;
 
+  // TODO Tune PIDs.
+  private final PIDController m_drivePIDController = new PIDController(0.1, 0, 0);
   private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
 
   /**
@@ -69,7 +71,9 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, m_turningEncoder.get());
 
-    final double driveOutput = state.speedMetersPerSecond;
+    final double driveOutput = m_drivePIDController.calculate(m_driveMotor.getEncoder().getVelocity()
+        * ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio,
+        state.speedMetersPerSecond);
     final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get().getRadians(),
         state.angle.getRadians());
 
