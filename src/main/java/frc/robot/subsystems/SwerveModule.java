@@ -4,21 +4,22 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.AbsoluteEncoder;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.HardwareMap.SwerveModuleHardware;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
 public class SwerveModule {
   private final CANSparkMax m_driveMotor;
   private final CANSparkMax m_turningMotor;
 
-  private final AbsoluteEncoder m_turningEncoder;
+  private final CANCoder m_turningEncoder;
 
   private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
 
@@ -31,7 +32,7 @@ public class SwerveModule {
    * @param turningEncoder absolute encoder for the swerve module
    */
   public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor,
-      AbsoluteEncoder turningEncoder) {
+      CANCoder turningEncoder) {
     m_driveMotor = driveMotor;
     m_turningMotor = turningMotor;
 
@@ -49,7 +50,7 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity() * ModuleConstants.kWheelCircumferenceMeters
-        / 60 / ModuleConstants.kDrivingGearRatio, m_turningEncoder.get());
+        / 60 / ModuleConstants.kDrivingGearRatio, Rotation2d.fromDegrees(m_turningEncoder.getPosition()));
   }
 
   /**
@@ -67,10 +68,10 @@ public class SwerveModule {
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, m_turningEncoder.get());
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getPosition() * Math.PI / 180));
 
     final double driveOutput = state.speedMetersPerSecond;
-    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get().getRadians(),
+    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition() * Math.PI / 180,
         state.angle.getRadians());
 
     m_driveMotor.set(driveOutput);

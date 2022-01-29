@@ -4,7 +4,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.WPI_CallbackHelper;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -16,9 +20,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+  private WPI_CANCoder encoder;
 
-  private RobotContainer m_robotContainer;
+
+  // private RobotContainer m_robotContainer;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -26,8 +31,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_robotContainer = new RobotContainer();
-    m_robotContainer.m_hardwareMap.swerveDrivetrainHardware.gyro.calibrate();
+    // m_robotContainer = new RobotContainer();
+    // m_robotContainer.m_hardwareMap.swerveDrivetrainHardware.gyro.calibrate();
+    encoder = new WPI_CANCoder(20);
+    encoder.configMagnetOffset(-34);
   }
 
   /**
@@ -41,7 +48,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
+    // CommandScheduler.getInstance().run();
+    SmartDashboard.putNumber("cancoder absolute position", encoder.getAbsolutePosition());
+    SmartDashboard.putNumber("voltage", encoder.getBusVoltage());
+    SmartDashboard.putNumber("cancoder position", encoder.getPosition());
+    System.out.println("printing to smartdash");
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -59,11 +70,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
   }
 
   /** This function is called periodically during autonomous. */
@@ -73,9 +80,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+
   }
 
   /** This function is called periodically during operator control. */

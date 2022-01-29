@@ -1,6 +1,9 @@
 package frc.robot;
 
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -13,16 +16,16 @@ public class HardwareMap {
     public class SwerveDrivetrainHardware {
         public SwerveModule frontLeft = new SwerveModule(swerveModuleHardware,
                 swerveModuleHardware.frontLeftDriveMotor, swerveModuleHardware.frontLeftTurningMotor,
-                swerveModuleHardware.frontLeftAbsoluteEncoder);
+                swerveModuleHardware.frontLeftEncoder);
         public SwerveModule rearLeft = new SwerveModule(swerveModuleHardware,
                 swerveModuleHardware.rearLeftDriveMotor, swerveModuleHardware.rearLeftTurningMotor,
-                swerveModuleHardware.rearLeftAbsoluteEncoder);
+                swerveModuleHardware.rearLeftEncoder);
         public SwerveModule frontRight = new SwerveModule(swerveModuleHardware,
                 swerveModuleHardware.frontRightDriveMotor, swerveModuleHardware.frontRightTurningMotor,
-                swerveModuleHardware.frontRightAbsoluteEncoder);
+                swerveModuleHardware.frontRightEncoder);
         public SwerveModule rearRight = new SwerveModule(swerveModuleHardware,
                 swerveModuleHardware.rearRightDriveMotor, swerveModuleHardware.rearRightTurningMotor,
-                swerveModuleHardware.rearRightAbsoluteEncoder);
+                swerveModuleHardware.rearRightEncoder);
 
         public AHRS gyro = new AHRS();
     }
@@ -33,34 +36,26 @@ public class HardwareMap {
                 SwerveConstants.kFrontLeftTurningMotorPort, MotorType.kBrushless);
         public CANSparkMax frontLeftDriveMotor = new CANSparkMax(
                 SwerveConstants.kFrontLeftDriveMotorPort, MotorType.kBrushless);
-        public AbsoluteEncoder frontLeftAbsoluteEncoder = new AbsoluteEncoder(
-                SwerveConstants.kFrontLeftTurningEncoderPort, SwerveConstants.kFrontLeftTurningEncoderReversed,
-                SwerveConstants.kFrontLeftTurningEncoderOffset);
+        public WPI_CANCoder frontLeftEncoder = new WPI_CANCoder(SwerveConstants.kFrontLeftTurningEncoderPort);
 
         public CANSparkMax rearLeftTurningMotor = new CANSparkMax(
                 SwerveConstants.kRearLeftTurningMotorPort, MotorType.kBrushless);
         public CANSparkMax rearLeftDriveMotor = new CANSparkMax(
                 SwerveConstants.kRearLeftDriveMotorPort, MotorType.kBrushless);
-        public AbsoluteEncoder rearLeftAbsoluteEncoder = new AbsoluteEncoder(
-                SwerveConstants.kRearLeftTurningEncoderPort, SwerveConstants.kRearLeftTurningEncoderReversed,
-                SwerveConstants.kRearLeftTurningEncoderOffset);
+        public WPI_CANCoder rearLeftEncoder = new WPI_CANCoder(SwerveConstants.kRearLeftTurningEncoderPort);
 
         public CANSparkMax frontRightTurningMotor = new CANSparkMax(
                 SwerveConstants.kFrontRightTurningMotorPort, MotorType.kBrushless);
         public CANSparkMax frontRightDriveMotor = new CANSparkMax(
                 SwerveConstants.kFrontRightDriveMotorPort, MotorType.kBrushless);
-        public AbsoluteEncoder frontRightAbsoluteEncoder = new AbsoluteEncoder(
-                SwerveConstants.kFrontRightTurningEncoderPort, SwerveConstants.kFrontRightTurningEncoderReversed,
-                SwerveConstants.kFrontRightTurningEncoderOffset);
+        public WPI_CANCoder frontRightEncoder = new WPI_CANCoder(SwerveConstants.kFrontRightTurningEncoderPort);
 
         public CANSparkMax rearRightTurningMotor = new CANSparkMax(
                 SwerveConstants.kRearRightTurningMotorPort, MotorType.kBrushless);
         public CANSparkMax rearRightDriveMotor = new CANSparkMax(
                 SwerveConstants.kRearRightDriveMotorPort, MotorType.kBrushless);
-        public AbsoluteEncoder rearRightAbsoluteEncoder = new AbsoluteEncoder(
-                SwerveConstants.kRearRightTurningEncoderPort, SwerveConstants.kRearRightTurningEncoderReversed,
-                SwerveConstants.kRearRightTurningEncoderOffset);
-    }
+        public WPI_CANCoder rearRightEncoder = new WPI_CANCoder(SwerveConstants.kRearRightTurningEncoderPort);
+        }
 
     public SwerveModuleHardware swerveModuleHardware;
     public SwerveDrivetrainHardware swerveDrivetrainHardware;

@@ -22,36 +22,36 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  */
 public final class Constants {
   public static final class SwerveConstants {
-    public static final int kFrontLeftDriveMotorPort = 8;
-    public static final int kRearLeftDriveMotorPort = 2;
-    public static final int kFrontRightDriveMotorPort = 4;
-    public static final int kRearRightDriveMotorPort = 6;
+    public static final int kFrontLeftDriveMotorPort = 16;
+    public static final int kRearLeftDriveMotorPort = 15;
+    public static final int kFrontRightDriveMotorPort = 13;
+    public static final int kRearRightDriveMotorPort = 10;
 
-    public static final int kFrontLeftTurningMotorPort = 1;
-    public static final int kRearLeftTurningMotorPort = 3;
-    public static final int kFrontRightTurningMotorPort = 5;
-    public static final int kRearRightTurningMotorPort = 7;
+    public static final int kFrontLeftTurningMotorPort = 14;
+    public static final int kRearLeftTurningMotorPort = 11;
+    public static final int kFrontRightTurningMotorPort = 12;
+    public static final int kRearRightTurningMotorPort = 3;
 
-    public static final int kFrontLeftTurningEncoderPort = 0;
-    public static final int kRearLeftTurningEncoderPort = 3;
-    public static final int kFrontRightTurningEncoderPort = 1;
-    public static final int kRearRightTurningEncoderPort = 2;
+    public static final int kFrontLeftTurningEncoderPort = 17;
+    public static final int kRearLeftTurningEncoderPort = 19;
+    public static final int kFrontRightTurningEncoderPort = 18;
+    public static final int kRearRightTurningEncoderPort = 20;
 
     public static final boolean kFrontLeftTurningEncoderReversed = true;
     public static final boolean kRearLeftTurningEncoderReversed = true;
     public static final boolean kFrontRightTurningEncoderReversed = true;
     public static final boolean kRearRightTurningEncoderReversed = true;
 
-    public static final double kFrontLeftTurningEncoderOffset = -0.81;
-    public static final double kRearLeftTurningEncoderOffset = 0.93;
-    public static final double kFrontRightTurningEncoderOffset = -1.19;
-    public static final double kRearRightTurningEncoderOffset = -2.55;
+    public static final double kFrontLeftTurningEncoderOffset = 0;
+    public static final double kRearLeftTurningEncoderOffset = 0;
+    public static final double kFrontRightTurningEncoderOffset = 0;
+    public static final double kRearRightTurningEncoderOffset = 0;
 
     /** Distance between centers of right and left wheels on robot. */
-    public static final double kTrackWidth = 0.5;
+    public static final double kTrackWidth = 0.762;
 
     /** Distance between front and back wheels on robot. */
-    public static final double kWheelBase = 0.67;
+    public static final double kWheelBase = 0.762;
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2), new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
