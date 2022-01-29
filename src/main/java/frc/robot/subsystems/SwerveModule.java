@@ -21,7 +21,7 @@ public class SwerveModule {
   private final AbsoluteEncoder m_turningEncoder;
 
   // TODO Tune PIDs.
-  private final PIDController m_drivePIDController = new PIDController(0.1, 0, 0);
+  private final PIDController m_drivePIDController = new PIDController(0.3, 0.8, 0);
   private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
 
   /**
@@ -39,6 +39,7 @@ public class SwerveModule {
 
     m_turningEncoder = turningEncoder;
 
+    m_drivePIDController.setIntegratorRange(0, 1);
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_driveMotor.setIdleMode(IdleMode.kBrake);
     m_turningMotor.setIdleMode(IdleMode.kBrake);
