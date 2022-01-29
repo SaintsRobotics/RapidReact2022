@@ -31,7 +31,7 @@ public class shooterSubsystem extends SubsystemBase {
   } 
 
   public double getFlywheelPower(){
-    return m_rightFlywheel.getSelectedSensorVelocity();
+    return m_rightFlywheel.getMotorOutputPercent();
     // not sure if this is correct way to get Velocity 
   }
 
