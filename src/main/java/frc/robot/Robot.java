@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
@@ -34,24 +35,24 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    String trajectoryJSON = "output/S.wpilib.json";
+    String trajectoryJSON = "output/S.wpilib.json"; // PathWeaver\output\S.wpilib.json
     Trajectory trajectory = new Trajectory();
     System.out.println("running Robot Init");
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+      // Path trajectoryPath = Paths.get(trajectoryJSON); 
+       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+      // trajectory = new Trajectory();
     } catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-
-      m_robotContainer = new RobotContainer();
-
-      m_robotContainer.trajectoryJSON = trajectoryJSON;
-      /* Code crashes after the breakpoint at line 48 is countinued */
-      m_robotContainer.trajectory = trajectory;
-
-      m_robotContainer.m_hardwareMap.swerveDrivetrainHardware.gyro.calibrate();
-
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());   
     }
+    m_robotContainer = new RobotContainer();
+
+    m_robotContainer.trajectoryJSON = trajectoryJSON;
+      /* Code crashes after the breakpoint at line 48 is countinued */
+    m_robotContainer.trajectory = trajectory;
+
+    m_robotContainer.m_hardwareMap.swerveDrivetrainHardware.gyro.calibrate();
   }
 
   /**

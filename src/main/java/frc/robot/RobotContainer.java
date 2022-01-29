@@ -87,9 +87,7 @@ public class RobotContainer {
     return pathFollowCommand();
   }
 
-  public Command pathFollowCommand() {
-
-    
+  public Command pathFollowCommand() {    
 
     PIDController xPID = new PIDController(Constants.SwerveConstants.kMaxSpeedMetersPerSecond, 0, 0);
     PIDController yPID = new PIDController(Constants.SwerveConstants.kMaxSpeedMetersPerSecond, 0, 0);
@@ -105,5 +103,5 @@ public class RobotContainer {
                     m_swerveDriveSubsystem.getKinematics(), xPID, yPID, rotPID,
                     m_swerveDriveSubsystem::setSwerveModuleStates, m_swerveDriveSubsystem);
 
-}
+  }
 }
