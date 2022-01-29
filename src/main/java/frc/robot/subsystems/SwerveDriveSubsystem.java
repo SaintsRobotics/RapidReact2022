@@ -58,6 +58,16 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
     SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
 
+    SmartDashboard.putNumber("Desired Module Speed Front Left", m_frontLeft.getDesiredState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Desired Module Speed Rear Left", m_rearLeft.getDesiredState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Desired Module Speed Front Right", m_frontRight.getDesiredState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Desired Module Speed Rear Right", m_rearRight.getDesiredState().speedMetersPerSecond);
+
+    SmartDashboard.putNumber("Module Speed Difference Front Left", m_frontLeft.getDesiredState().speedMetersPerSecond / m_frontLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Difference Rear Left", m_rearLeft.getDesiredState().speedMetersPerSecond / m_rearLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Difference Front Right", m_frontRight.getDesiredState().speedMetersPerSecond / m_frontRight.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Difference Rear Right", m_rearRight.getDesiredState().speedMetersPerSecond / m_rearRight.getState().speedMetersPerSecond);
+
     SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
     SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
@@ -109,10 +119,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
       SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
 
-      m_frontLeft.setDesiredState(swerveModuleStates[0]);
-      m_rearLeft.setDesiredState(swerveModuleStates[1]);
-      m_frontRight.setDesiredState(swerveModuleStates[2]);
-      m_rearRight.setDesiredState(swerveModuleStates[3]);
+      m_frontLeft.setDesiredState(swerveModuleStates[0], 1.12);
+      m_rearLeft.setDesiredState(swerveModuleStates[1], 1.11);
+      m_frontRight.setDesiredState(swerveModuleStates[2], 1.2);
+      m_rearRight.setDesiredState(swerveModuleStates[3], 1.23);
     }
 
     SmartDashboard.putNumber("Desired X", xSpeed);

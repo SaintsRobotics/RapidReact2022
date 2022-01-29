@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.AbsoluteEncoder;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.HardwareMap.SwerveModuleHardware;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
@@ -21,8 +22,13 @@ public class SwerveModule {
   private final AbsoluteEncoder m_turningEncoder;
 
   // TODO Tune PIDs.
-  private final PIDController m_drivePIDController = new PIDController(0.3, 0.8, 0.025);
+  static double Ku = 0.9;
+  static double Tu = 0.38;
+  private static final double f = 3*Ku*Tu/40;
+  private final PIDController m_drivePIDController = new PIDController(0.6*Ku, 1.2*Ku/Tu, 0.03);
   private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
+
+  private SwerveModuleState m_state = new SwerveModuleState();
 
   /**
    * Creates a new {@link SwerveModule}.
@@ -62,6 +68,8 @@ public class SwerveModule {
   public void setDesiredState() {
     m_turningMotor.set(0);
     m_driveMotor.set(0);
+
+    m_state = new SwerveModuleState();
   }
 
   /**
@@ -69,16 +77,20 @@ public class SwerveModule {
    *
    * @param desiredState Desired state with speed and angle.
    */
-  public void setDesiredState(SwerveModuleState desiredState) {
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, m_turningEncoder.get());
+  public void setDesiredState(SwerveModuleState desiredState, double boost) {
+    m_state = desiredState; // SwerveModuleState.optimize(desiredState, m_turningEncoder.get());
 
     final double driveOutput = m_drivePIDController.calculate(m_driveMotor.getEncoder().getVelocity()
         * ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio,
-        state.speedMetersPerSecond);
+        m_state.speedMetersPerSecond);
     final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get().getRadians(),
-        state.angle.getRadians());
+        m_state.angle.getRadians());
 
-    m_driveMotor.set(driveOutput);
+    m_driveMotor.set(m_state.speedMetersPerSecond * boost / SwerveConstants.kMaxSpeedMetersPerSecond);
     m_turningMotor.set(turnOutput);
+  }
+
+  public SwerveModuleState getDesiredState() {
+    return m_state;
   }
 }
