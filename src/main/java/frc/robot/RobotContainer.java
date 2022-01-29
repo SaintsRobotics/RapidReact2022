@@ -44,7 +44,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     new JoystickButton(m_driveController, Button.kStart.value)
-                      .whenHeld(new ShooterCommand(m_shooterSubsystem));
+                      .toggleWhenPressed(new ShooterCommand(m_shooterSubsystem));
   }
 
   /**
