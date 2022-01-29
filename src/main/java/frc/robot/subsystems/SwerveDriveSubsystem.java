@@ -84,7 +84,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Method to drive the robot using joystick info.
+   * Method to drive the robot.
    *
    * @param xSpeed        Speed of the robot in the x direction in meters per
    *                      second (forward). Positive is forward.
