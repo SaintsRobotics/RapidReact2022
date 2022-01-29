@@ -21,7 +21,7 @@ public class SwerveModule {
   private final AbsoluteEncoder m_turningEncoder;
 
   // TODO Tune PIDs.
-  private final PIDController m_drivePIDController = new PIDController(0.3, 0.8, 0);
+  private final PIDController m_drivePIDController = new PIDController(0.3, 0.8, 0.025);
   private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
 
   /**
