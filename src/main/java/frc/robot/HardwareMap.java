@@ -61,13 +61,21 @@ public class HardwareMap {
                 SwerveConstants.kRearRightTurningEncoderPort, SwerveConstants.kRearRightTurningEncoderReversed,
                 SwerveConstants.kRearRightTurningEncoderOffset);
     }
-
+// TODO Make ClimberArmHardware have actual variables when robot is built 
+    public class ClimberArmHardware {
+        public CANSparkMax RightClimbingMotor = new CANSparkMax(
+                SwerveConstants.kFrontLeftTurningMotorPort, MotorType.kBrushless);
+        public CANSparkMax LeftClimbingMotor = new CANSparkMax(
+                SwerveConstants.kFrontRightTurningMotorPort, MotorType.kBrushless);
+    }
     public SwerveModuleHardware swerveModuleHardware;
     public SwerveDrivetrainHardware swerveDrivetrainHardware;
+    public ClimberArmHardware climberArmHardware;
 
     /** Creates a new {@link HardwareMap}. */
     public HardwareMap() {
         swerveModuleHardware = new SwerveModuleHardware();
         swerveDrivetrainHardware = new SwerveDrivetrainHardware();
+        climberArmHardware = new ClimberArmHardware();
     }
 }
