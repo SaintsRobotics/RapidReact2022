@@ -16,9 +16,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * <p>
  * It is advised to statically import this class (or one of its inner classes)
  * wherever the constants are needed, to reduce verbosity.
- * 
- * <p>
- * TODO update these values when the new robot is built
  */
 public final class Constants {
   public static final class SwerveConstants {
@@ -59,11 +56,12 @@ public final class Constants {
 
     public static final double kMaxSpeedMetersPerSecond = 3.66;
 
+    // TODO update value with new robot
     public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
   }
 
   public static final class ModuleConstants {
-    public static final double kWheelCircumferenceMeters = 0.1 * Math.PI;
+    public static final double kWheelDiameterMeters = 0.1;
 
     /** Gear ratio between the motor and the wheel. */
     public static final double kDrivingGearRatio = 8.14;

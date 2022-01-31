@@ -48,7 +48,7 @@ public class SwerveModule {
 
     // converts default units to meters per second
     m_driveMotor.getEncoder().setVelocityConversionFactor(
-        ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio);
+        ModuleConstants.kWheelDiameterMeters * Math.PI / 60 / ModuleConstants.kDrivingGearRatio);
     m_driveMotor.setIdleMode(IdleMode.kBrake);
     m_driveMotor.setInverted(driveMotorReversed);
 
