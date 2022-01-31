@@ -28,30 +28,32 @@ public class SwerveModule {
   /**
    * Creates a new {@link SwerveModule}.
    * 
-   * @param hardware       the hardware for the swerve module
-   * @param driveMotor     motor that drives the wheel
-   * @param turningMotor   motor that changes the angle of the wheel
-   * @param turningEncoder absolute encoder for the swerve module
+   * @param hardware             The hardware for the swerve module.
+   * @param driveMotor           Motor that drives the wheel.
+   * @param driveMotorReversed   Whether the drive motor is reversed.
+   * @param turningMotor         Motor that changes the angle of the wheel.
+   * @param turningEncoder       Absolute encoder for the swerve module.
+   * @param turningEncoderOffset Offset of the turning encoder in degrees.
    */
-  public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor,
-      CANCoder turningEncoder, double turningEncoderOffset, boolean isInverted) {
+  public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, boolean driveMotorReversed,
+      CANSparkMax turningMotor, CANCoder turningEncoder, double turningEncoderOffset) {
     m_driveMotor = driveMotor;
     m_turningMotor = turningMotor;
-
     m_turningEncoder = turningEncoder;
-    m_turningEncoder.configMagnetOffset(turningEncoderOffset);
-
-    // converts default units to radians
-    m_turningEncoder.configFeedbackCoefficient(Math.toRadians(0.087890625), "radians", SensorTimeBase.PerSecond);
-
-    m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-    m_driveMotor.setIdleMode(IdleMode.kBrake);
-    m_driveMotor.setInverted(isInverted);
 
     // converts default units to meters per second
     m_driveMotor.getEncoder().setVelocityConversionFactor(
         ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio);
+    m_driveMotor.setIdleMode(IdleMode.kBrake);
+    m_driveMotor.setInverted(driveMotorReversed);
+
     m_turningMotor.setIdleMode(IdleMode.kBrake);
+
+    // converts default units to radians
+    m_turningEncoder.configFeedbackCoefficient(Math.toRadians(0.087890625), "radians", SensorTimeBase.PerSecond);
+    m_turningEncoder.configMagnetOffset(turningEncoderOffset);
+
+    m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   /**
