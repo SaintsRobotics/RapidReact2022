@@ -35,8 +35,13 @@ public class SwerveModule {
    * @param turningEncoder       Absolute encoder for the swerve module.
    * @param turningEncoderOffset Offset of the turning encoder in degrees.
    */
-  public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, boolean driveMotorReversed,
-      CANSparkMax turningMotor, CANCoder turningEncoder, double turningEncoderOffset) {
+  public SwerveModule(
+      SwerveModuleHardware hardware,
+      CANSparkMax driveMotor,
+      boolean driveMotorReversed,
+      CANSparkMax turningMotor,
+      CANCoder turningEncoder,
+      double turningEncoderOffset) {
     m_driveMotor = driveMotor;
     m_turningMotor = turningMotor;
     m_turningEncoder = turningEncoder;
