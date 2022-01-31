@@ -59,7 +59,10 @@ public final class Constants {
     // TODO update value with new robot
     public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
 
-    /** Time in seconds for the robot to stop turning from max speed. */
+    /**
+     * Time in seconds for the robot to stop turning from max speed.
+     * TODO update value with new robot.
+     */
     public static final double kTurningStopTime = 0.2;
   }
 
