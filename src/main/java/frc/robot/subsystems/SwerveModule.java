@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.SensorTimeBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
@@ -40,6 +41,9 @@ public class SwerveModule {
     m_turningEncoder = turningEncoder;
     m_turningEncoder.configMagnetOffset(turningEncoderOffset);
 
+    // converts default units to radians
+    m_turningEncoder.configFeedbackCoefficient(Math.toRadians(0.087890625), "radians", SensorTimeBase.PerSecond);
+
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_driveMotor.setIdleMode(IdleMode.kBrake);
     m_driveMotor.setInverted(isInverted);
@@ -53,7 +57,7 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity() * ModuleConstants.kWheelCircumferenceMeters
-        / 60 / ModuleConstants.kDrivingGearRatio, Rotation2d.fromDegrees(m_turningEncoder.getAbsolutePosition()));
+        / 60 / ModuleConstants.kDrivingGearRatio, new Rotation2d(m_turningEncoder.getAbsolutePosition()));
   }
 
   /**
@@ -71,10 +75,10 @@ public class SwerveModule {
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(m_turningEncoder.getAbsolutePosition()));
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getAbsolutePosition()));
 
     final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
-    final double turnOutput = m_turningPIDController.calculate(Math.toRadians(m_turningEncoder.getAbsolutePosition()),
+    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getAbsolutePosition(),
         state.angle.getRadians());
 
     m_driveMotor.set(driveOutput);
