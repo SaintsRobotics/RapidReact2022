@@ -47,6 +47,10 @@ public class SwerveModule {
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_driveMotor.setIdleMode(IdleMode.kBrake);
     m_driveMotor.setInverted(isInverted);
+
+    // converts default units to meters per second
+    m_driveMotor.getEncoder().setVelocityConversionFactor(
+        ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio);
     m_turningMotor.setIdleMode(IdleMode.kBrake);
   }
 
@@ -56,8 +60,8 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity() * ModuleConstants.kWheelCircumferenceMeters
-        / 60 / ModuleConstants.kDrivingGearRatio, new Rotation2d(m_turningEncoder.getAbsolutePosition()));
+    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(),
+        new Rotation2d(m_turningEncoder.getAbsolutePosition()));
   }
 
   /**
@@ -75,7 +79,8 @@ public class SwerveModule {
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getAbsolutePosition()));
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+        new Rotation2d(m_turningEncoder.getAbsolutePosition()));
 
     final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
     final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getAbsolutePosition(),
