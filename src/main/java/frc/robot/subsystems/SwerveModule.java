@@ -9,10 +9,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.HardwareMap.SwerveModuleHardware;
-import edu.wpi.first.math.geometry.Rotation2d;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
 public class SwerveModule {
@@ -32,14 +33,16 @@ public class SwerveModule {
    * @param turningEncoder absolute encoder for the swerve module
    */
   public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor,
-      CANCoder turningEncoder) {
+      CANCoder turningEncoder, double turningEncoderOffset, boolean isInverted) {
     m_driveMotor = driveMotor;
     m_turningMotor = turningMotor;
 
     m_turningEncoder = turningEncoder;
+    m_turningEncoder.configMagnetOffset(turningEncoderOffset);
 
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_driveMotor.setIdleMode(IdleMode.kBrake);
+    m_driveMotor.setInverted(isInverted);
     m_turningMotor.setIdleMode(IdleMode.kBrake);
   }
 
@@ -50,7 +53,7 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity() * ModuleConstants.kWheelCircumferenceMeters
-        / 60 / ModuleConstants.kDrivingGearRatio, Rotation2d.fromDegrees(m_turningEncoder.getPosition()));
+        / 60 / ModuleConstants.kDrivingGearRatio, Rotation2d.fromDegrees(m_turningEncoder.getAbsolutePosition()));
   }
 
   /**
@@ -68,10 +71,10 @@ public class SwerveModule {
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getPosition() * Math.PI / 180));
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(m_turningEncoder.getAbsolutePosition()));
 
-    final double driveOutput = state.speedMetersPerSecond;
-    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition() * Math.PI / 180,
+    final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
+    final double turnOutput = m_turningPIDController.calculate(Math.toRadians(m_turningEncoder.getAbsolutePosition()),
         state.angle.getRadians());
 
     m_driveMotor.set(driveOutput);

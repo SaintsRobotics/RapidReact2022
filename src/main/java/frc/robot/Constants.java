@@ -37,15 +37,15 @@ public final class Constants {
     public static final int kFrontRightTurningEncoderPort = 18;
     public static final int kRearRightTurningEncoderPort = 20;
 
-    public static final boolean kFrontLeftTurningEncoderReversed = true;
-    public static final boolean kRearLeftTurningEncoderReversed = true;
-    public static final boolean kFrontRightTurningEncoderReversed = true;
-    public static final boolean kRearRightTurningEncoderReversed = true;
+    public static final boolean kFrontLeftDriveMotorReversed = false;
+    public static final boolean kRearLeftDriveMotorReversed = false;
+    public static final boolean kFrontRightDriveMotorReversed = true;
+    public static final boolean kRearRightDriveMotorReversed = true;
 
-    public static final double kFrontLeftTurningEncoderOffset = 0;
-    public static final double kRearLeftTurningEncoderOffset = 0;
-    public static final double kFrontRightTurningEncoderOffset = 0;
-    public static final double kRearRightTurningEncoderOffset = 0;
+    public static final double kFrontLeftTurningEncoderOffset = -327;
+    public static final double kRearLeftTurningEncoderOffset = -261;
+    public static final double kFrontRightTurningEncoderOffset = -253;
+    public static final double kRearRightTurningEncoderOffset = -207;
 
     /** Distance between centers of right and left wheels on robot. */
     public static final double kTrackWidth = 0.762;
@@ -57,16 +57,16 @@ public final class Constants {
         new Translation2d(kWheelBase / 2, kTrackWidth / 2), new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2), new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxSpeedMetersPerSecond = 3.66;
 
     public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
   }
 
   public static final class ModuleConstants {
-    public static final double kWheelCircumferenceMeters = 0.3;
+    public static final double kWheelCircumferenceMeters = 0.1 * Math.PI;
 
     /** Gear ratio between the motor and the wheel. */
-    public static final double kDrivingGearRatio = 8.33;
+    public static final double kDrivingGearRatio = 8.14;
   }
 
   public static final class OIConstants {

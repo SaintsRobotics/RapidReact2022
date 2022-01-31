@@ -1,9 +1,7 @@
 package frc.robot;
 
-import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -16,16 +14,16 @@ public class HardwareMap {
     public class SwerveDrivetrainHardware {
         public SwerveModule frontLeft = new SwerveModule(swerveModuleHardware,
                 swerveModuleHardware.frontLeftDriveMotor, swerveModuleHardware.frontLeftTurningMotor,
-                swerveModuleHardware.frontLeftEncoder);
+                swerveModuleHardware.frontLeftEncoder, SwerveConstants.kFrontLeftTurningEncoderOffset, SwerveConstants.kFrontLeftDriveMotorReversed);
         public SwerveModule rearLeft = new SwerveModule(swerveModuleHardware,
                 swerveModuleHardware.rearLeftDriveMotor, swerveModuleHardware.rearLeftTurningMotor,
-                swerveModuleHardware.rearLeftEncoder);
+                swerveModuleHardware.rearLeftEncoder, SwerveConstants.kRearLeftTurningEncoderOffset, SwerveConstants.kRearLeftDriveMotorReversed);
         public SwerveModule frontRight = new SwerveModule(swerveModuleHardware,
                 swerveModuleHardware.frontRightDriveMotor, swerveModuleHardware.frontRightTurningMotor,
-                swerveModuleHardware.frontRightEncoder);
+                swerveModuleHardware.frontRightEncoder, SwerveConstants.kFrontRightTurningEncoderOffset, SwerveConstants.kFrontRightDriveMotorReversed);
         public SwerveModule rearRight = new SwerveModule(swerveModuleHardware,
                 swerveModuleHardware.rearRightDriveMotor, swerveModuleHardware.rearRightTurningMotor,
-                swerveModuleHardware.rearRightEncoder);
+                swerveModuleHardware.rearRightEncoder, SwerveConstants.kRearRightTurningEncoderOffset, SwerveConstants.kRearRightDriveMotorReversed);
 
         public AHRS gyro = new AHRS();
     }
