@@ -4,13 +4,18 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -36,9 +41,6 @@ public class RobotContainer {
       m_hardwareMap.swerveDrivetrainHardware);
 
   private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
-
-  public String trajectoryJSON;
-  public Trajectory trajectory;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -87,21 +89,36 @@ public class RobotContainer {
     return pathFollowCommand();
   }
 
-  public Command pathFollowCommand() {    
+  public Command pathFollowCommand() {
+    String trajectoryJSON = "output/l.wpilib.json";
+    Trajectory trajectory = new Trajectory();
 
-    PIDController xPID = new PIDController(Constants.SwerveConstants.kMaxSpeedMetersPerSecond, 0, 0);
-    PIDController yPID = new PIDController(Constants.SwerveConstants.kMaxSpeedMetersPerSecond, 0, 0);
-    ProfiledPIDController rotPID = new ProfiledPIDController(-Math.PI * 6, 0.0, 0.0,
-                    new TrapezoidProfile.Constraints(
-                                    Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond,
-                                    2.6));
-    xPID.setTolerance(.05);
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+    }
+
+    PIDController xPID = new PIDController(1, 0, 0);
+    PIDController yPID = new PIDController(1, 0, 0);
+    ProfiledPIDController rotPID = new ProfiledPIDController(1, 0.0, 0.0,
+        new TrapezoidProfile.Constraints(Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 2.6));
+    xPID.setTolerance(0.05);
     yPID.setTolerance(0.05);
     rotPID.setTolerance(Math.PI / 24);
     rotPID.enableContinuousInput(-Math.PI, Math.PI);
-    return new SwerveControllerCommand(trajectory, m_swerveDriveSubsystem::getCurrentPose,
-                    m_swerveDriveSubsystem.getKinematics(), xPID, yPID, rotPID,
-                    m_swerveDriveSubsystem::setSwerveModuleStates, m_swerveDriveSubsystem);
 
+    m_swerveDriveSubsystem.resetOdometry(trajectory.getInitialPose());
+
+    return new SwerveControllerCommand(
+        trajectory,
+        m_swerveDriveSubsystem::getCurrentPose,
+        SwerveConstants.kDriveKinematics,
+        xPID,
+        yPID,
+        rotPID,
+        m_swerveDriveSubsystem::setSwerveModuleStates,
+        m_swerveDriveSubsystem);
   }
 }

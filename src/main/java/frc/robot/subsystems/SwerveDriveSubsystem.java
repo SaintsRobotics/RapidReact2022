@@ -120,18 +120,14 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public void zeroHeading() {
     m_gyro.reset();
   }
-  
-  public SwerveDriveKinematics getKinematics() {
-    return SwerveConstants.kDriveKinematics;
-  }
 
   public void setSwerveModuleStates(SwerveModuleState[] swerveModuleStates) { 
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_rearLeft.setDesiredState(swerveModuleStates[1]);
     m_frontRight.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
-
   }
+
   private void printToDashboard () {
     SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
     SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
