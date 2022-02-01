@@ -16,9 +16,16 @@ public class ClimberArmSubsystem extends SubsystemBase {
     m_right = hardware.RightClimbingMotor;
     m_left = hardware.LeftClimbingMotor;
 }
-  public void climb(double ) {
-
+  public void climb(double m_desiredSpeed) {
+    m_right.set(m_desiredSpeed);
+    m_left.set(m_desiredSpeed);
   }
+
+  public void unclimb() {
+    m_right.set(0);
+    m_left.set(0);
+  }
+
   @Override
   public void periodic() {
     

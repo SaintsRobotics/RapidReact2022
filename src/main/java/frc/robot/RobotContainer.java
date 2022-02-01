@@ -15,7 +15,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.ClimberArmCommand;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.ClimberArmSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -31,6 +33,9 @@ public class RobotContainer {
       m_hardwareMap.swerveDrivetrainHardware);
 
   private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+  private XboxController m_operatorController = new XboxController(OIConstants.kDriverControllerPort);
+  private ClimberArmSubsystem m_climberSubsystem = new ClimberArmSubsystem(m_hardwareMap.climberArmHardware);
+  private ClimberArmCommand m_climberCommand = new ClimberArmCommand(m_climberSubsystem, m_operatorController);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -48,6 +53,8 @@ public class RobotContainer {
         * SwerveConstants.kMaxAngularSpeedRadiansPerSecond * 0.2;
     m_swerveDriveSubsystem.setDefaultCommand(
         new SwerveDriveCommand(m_swerveDriveSubsystem, x, y, rot, () -> m_driveController.getRightBumper()));
+
+    m_climberSubsystem.setDefaultCommand(m_climberCommand);
 
     SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
     SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
