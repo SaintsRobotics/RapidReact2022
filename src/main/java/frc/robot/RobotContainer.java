@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.MoveArmCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -34,7 +35,10 @@ public class RobotContainer {
       m_hardwareMap.swerveDrivetrainHardware);
 
   private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+  private XboxController m_operatorController = new XboxController(OIConstants.kDriverControllerPort);
+
   private IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_hardwareMap.intakeHardware);
+  private MoveArmCommand m_moveArmCommand = new MoveArmCommand(m_intakeSubsystem, m_operatorController);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -52,6 +56,7 @@ public class RobotContainer {
         * SwerveConstants.kMaxAngularSpeedRadiansPerSecond * 0.2;
     m_swerveDriveSubsystem.setDefaultCommand(
         new SwerveDriveCommand(m_swerveDriveSubsystem, x, y, rot, () -> m_driveController.getRightBumper()));
+    m_intakeSubsystem.setDefaultCommand(m_moveArmCommand);
 
     SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
     SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
@@ -73,9 +78,10 @@ public class RobotContainer {
     new JoystickButton(m_driveController, Button.kStart.value).whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(),
         m_swerveDriveSubsystem);
 
-    new JoystickButton(m_driveController, Button.kRightBumper.value).whileHeld(new IntakeCommand(m_intakeSubsystem));
+    new JoystickButton(m_operatorController, Button.kRightBumper.value).whileHeld(new IntakeCommand(m_intakeSubsystem));
 
-    new JoystickButton(m_driveController, Button.kLeftBumper.value).whileHeld(new OuttakeCommand(m_intakeSubsystem));
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whileHeld(new OuttakeCommand(m_intakeSubsystem));
+
 
     
   }
