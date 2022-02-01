@@ -74,6 +74,15 @@ public final class Constants {
     public static final double kDrivingGearRatio = 8.33;
   }
 
+  public static final class IntakeConstants {
+    // Speed [-1, 1] at which to run the intake motor.
+    public static final double INTAKE_SPEED = 0.5;
+
+    public static final int WHEELS_PORT = 25;
+    public static final int ARM_PORT = 24;
+}
+
+
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kJoystickDeadzone = 0.11;

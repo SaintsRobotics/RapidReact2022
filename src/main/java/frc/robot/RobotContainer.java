@@ -15,7 +15,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -31,6 +34,7 @@ public class RobotContainer {
       m_hardwareMap.swerveDrivetrainHardware);
 
   private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+  private IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_hardwareMap.intakeHardware);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -68,6 +72,12 @@ public class RobotContainer {
     // Zeroes the heading when the start button is pressed
     new JoystickButton(m_driveController, Button.kStart.value).whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(),
         m_swerveDriveSubsystem);
+
+    new JoystickButton(m_driveController, Button.kRightBumper.value).whileHeld(new IntakeCommand(m_intakeSubsystem));
+
+    new JoystickButton(m_driveController, Button.kLeftBumper.value).whileHeld(new OuttakeCommand(m_intakeSubsystem));
+
+    
   }
 
   /**

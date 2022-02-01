@@ -2,8 +2,12 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.CAN;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.SwerveModule;
 
@@ -70,12 +74,25 @@ public class HardwareMap {
         SwerveConstants.kRearRightTurningEncoderOffset);
   }
 
+  public class IntakeHardware {
+    public CANSparkMax intakeController;
+    public CANSparkMax armController;
+
+    public IntakeHardware() {
+            intakeController = new CANSparkMax(25, null);
+            armController = new CANSparkMax(24, null);
+            armController.setIdleMode(IdleMode.kBrake);
+    }
+}
+
   public SwerveModuleHardware swerveModuleHardware;
   public SwerveDrivetrainHardware swerveDrivetrainHardware;
+  public IntakeHardware intakeHardware;
 
   /** Creates a new {@link HardwareMap}. */
   public HardwareMap() {
     swerveModuleHardware = new SwerveModuleHardware();
     swerveDrivetrainHardware = new SwerveDrivetrainHardware();
+    intakeHardware = new IntakeHardware();
   }
 }
