@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.FeederCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveArmCommand;
 import frc.robot.commands.OuttakeCommand;
@@ -81,7 +82,8 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kRightBumper.value).whileHeld(new IntakeCommand(m_intakeSubsystem));
 
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whileHeld(new OuttakeCommand(m_intakeSubsystem));
-
+    
+    new JoystickButton(m_operatorController, Button.kA.value).toggleWhenPressed(new FeederCommand(m_intakeSubsystem));
 
     
   }
