@@ -77,10 +77,12 @@ public class HardwareMap {
   public class IntakeHardware {
     public CANSparkMax intakeController;
     public CANSparkMax armController;
+    public CANSparkMax feederController;
 
     public IntakeHardware() {
             intakeController = new CANSparkMax(25, null);
             armController = new CANSparkMax(24, null);
+            feederController = new CANSparkMax(23, null);
             armController.setIdleMode(IdleMode.kBrake);
     }
 }
