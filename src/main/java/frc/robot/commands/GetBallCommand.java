@@ -35,7 +35,7 @@ public class GetBallCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_swerveSubsystem.move(0, 0, m_pid.calculate(Limelight.getX()), true);
+    m_swerveSubsystem.move(m_pid.calculate(Limelight.getX()), m_pid.calculate(Limelight.getY()), 0, true);
   }
 
   // Called once the command ends or is interrupted.
