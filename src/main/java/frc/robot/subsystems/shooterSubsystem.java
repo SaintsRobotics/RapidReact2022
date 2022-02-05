@@ -4,38 +4,30 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap.ShooterHardware;
 
 public class shooterSubsystem extends SubsystemBase {
   /** Creates a new shooterSubsystem. */
-  
-  private MotorControllerGroup m_flywheelMotor; 
-  private double m_targetSpeed;
-  private double m_flywheelSpeed; 
-  private TalonFX m_rightFlywheel;
-  
 
+  private WPI_TalonFX m_flywheelMotor;
+  private double m_targetSpeed;
+  private double m_flywheelSpeed;
 
   public shooterSubsystem(ShooterHardware shooterHardware) {
-    m_flywheelMotor = shooterHardware.flywheel; 
-    m_rightFlywheel = shooterHardware.rightFlywheel;
-    
+    m_flywheelMotor = shooterHardware.flywheel;
+
   }
 
   public void setFlywheelPower(double power) {
     this.m_targetSpeed = power;
-  } 
-
-  public double getFlywheelPower(){
-    return m_rightFlywheel.getMotorOutputPercent();
-    // not sure if this is correct way to get Velocity 
   }
 
-
+  public double getFlywheelPower() {
+    return m_flywheelMotor.get();
+  }
 
   @Override
   public void periodic() {

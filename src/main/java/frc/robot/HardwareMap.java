@@ -6,9 +6,6 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.CANCoder;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.XboxController;
@@ -18,21 +15,12 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 public class HardwareMap {
 
     public class ShooterHardware{
-
-        public  WPI_TalonFX rightFlywheel;
-        public  WPI_TalonFX leftFlywheel;
-        public MotorControllerGroup flywheel; 
+        public  WPI_TalonFX flywheel;
         public double velocity;
         
 
         public ShooterHardware(){
-            
-            rightFlywheel = new WPI_TalonFX(2);
-            leftFlywheel = new WPI_TalonFX(1);
-            leftFlywheel.setInverted(true);
-            flywheel = new MotorControllerGroup(rightFlywheel,leftFlywheel); 
-            velocity = rightFlywheel.getSelectedSensorVelocity();
-            
+            flywheel = new WPI_TalonFX(0);          
 
         }
 
