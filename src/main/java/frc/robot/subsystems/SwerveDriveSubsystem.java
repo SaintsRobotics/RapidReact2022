@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -16,6 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.Utils;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.HardwareMap.SwerveDrivetrainHardware;
@@ -164,10 +167,26 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Desired X", xSpeed);
     SmartDashboard.putNumber("Desired Y", ySpeed);
     SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
+
+    double degreeRotationSpeed = Math.toDegrees(rotation);
+    double degressSinceLastTick = degreeRotationSpeed * Robot.kDefaultPeriod;
+    printSimulatedGyro(Math.toDegrees(currentAngle) + degressSinceLastTick);
   }
 
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.reset();
   }
+
+  /**
+   * Prints the estimated gyro value to the simulator.
+   * 
+   * @param printHeading The estimated gyro value.
+   */
+  public void printSimulatedGyro(double printHeading) {
+    int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+    SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+    angle.set(printHeading);
+  }
+
 }
