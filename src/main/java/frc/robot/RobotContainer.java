@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -12,6 +15,15 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.LimelightAimingCommand;
+import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.SwerveDriveSubsystem;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -22,29 +34,67 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
 
-  // The robot's subsystems and commands are defined here...\
-  private HardwareMap hardwareMap = new HardwareMap();
-  private ShooterHardware ShooterHardware = hardwareMap.shooterHardware;
+  // The robot's subsystems and commands are defined here...
+  private HardwareMap m_hardwareMap = new HardwareMap();
+  private ShooterHardware ShooterHardware = m_hardwareMap.shooterHardware;
   private ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(ShooterHardware);
 
   private ShooterCommand m_ShooterCommand = new ShooterCommand(m_shooterSubsystem);
-  private XboxController m_driveController = hardwareMap.inputHardware.driveController;
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  private XboxController m_driveController = m_hardwareMap.inputHardware.driveController;
+  private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
+      m_hardwareMap.swerveDrivetrainHardware);
+
+   /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
-    // Configure the button bindings
     configureButtonBindings();
+    DoubleSupplier x = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getLeftY(), OIConstants.kJoystickDeadzone))
+        * SwerveConstants.kMaxSpeedMetersPerSecond;
+    DoubleSupplier y = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getLeftX(), OIConstants.kJoystickDeadzone))
+        * SwerveConstants.kMaxSpeedMetersPerSecond;
+    DoubleSupplier rot = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getRightX(), OIConstants.kJoystickDeadzone))
+        * SwerveConstants.kMaxAngularSpeedRadiansPerSecond;
+    m_swerveDriveSubsystem.setDefaultCommand(
+        new SwerveDriveCommand(m_swerveDriveSubsystem, x, y, rot, () -> m_driveController.getRightBumper()));
+
+    SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
+    SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
+    SmartDashboard.putNumber("Controller Rot", -m_driveController.getRightY());
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(m_driveController, Button.kStart.value)
+    new JoystickButton(m_driveController, Button.kY.value)
                       .toggleWhenPressed(new ShooterCommand(m_shooterSubsystem));
+    // Resets the odometry when the back button is pressed.
+    new JoystickButton(m_driveController, Button.kBack.value)
+        .whenPressed(() -> m_swerveDriveSubsystem.resetOdometry(new Pose2d()), m_swerveDriveSubsystem);
+
+    // Zeroes the heading when the start button is pressed
+    new JoystickButton(m_driveController, Button.kStart.value).whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(),
+        m_swerveDriveSubsystem);
+
+    // Aims at target while the A button is held.
+    new JoystickButton(m_driveController, Button.kA.value)
+        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 0));
+
+    // Aims at blue balls while the B button is held.
+    new JoystickButton(m_driveController, Button.kB.value)
+        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 1));
+
+    // Aims at red balls while the X button is held.
+    new JoystickButton(m_driveController, Button.kX.value)
+        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 2));
   }
 
   /**
@@ -53,7 +103,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
     return null;
   }
 }
