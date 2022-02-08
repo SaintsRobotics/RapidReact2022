@@ -20,7 +20,7 @@ public class HardwareMap {
         
 
         public ShooterHardware(){
-            flywheel = new WPI_TalonFX(0);          
+            flywheel = new WPI_TalonFX(8);          
 
         }
 
