@@ -7,8 +7,10 @@ package frc.robot;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,6 +20,7 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -74,14 +77,21 @@ public class RobotContainer {
     new JoystickButton(m_driveController, Button.kA.value)
         .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 0));
 
-    // Aims at blue balls while the B button is held.
-    new JoystickButton(m_driveController, Button.kB.value)
-        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 1));
+        int limelightPipeline;
+        if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+          limelightPipeline = 1;
+          
+        //Aims at red balls by default if no alliance color is found (invalid color)
+        } else { 
+          limelightPipeline = 2;
+        
+        }
+        new JoystickButton(m_driveController, Button.kB.value)
+          .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, limelightPipeline));
+  } 
+  
+ 
 
-    // Aims at red balls while the X button is held.
-    new JoystickButton(m_driveController, Button.kX.value)
-        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 2));
-  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
