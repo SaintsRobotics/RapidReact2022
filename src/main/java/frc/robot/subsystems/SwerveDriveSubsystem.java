@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Utils;
@@ -29,9 +30,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   private final AHRS m_gyro;
   private final SwerveDriveOdometry m_odometry;
 
+  private double time;
+
   // TODO tune pid
   private final PIDController m_headingCorrectionPID = new PIDController(1.5, 0, 0);
   private final Timer m_headingCorrectionTimer;
+
+  private final Field2d m_field2d;
 
   /**
    * Creates a new {@link SwerveDriveSubsystem}.
@@ -43,6 +48,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_rearLeft = hardware.rearLeft;
     m_frontRight = hardware.frontRight;
     m_rearRight = hardware.rearRight;
+    
 
     m_gyro = hardware.gyro;
 
@@ -52,12 +58,20 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_headingCorrectionPID.setSetpoint(Utils.normalizeAngle(m_gyro.getRotation2d().getRadians(), 2 * Math.PI));
     m_headingCorrectionTimer = new Timer();
     m_headingCorrectionTimer.start();
+
+    m_field2d = new Field2d();
+
+    time = 0;
   }
 
   @Override
   public void periodic() {
-    m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(), m_rearLeft.getState(), m_frontRight.getState(),
+    if (time > 10) {
+      m_field2d.setRobotPose(m_odometry.getPoseMeters());
+      m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(), m_rearLeft.getState(), m_frontRight.getState(),
         m_rearRight.getState());
+    }
+    time++;
 
     SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
     SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
