@@ -91,10 +91,12 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    /* The plan for the autonomous mode:
-    1. Go to and pick up ball.
-    2. Turn around and get into position for shooting the ball.
-    3. Shoot the ball.
+    /* The plan for two ball autonomous mode:
+    Starting Position: facing towards the outside (describe more)
+    1. Go to ball (drive forwards ___ meters)
+    2. Run intake for __ seconds
+    2. Turn around and get into position for shooting the ball (drive ____, turn _____)
+    3. Shoot the ball
     What we need to figure out:
     1. Numbers in meters
     */
