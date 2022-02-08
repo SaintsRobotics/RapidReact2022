@@ -93,7 +93,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Gyro Angle", Utils.normalizeAngle(m_gyro.getAngle(), 360));
 
     SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
-    SmartDashboard.putNumber("Heading Correction Timer", m_headingCorrectionTimer.get());
+    SmartDashboard.putNumber("Heading Correction Timer", m_headingCorrectionTimer.get()); SmartDashboard.putData("Field", m_field2d);
   }
 
   /**

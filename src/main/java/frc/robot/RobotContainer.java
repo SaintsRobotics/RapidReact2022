@@ -27,60 +27,59 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  public HardwareMap m_hardwareMap = new HardwareMap();
-  private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
-      m_hardwareMap.swerveDrivetrainHardware);
+    public HardwareMap m_hardwareMap = new HardwareMap();
+    private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
+            m_hardwareMap.swerveDrivetrainHardware);
 
-  private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+    private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-  public RobotContainer() {
-    configureButtonBindings();
-    DoubleSupplier x = () -> Utils
-        .oddSquare(Utils.deadZone(-m_driveController.getLeftY(), OIConstants.kJoystickDeadzone))
-        * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
-    DoubleSupplier y = () -> Utils
-        .oddSquare(Utils.deadZone(-m_driveController.getLeftX(), OIConstants.kJoystickDeadzone))
-        * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
-    DoubleSupplier rot = () -> Utils
-        .oddSquare(Utils.deadZone(-m_driveController.getRightX(), OIConstants.kJoystickDeadzone))
-        * SwerveConstants.kMaxAngularSpeedRadiansPerSecond * 0.2;
-    m_swerveDriveSubsystem.setDefaultCommand(
-        new SwerveDriveCommand(m_swerveDriveSubsystem, x, y, rot, () -> m_driveController.getRightBumper()));
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        configureButtonBindings();
+        DoubleSupplier x = () -> Utils
+                .oddSquare(Utils.deadZone(-m_driveController.getLeftY(), OIConstants.kJoystickDeadzone))
+                * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
+        DoubleSupplier y = () -> Utils
+                .oddSquare(Utils.deadZone(-m_driveController.getLeftX(), OIConstants.kJoystickDeadzone))
+                * SwerveConstants.kMaxSpeedMetersPerSecond * 0.2;
+        DoubleSupplier rot = () -> Utils
+                .oddSquare(Utils.deadZone(-m_driveController.getRightX(), OIConstants.kJoystickDeadzone))
+                * SwerveConstants.kMaxAngularSpeedRadiansPerSecond * 0.2;
+        m_swerveDriveSubsystem.setDefaultCommand(
+                new SwerveDriveCommand(m_swerveDriveSubsystem, x, y, rot, () -> m_driveController.getRightBumper()));
 
-    SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
-    SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
-    SmartDashboard.putNumber("Controller Rot", -m_driveController.getRightY());
-  }
+        SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
+        SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
+        SmartDashboard.putNumber("Controller Rot", -m_driveController.getRightY());
+    }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by instantiating a {@link GenericHID} or one of its subclasses
-   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-    // Resets the odometry when the back button is pressed.
-    new JoystickButton(m_driveController, Button.kBack.value)
-        .whenPressed(() -> m_swerveDriveSubsystem.resetOdometry(new Pose2d()), m_swerveDriveSubsystem);
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by instantiating a {@link GenericHID} or one of its subclasses
+     * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+     * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    private void configureButtonBindings() {
+        // Resets the odometry when the back button is pressed.
+        new JoystickButton(m_driveController, Button.kBack.value)
+                .whenPressed(() -> m_swerveDriveSubsystem.resetOdometry(new Pose2d()), m_swerveDriveSubsystem);
 
-    // Zeroes the heading when the start button is pressed
-    new JoystickButton(m_driveController, Button.kStart.value).whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(),
-        m_swerveDriveSubsystem);
-  }
+        // Zeroes the heading when the start button is pressed
+        new JoystickButton(m_driveController, Button.kStart.value).whenPressed(
+                () -> m_swerveDriveSubsystem.zeroHeading(),
+                m_swerveDriveSubsystem);
+    }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  // public Command getAutonomousCommand() {
-  //   return new Command();
-      
-  //   };
-    
-  
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    // public Command getAutonomousCommand() {
+    // return new Command();
+
+    // };
+
 }
-
