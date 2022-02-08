@@ -7,6 +7,8 @@ package frc.robot.commands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -41,6 +43,7 @@ public class SwerveDriveCommand extends CommandBase {
     m_rotSupplier = rotSupplier;
     m_fieldRelativeSupplier = fieldRelativeSupplier;
   }
+  
 
   @Override
   public void execute() {

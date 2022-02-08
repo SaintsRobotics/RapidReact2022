@@ -157,4 +157,16 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public void zeroHeading() {
     m_gyro.reset();
   }
+  public void setMotorIdle() {
+    m_frontLeft.setIdle();
+    m_frontRight.setIdle();
+    m_rearLeft.setIdle();
+    m_rearRight.setIdle();
+  }
+  public void setMotorBrake() {
+    m_frontLeft.setBrake();
+    m_frontRight.setBrake();
+    m_rearLeft.setBrake();
+    m_rearRight.setBrake();
+  }
 }

@@ -81,7 +81,12 @@ public class RobotContainer {
     // Aims at red balls while the X button is held.
     new JoystickButton(m_driveController, Button.kX.value)
         .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 2));
+    // Allows the bot to drift while right bumper is held
+    new JoystickButton(m_driveController, Button.kRightBumper.value)
+        .whileHeld(()->m_swerveDriveSubsystem.setMotorIdle())
+        .whenReleased(()->m_swerveDriveSubsystem.setMotorBrake());
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
