@@ -40,5 +40,6 @@ public class HardwareMap {
 
     public HardwareMap() {
         shooterHardware = new ShooterHardware();
+        inputHardware = new InputHardware();
     }
 }

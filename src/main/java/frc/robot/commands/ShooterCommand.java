@@ -5,16 +5,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.shooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterCommand extends CommandBase {
 
-  private shooterSubsystem m_shooterSubsystem; 
-  private PIDController m_pidController = new PIDController(.3, 0, 0);
+  private ShooterSubsystem m_shooterSubsystem; 
+  private PIDController m_pidController = new PIDController(0.7, 0, 0);
 
   /** Creates a new ShooterCommand. */
-  public ShooterCommand(shooterSubsystem shooterSubsystem) {
+  public ShooterCommand(ShooterSubsystem shooterSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooterSubsystem = shooterSubsystem;
     addRequirements(m_shooterSubsystem);
@@ -27,7 +28,8 @@ public class ShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() { 
-    m_pidController.setSetpoint(0.1); 
+    m_pidController.setSetpoint(0.5);
+    SmartDashboard.putNumber("Shooter speed:", m_shooterSubsystem.m_flywheelMotor.getMotorOutputPercent());
     double speed = m_pidController.calculate(m_shooterSubsystem.getFlywheelPower());
     m_shooterSubsystem.setFlywheelPower(speed);
   }
