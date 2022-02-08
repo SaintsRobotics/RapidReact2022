@@ -45,5 +45,6 @@
     "teleoperated",
     "windowsx",
     "wpilib"
-  ]
+  ],
+  "wpilib.selectDefaultSimulateExtension": true
 }
