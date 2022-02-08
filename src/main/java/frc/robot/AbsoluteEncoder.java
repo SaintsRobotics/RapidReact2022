@@ -2,12 +2,16 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.simulation.AnalogInputSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AbsoluteEncoder {
   private final AnalogInput m_analogIn;
 
   private final boolean m_reversed;
   private final double m_offset;
+
+  private AnalogInputSim m_analogInputSim;
 
   /**
    * Construct an absolute encoder, most likely a US Digital MA3 encoder.
@@ -24,6 +28,7 @@ public class AbsoluteEncoder {
     m_analogIn = new AnalogInput(channel);
     m_reversed = reversed;
     m_offset = offset;
+    m_analogInputSim = new AnalogInputSim(m_analogIn);
   }
 
   /**
@@ -37,4 +42,48 @@ public class AbsoluteEncoder {
 
     return m_reversed ? new Rotation2d(5 - angle) : new Rotation2d(angle);
   }
+
+   
+    /**
+     * Figures out the value that the simulated absolute encoder should be at. Read
+     * comments in source code below.
+     * 
+     * @param turnVoltage Voltage that will go to the turning motor, range: [-1, 1].
+     */
+    public void sendVoltage(double turnVoltage) {
+      // gear ratio between motor and wheel / encoder
+      double gearRatio = 12.8;
+
+      // maximum RPM for motor under 0 load
+      double motorRPM = 5000;
+
+      // how long it takes to run one loop of the periodic (in seconds)
+      double tickPeriod = Robot.kDefaultPeriod;
+
+      if (turnVoltage > 1) {
+          turnVoltage = 1;
+      } else if (turnVoltage < -1) {
+          turnVoltage = -1;
+      }
+
+      // started with motorRPM and converted to wheel rotations per tick
+      // RPM * (min / sec) * (s / tick) * (wheel rotations / motor rotations)
+      double wheelRotationsPerTick = motorRPM / 60 * tickPeriod / gearRatio; // 0.143
+      double wheelRotationsSinceLastTick = wheelRotationsPerTick * turnVoltage;
+      double voltsSinceLastTick = 5 * wheelRotationsSinceLastTick;
+      double polarity = m_reversed ? -1 : 1;
+      voltsSinceLastTick *= polarity;
+
+      double outputVoltage = m_analogIn.getVoltage() + voltsSinceLastTick;
+
+      SmartDashboard.putNumber("turning voltage" + m_analogIn.getChannel(), turnVoltage);
+
+      // convert output to a number between 0 and 5 (continuous unit circle)
+      outputVoltage = (((outputVoltage % 5) + 5) % 5);
+
+      // basically this "hijacks" the simulated absolute encoder to say that it's
+      // reading the voltage that u give it, range: [0, 5]
+      m_analogInputSim.setVoltage(outputVoltage);
+  } 
+
 }
