@@ -80,6 +80,6 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int kShooterMotorPort = 8;
+    public static final int kShooterMotorPort = 9;
   }
 }
