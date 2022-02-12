@@ -31,15 +31,14 @@ public class RobotContainer {
   private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
       m_hardwareMap.swerveDrivetrainHardware);
 
+  private final MoveCommand m_moveCommand;
+
   private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    configureButtonBindings();
-    Limelight.setLed(1);
-
     DoubleSupplier x = () -> Utils
         .oddSquare(Utils.deadZone(-m_driveController.getLeftY(), OIConstants.kJoystickDeadzone))
         * SwerveConstants.kMaxSpeedMetersPerSecond;
@@ -49,12 +48,16 @@ public class RobotContainer {
     DoubleSupplier rot = () -> Utils
         .oddSquare(Utils.deadZone(-m_driveController.getRightX(), OIConstants.kJoystickDeadzone))
         * SwerveConstants.kMaxAngularSpeedRadiansPerSecond;
-    m_swerveDriveSubsystem.setDefaultCommand(
-        new MoveCommand(m_swerveDriveSubsystem)
-            .withXSpeedSupplier(x)
-            .withYSpeedSupplier(y)
-            .withRotSpeedSupplier(rot)
-            .withFieldRelativeSupplier(() -> m_driveController.getRightBumper()));
+    m_moveCommand = new MoveCommand(m_swerveDriveSubsystem)
+        .withXSpeedSupplier(x)
+        .withYSpeedSupplier(y)
+        .withRotSpeedSupplier(rot)
+        .withFieldRelativeSupplier(() -> m_driveController.getRightBumper());
+
+    configureButtonBindings();
+    Limelight.setLed(1);
+
+    m_swerveDriveSubsystem.setDefaultCommand(m_moveCommand);
 
     SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
     SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
@@ -78,15 +81,15 @@ public class RobotContainer {
 
     // Aims at target while the A button is held.
     new JoystickButton(m_driveController, Button.kA.value)
-        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 0));
+        .whenHeld(new LimelightAimingCommand(m_moveCommand, 0));
 
     // Aims at blue balls while the B button is held.
     new JoystickButton(m_driveController, Button.kB.value)
-        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 1));
+        .whenHeld(new LimelightAimingCommand(m_moveCommand, 1));
 
     // Aims at red balls while the X button is held.
     new JoystickButton(m_driveController, Button.kX.value)
-        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 2));
+        .whenHeld(new LimelightAimingCommand(m_moveCommand, 2));
   }
 
   /**
