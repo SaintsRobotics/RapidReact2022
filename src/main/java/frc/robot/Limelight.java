@@ -9,12 +9,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 /** Class to access the limelight through network tables. */
 public final class Limelight {
     /**
-     * Returns the vertical offset from crosshair to target.
+     * Returns if the limelight has any valid targets.
      * 
-     * @return Vertical offset from -24.85 to 24.85 degrees.
+     * @return If the limelight has a target.
      */
-    public static double getY() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+    public static boolean hasTarget() {
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 0 ? false : true;
     }
 
     /**
@@ -24,6 +24,24 @@ public final class Limelight {
      */
     public static double getX() {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    }
+
+    /**
+     * Returns the vertical offset from crosshair to target.
+     * 
+     * @return Vertical offset from -24.85 to 24.85 degrees.
+     */
+    public static double getY() {
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+    }
+
+    /**
+     * Returns the area of the target.
+     * 
+     * @return Area value from 0-100% of image.
+     */
+    public static double getArea() {
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
     }
 
     /**
@@ -38,28 +56,10 @@ public final class Limelight {
     /**
      * Returns the pipeline’s latency contribution.
      * 
-     * @return Latency value in ms.
+     * @return Latency value in ms, add at least 11 ms for image capture latency.
      */
     public static double getLatency() {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tl").getDouble(0);
-    }
-
-    /**
-     * Returns the area of the target.
-     * 
-     * @return Area value from 0-100% of image.
-     */
-    public static double getArea() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-    }
-
-    /**
-     * Returns if the limelight has any valid targets.
-     * 
-     * @return If the limelight has a target.
-     */
-    public static boolean hasTarget() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 0 ? false : true;
     }
 
     /**
