@@ -38,6 +38,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     configureButtonBindings();
+    Limelight.setLed(1);
+
     DoubleSupplier x = () -> Utils
         .oddSquare(Utils.deadZone(-m_driveController.getLeftY(), OIConstants.kJoystickDeadzone))
         * SwerveConstants.kMaxSpeedMetersPerSecond;
