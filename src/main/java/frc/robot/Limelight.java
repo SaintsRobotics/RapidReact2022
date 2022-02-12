@@ -75,7 +75,7 @@ public final class Limelight {
      * 
      * @param state Limelight LED state.
      */
-    public static void setLed(double state) {
+    public static void setLED(double state) {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(state);
     }
 
