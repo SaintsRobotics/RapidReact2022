@@ -75,7 +75,7 @@ public final class Limelight {
      * 
      * @param state Limelight LED state.
      */
-    public static void setLED(double state) {
+    public static void setLED(int state) {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(state);
     }
 
@@ -103,7 +103,7 @@ public final class Limelight {
      * 
      * @param pipeline Select pipeline 0-9.
      */
-    public static void setPipeline(double pipeline) {
+    public static void setPipeline(int pipeline) {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipeline);
     }
 }
