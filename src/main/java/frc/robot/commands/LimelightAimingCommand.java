@@ -30,13 +30,13 @@ public class LimelightAimingCommand extends CommandBase {
   @Override
   public void initialize() {
     Limelight.setPipeline(m_pipeline);
-    Limelight.setLed(0);
+    Limelight.setLED(0);
     m_moveCommand.withRotSpeedSupplier(() -> m_pid.calculate(Limelight.getX(), 0)).schedule();;
   }
 
   @Override
   public void end(boolean interrupted) {
-    Limelight.setLed(1);
+    Limelight.setLED(1);
     m_moveCommand.cancel();
   }
 }

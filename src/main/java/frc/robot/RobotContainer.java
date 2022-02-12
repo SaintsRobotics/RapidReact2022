@@ -62,7 +62,7 @@ public class RobotContainer {
         .withFieldRelativeSupplier(fieldRelative);
 
     configureButtonBindings();
-    Limelight.setLed(1);
+    Limelight.setLED(1);
 
     m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
 
