@@ -28,10 +28,9 @@ public class ShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() { 
-    m_pidController.setSetpoint(0.5);
+    m_pidController.setSetpoint(0.67);
     SmartDashboard.putNumber("Shooter speed:", m_shooterSubsystem.m_flywheelMotor.getMotorOutputPercent());
-    double speed = m_pidController.calculate(m_shooterSubsystem.getFlywheelPower());
-    m_shooterSubsystem.setFlywheelPower(speed);
+    m_shooterSubsystem.setFlywheelPower(m_pidController.calculate(m_shooterSubsystem.getFlywheelPower()));
   }
 
   // Called once the command ends or is interrupted.

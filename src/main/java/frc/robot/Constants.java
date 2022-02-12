@@ -78,4 +78,8 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kJoystickDeadzone = 0.11;
   }
+
+  public static final class ShooterConstants {
+    public static final int kShooterMotorPort = 8;
+  }
 }

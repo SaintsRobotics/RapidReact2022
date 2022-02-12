@@ -24,10 +24,8 @@ public class HardwareMap {
         
 
         public ShooterHardware(){
-            flywheel = new WPI_TalonFX(8);          
-
+            flywheel = new WPI_TalonFX(Constants.ShooterConstants.kShooterMotorPort);          
         }
-
     }
     
     public class InputHardware {
