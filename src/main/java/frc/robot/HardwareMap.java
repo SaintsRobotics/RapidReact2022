@@ -5,9 +5,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.CAN;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
-import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.SwerveModule;
 
@@ -80,10 +77,10 @@ public class HardwareMap {
     public CANSparkMax feederController;
 
     public IntakeHardware() {
-            intakeController = new CANSparkMax(25, null);
-            armController = new CANSparkMax(24, null);
-            feederController = new CANSparkMax(23, null);
-            armController.setIdleMode(IdleMode.kBrake);
+        intakeController = new CANSparkMax(25, null);
+        armController = new CANSparkMax(24, null);
+        feederController = new CANSparkMax(23, null);
+        armController.setIdleMode(IdleMode.kBrake);
     }
 }
 

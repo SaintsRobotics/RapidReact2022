@@ -76,7 +76,7 @@ public final class Constants {
 
   public static final class IntakeConstants {
     // Speed [-1, 1] at which to run the intake motor.
-    public static final double INTAKE_SPEED = 0.5;
+    public static final double INTAKE_SPEED = 0.45;
 
     public static final int WHEELS_PORT = 25;
     public static final int ARM_PORT = 24;
