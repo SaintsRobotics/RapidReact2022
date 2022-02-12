@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
 /** Command that turns the shooter on and off. */
@@ -23,7 +24,7 @@ public class ShooterCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    m_shooterSubsystem.set(0.65);
+    m_shooterSubsystem.set(ShooterConstants.kShooterSpeed);
   }
 
   @Override
