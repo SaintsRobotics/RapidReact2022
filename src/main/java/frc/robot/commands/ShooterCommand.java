@@ -4,44 +4,30 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
+/** Command that turns the shooter on and off. */
 public class ShooterCommand extends CommandBase {
+  private final ShooterSubsystem m_shooterSubsystem;
 
-  private ShooterSubsystem m_shooterSubsystem; 
-  private PIDController m_pidController = new PIDController(0.7, 0, 0);
-
-  /** Creates a new ShooterCommand. */
-  public ShooterCommand(ShooterSubsystem shooterSubsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_shooterSubsystem = shooterSubsystem;
+  /**
+   * Creates a new {@link ShooterCommand}.
+   * 
+   * @param subsystem The required subsystem.
+   */
+  public ShooterCommand(ShooterSubsystem subsystem) {
+    m_shooterSubsystem = subsystem;
     addRequirements(m_shooterSubsystem);
   }
 
-  // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() { 
-    m_pidController.setSetpoint(0.67);
-    SmartDashboard.putNumber("Shooter speed:", m_shooterSubsystem.m_flywheelMotor.getMotorOutputPercent());
-    m_shooterSubsystem.setFlywheelPower(m_pidController.calculate(m_shooterSubsystem.getFlywheelPower()));
+  public void initialize() {
+    m_shooterSubsystem.setFlywheelPower(0.65);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_shooterSubsystem.setFlywheelPower(0);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }
