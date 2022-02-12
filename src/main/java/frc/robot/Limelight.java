@@ -80,6 +80,19 @@ public final class Limelight {
     }
 
     /**
+     * Sets the limelight's operation mode.
+     * <p>
+     * 0: Vision Processor.
+     * <p>
+     * 1: Driver Camera (Increases exposure, disables vision processing).
+     * 
+     * @param mode Limelight operation mode.
+     */
+    public static void setCameraMode(int mode) {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(mode);
+    }
+
+    /**
      * Sets limelight’s current pipeline.
      * <p>
      * 0: Targets shooting target.
