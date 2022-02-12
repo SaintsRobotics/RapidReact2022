@@ -9,28 +9,29 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap.ShooterHardware;
 
+/** Subsystem that controls the shooter. */
 public class ShooterSubsystem extends SubsystemBase {
-  /** Creates a new shooterSubsystem. */
+  private final WPI_TalonFX m_flywheelMotor;
 
-  public WPI_TalonFX m_flywheelMotor;
-  public double m_targetSpeed;
-  public double m_flywheelSpeed;
-
+  /**
+   * Creates a new {@link ShooterSubsystem}.
+   * 
+   * @param shooterHardware The hardware for the {@link ShooterSubsystem}.
+   */
   public ShooterSubsystem(ShooterHardware shooterHardware) {
     m_flywheelMotor = shooterHardware.flywheel;
-
-  }
-
-  public void setFlywheelPower(double power) {
-    this.m_targetSpeed = power;
-  }
-
-  public double getFlywheelPower() {
-    return m_flywheelMotor.get();
   }
 
   @Override
   public void periodic() {
-    m_flywheelMotor.set(m_targetSpeed);
+  }
+
+  /**
+   * Sets the speed of the flywheel.
+   * 
+   * @param power The speed of the flywheel (-1 to 1).
+   */
+  public void set(double power) {
+    m_flywheelMotor.set(power);
   }
 }

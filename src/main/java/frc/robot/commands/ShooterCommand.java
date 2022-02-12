@@ -23,11 +23,11 @@ public class ShooterCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    m_shooterSubsystem.setFlywheelPower(0.65);
+    m_shooterSubsystem.set(0.65);
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_shooterSubsystem.setFlywheelPower(0);
+    m_shooterSubsystem.set(0);
   }
 }
