@@ -20,8 +20,6 @@ public class HardwareMap {
 
     public class ShooterHardware{
         public  WPI_TalonFX flywheel;
-        public double velocity;
-        
 
         public ShooterHardware(){
             flywheel = new WPI_TalonFX(Constants.ShooterConstants.kShooterMotorPort);          
@@ -31,7 +29,7 @@ public class HardwareMap {
     public class InputHardware {
         public XboxController driveController;
         public InputHardware() {
-            driveController = new XboxController(0);
+            driveController = new XboxController(Constants.OIConstants.kDriverControllerPort);
         }
     }
     ;
