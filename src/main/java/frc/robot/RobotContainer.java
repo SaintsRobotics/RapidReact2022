@@ -31,30 +31,34 @@ public class RobotContainer {
   private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
       m_hardwareMap.swerveDrivetrainHardware);
 
+  private DoubleSupplier m_x;
+  private DoubleSupplier m_y;
+  private DoubleSupplier m_rot;
+
   private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    m_x = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getLeftY(), OIConstants.kJoystickDeadzone))
+        * SwerveConstants.kMaxSpeedMetersPerSecond;
+    m_y = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getLeftX(), OIConstants.kJoystickDeadzone))
+        * SwerveConstants.kMaxSpeedMetersPerSecond;
+    m_rot = () -> Utils
+        .oddSquare(Utils.deadZone(-m_driveController.getRightX(), OIConstants.kJoystickDeadzone))
+        * SwerveConstants.kMaxAngularSpeedRadiansPerSecond;
+
     configureButtonBindings();
     Limelight.setLed(1);
 
-    DoubleSupplier x = () -> Utils
-        .oddSquare(Utils.deadZone(-m_driveController.getLeftY(), OIConstants.kJoystickDeadzone))
-        * SwerveConstants.kMaxSpeedMetersPerSecond;
-    DoubleSupplier y = () -> Utils
-        .oddSquare(Utils.deadZone(-m_driveController.getLeftX(), OIConstants.kJoystickDeadzone))
-        * SwerveConstants.kMaxSpeedMetersPerSecond;
-    DoubleSupplier rot = () -> Utils
-        .oddSquare(Utils.deadZone(-m_driveController.getRightX(), OIConstants.kJoystickDeadzone))
-        * SwerveConstants.kMaxAngularSpeedRadiansPerSecond;
-    m_swerveDriveSubsystem.setDefaultCommand(
-        new MoveCommand(m_swerveDriveSubsystem)
-            .withXSpeedSupplier(x)
-            .withYSpeedSupplier(y)
-            .withRotSpeedSupplier(rot)
-            .withFieldRelativeSupplier(() -> m_driveController.getRightBumper()));
+    m_swerveDriveSubsystem.setDefaultCommand(new MoveCommand(m_swerveDriveSubsystem)
+        .withXSpeedSupplier(m_x)
+        .withYSpeedSupplier(m_y)
+        .withRotSpeedSupplier(m_rot)
+        .withFieldRelativeSupplier(() -> m_driveController.getRightBumper()));
 
     SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
     SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
@@ -73,20 +77,27 @@ public class RobotContainer {
         .whenPressed(() -> m_swerveDriveSubsystem.resetOdometry(new Pose2d()), m_swerveDriveSubsystem);
 
     // Zeroes the heading when the start button is pressed
-    new JoystickButton(m_driveController, Button.kStart.value).whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(),
+    new JoystickButton(m_driveController, Button.kStart.value).whenPressed(
+        () -> m_swerveDriveSubsystem.zeroHeading(),
         m_swerveDriveSubsystem);
 
     // Aims at target while the A button is held.
     new JoystickButton(m_driveController, Button.kA.value)
-        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 0));
+        .whenHeld(new LimelightAimingCommand(0))
+        .whenHeld(new MoveCommand(m_swerveDriveSubsystem)
+            .withXSpeedSupplier(m_x)
+            .withYSpeedSupplier(m_y)
+            .withRotSpeedSupplier(() -> {
+              return Limelight.getX() * 0.1;
+            }));
 
     // Aims at blue balls while the B button is held.
     new JoystickButton(m_driveController, Button.kB.value)
-        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 1));
+        .whenHeld(new LimelightAimingCommand(1));
 
     // Aims at red balls while the X button is held.
     new JoystickButton(m_driveController, Button.kX.value)
-        .whenHeld(new LimelightAimingCommand(m_swerveDriveSubsystem, 2));
+        .whenHeld(new LimelightAimingCommand(2));
   }
 
   /**
