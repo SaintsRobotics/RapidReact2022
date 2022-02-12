@@ -8,56 +8,55 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 /** Class to access the limelight through network tables. */
 public final class Limelight {
-
     /**
-     * Vertical Offset From Crosshair To Target
+     * Returns the vertical offset from crosshair to target.
      * 
-     * @return vertical offset
+     * @return Vertical offset from -24.85 to 24.85 degrees.
      */
     public static double getY() {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
     }
 
     /**
-     * Horizontal Offset From Crosshair To Target
+     * Returns the horizontal offset from crosshair to target.
      * 
-     * @return horizontal offset
+     * @return Horizontal offset from -29.8 to 29.8 degrees.
      */
     public static double getX() {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
     }
 
     /**
-     * Skew or rotation (-90 degrees to 0 degrees)
+     * Returns the angle of the target.
      * 
-     * @return skew angle
+     * @return Angle of the target from -90 to 0 degrees.
      */
     public static double getAngle() {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ts").getDouble(0);
     }
 
     /**
-     * The pipeline’s latency contribution (ms)
+     * Returns the pipeline’s latency contribution.
      * 
-     * @return latency value
+     * @return Latency value in ms.
      */
     public static double getLatency() {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tl").getDouble(0);
     }
 
     /**
-     * Target Area (0% of image to 100% of image)
+     * Returns the area of the target.
      * 
-     * @return area value
+     * @return Area value from 0-100% of image.
      */
     public static double getArea() {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
     }
 
     /**
-     * Whether the limelight has any valid targets (0 or 1)
+     * Returns if the limelight has any valid targets.
      * 
-     * @return true if the camera sees target
+     * @return If the limelight has a target.
      */
     public static boolean hasTarget() {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 0 ? false : true;
@@ -66,13 +65,13 @@ public final class Limelight {
     /**
      * Sets limelight’s LED state.
      * <p>
-     * 0: use LED Mode set in the current pipeline.
+     * 0: Use LED Mode set in the current pipeline.
      * <p>
-     * 1: force off.
+     * 1: Force off.
      * <p>
-     * 2: force blink.
+     * 2: Force blink.
      * <p>
-     * 3: force on.
+     * 3: Force on.
      * 
      * @param state Limelight LED state.
      */
@@ -82,6 +81,12 @@ public final class Limelight {
 
     /**
      * Sets limelight’s current pipeline.
+     * <p>
+     * 0: Targets shooting target.
+     * <p>
+     * 1: Targets blue ball.
+     * <p>
+     * 2: Targets red ball.
      * 
      * @param pipeline Select pipeline 0-9.
      */
