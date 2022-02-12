@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap.ShooterHardware;
 
@@ -24,6 +25,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Shooter Speed", m_flywheelMotor.get());
   }
 
   /**
@@ -33,5 +35,6 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public void set(double power) {
     m_flywheelMotor.set(power);
+    SmartDashboard.putNumber("Desired Shooter Speed", power);
   }
 }
