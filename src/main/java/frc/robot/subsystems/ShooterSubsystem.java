@@ -9,14 +9,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap.ShooterHardware;
 
-public class SShooterSubsystem extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new shooterSubsystem. */
 
   public WPI_TalonFX m_flywheelMotor;
   public double m_targetSpeed;
   public double m_flywheelSpeed;
 
-  public SShooterSubsystem(ShooterHardware shooterHardware) {
+  public ShooterSubsystem(ShooterHardware shooterHardware) {
     m_flywheelMotor = shooterHardware.flywheel;
 
   }

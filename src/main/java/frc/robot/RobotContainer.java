@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.HardwareMap.ShooterHardware;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.subsystems.SShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,7 +37,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private HardwareMap m_hardwareMap = new HardwareMap();
   private ShooterHardware ShooterHardware = m_hardwareMap.shooterHardware;
-  private SShooterSubsystem m_shooterSubsystem = new SShooterSubsystem(ShooterHardware);
+  private ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(ShooterHardware);
 
   private ShooterCommand m_ShooterCommand = new ShooterCommand(m_shooterSubsystem);
   private XboxController m_driveController = m_hardwareMap.inputHardware.driveController;
