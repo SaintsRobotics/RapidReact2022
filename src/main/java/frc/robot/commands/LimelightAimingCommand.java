@@ -10,7 +10,7 @@ import frc.robot.Limelight;
 
 /** Accesses {@link Limelight} values to aim the robot at a target. */
 public class LimelightAimingCommand extends CommandBase {
-  private final PIDController m_pid = new PIDController(0.03, 0, 0);
+  private final PIDController m_pid = new PIDController(0.2, 0, 0);
 
   private final MoveCommand m_moveCommand;
   private final int m_pipeline;
