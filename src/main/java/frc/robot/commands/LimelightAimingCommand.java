@@ -31,12 +31,14 @@ public class LimelightAimingCommand extends CommandBase {
   public void initialize() {
     Limelight.setPipeline(m_pipeline);
     Limelight.setLED(0);
+    Limelight.setCameraMode(0);
     m_moveCommand.withRotSpeedSupplier(() -> m_pid.calculate(Limelight.getX(), 0)).schedule();;
   }
 
   @Override
   public void end(boolean interrupted) {
     Limelight.setLED(1);
+    Limelight.setCameraMode(1);
     m_moveCommand.cancel();
   }
 }

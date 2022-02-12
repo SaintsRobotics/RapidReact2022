@@ -63,6 +63,7 @@ public class RobotContainer {
 
     configureButtonBindings();
     Limelight.setLED(1);
+    Limelight.setCameraMode(1);
 
     m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
 
