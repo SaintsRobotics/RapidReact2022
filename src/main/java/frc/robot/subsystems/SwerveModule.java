@@ -49,11 +49,9 @@ public class SwerveModule {
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_driveMotor.setIdleMode(IdleMode.kBrake);
     m_turningMotor.setIdleMode(IdleMode.kBrake);
-  }
-
-		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-		m_driveMotor.setIdleMode(IdleMode.kBrake);
-		m_turningMotor.setIdleMode(IdleMode.kBrake);
+	m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+	m_driveMotor.setIdleMode(IdleMode.kBrake);
+	m_turningMotor.setIdleMode(IdleMode.kBrake);
 	}
 
 	/**
