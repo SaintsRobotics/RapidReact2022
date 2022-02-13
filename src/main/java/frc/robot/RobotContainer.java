@@ -87,9 +87,8 @@ public class RobotContainer {
         .whenPressed(() -> m_swerveDriveSubsystem.resetOdometry(new Pose2d()), m_swerveDriveSubsystem);
 
     // Zeroes the heading when the start button is pressed
-    new JoystickButton(m_driveController, Button.kStart.value).whenPressed(
-        () -> m_swerveDriveSubsystem.zeroHeading(),
-        m_swerveDriveSubsystem);
+    new JoystickButton(m_driveController, Button.kStart.value)
+        .whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(), m_swerveDriveSubsystem);
 
     // Aims at target while the A button is held.
     new JoystickButton(m_driveController, Button.kA.value)
