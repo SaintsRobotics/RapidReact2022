@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.AbsoluteEncoder;
@@ -75,5 +77,11 @@ public class SwerveModule {
     m_driveMotor.set(driveOutput);
     m_turningMotor.set(turnOutput);
     m_turningEncoder.sendVoltage(turnOutput); //sim swerve
+  }
+
+  public void printSimulatedDriveSpeed(double driveSpeed) {
+    int dev = SimDeviceDataJNI.getSimDeviceHandle("SPARK MAX [" + m_driveMotor.getDeviceId() + "]");
+    SimDouble speed = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "velocity"));
+    speed.set(driveSpeed);
   }
 }
