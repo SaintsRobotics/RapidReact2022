@@ -1,39 +1,15 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import com.ctre.phoenix.sensors.CANCoder;
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.SwerveModule;
 
 public class HardwareMap {
-
-    public class ShooterHardware{
-        public  WPI_TalonFX flywheel;
-
-        public ShooterHardware(){
-            flywheel = new WPI_TalonFX(Constants.ShooterConstants.kShooterMotorPort);          
-        }
-    }
-    
-    public class InputHardware {
-        public XboxController driveController;
-        public InputHardware() {
-            driveController = new XboxController(Constants.OIConstants.kDriverControllerPort);
-        }
-    }
-    ;
-
   /** File for storing the hardware of the drivetrain. */
   public class SwerveDrivetrainHardware {
     public SwerveModule frontLeft = new SwerveModule(
@@ -95,9 +71,18 @@ public class HardwareMap {
         SwerveConstants.kRearRightTurningEncoderOffset);
   }
 
+  /** File for storing the hardware of the shooter. */
+  public class ShooterHardware {
+    public WPI_TalonFX shooter = new WPI_TalonFX(Constants.ShooterConstants.kShooterMotorPort);
+  }
+
+  /** File for storing the hardware of the inputs. */
+  public class InputHardware {
+    public XboxController driveController = new XboxController(Constants.OIConstants.kDriverControllerPort);
+  }
+
   public SwerveModuleHardware swerveModuleHardware;
   public SwerveDrivetrainHardware swerveDrivetrainHardware;
- 
   public ShooterHardware shooterHardware;
   public InputHardware inputHardware;
 

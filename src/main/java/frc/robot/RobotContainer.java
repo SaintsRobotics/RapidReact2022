@@ -22,7 +22,6 @@ import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -42,7 +41,7 @@ public class RobotContainer {
   private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
       m_hardwareMap.swerveDrivetrainHardware);
 
-   /**
+  /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
@@ -73,7 +72,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     new JoystickButton(m_driveController, Button.kY.value)
-                      .toggleWhenPressed(new ShooterCommand(m_shooterSubsystem));
+        .toggleWhenPressed(new ShooterCommand(m_shooterSubsystem));
     // Resets the odometry when the back button is pressed.
     new JoystickButton(m_driveController, Button.kBack.value)
         .whenPressed(() -> m_swerveDriveSubsystem.resetOdometry(new Pose2d()), m_swerveDriveSubsystem);

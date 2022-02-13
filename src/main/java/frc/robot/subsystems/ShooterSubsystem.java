@@ -20,7 +20,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param shooterHardware The hardware for the {@link ShooterSubsystem}.
    */
   public ShooterSubsystem(ShooterHardware shooterHardware) {
-    m_flywheelMotor = shooterHardware.flywheel;
+    m_flywheelMotor = shooterHardware.shooter;
   }
 
   @Override
