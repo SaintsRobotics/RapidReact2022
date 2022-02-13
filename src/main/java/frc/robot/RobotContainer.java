@@ -41,7 +41,7 @@ public class RobotContainer {
   private final MoveCommand m_defaultMoveCommand;
   private final MoveCommand m_aimingMoveCommand;
 
-  private XboxController m_driveController = m_hardwareMap.inputHardware.driveController;
+  private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
