@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.SwerveModule;
 
+/** File for storing the hardware of the robot. */
 public class HardwareMap {
   /** File for storing the hardware of the drivetrain. */
   public class SwerveDrivetrainHardware {
