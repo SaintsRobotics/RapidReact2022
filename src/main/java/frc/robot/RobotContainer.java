@@ -30,11 +30,11 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  */
 public class RobotContainer {
   private HardwareMap m_hardwareMap = new HardwareMap();
+  private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
+      m_hardwareMap.swerveDrivetrainHardware);
   private ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(m_hardwareMap.shooterHardware);
 
   private XboxController m_driveController = m_hardwareMap.inputHardware.driveController;
-  private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
-      m_hardwareMap.swerveDrivetrainHardware);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
