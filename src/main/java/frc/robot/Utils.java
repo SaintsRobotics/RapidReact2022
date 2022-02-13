@@ -9,7 +9,6 @@ package frc.robot;
  * or subsystem.
  */
 public class Utils {
-
 	/**
 	 * If the input is close enough to zero then treat it as zero.
 	 * 
