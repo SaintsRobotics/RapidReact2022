@@ -33,15 +33,4 @@ public class Utils {
   public static double oddSquare(double input) {
     return input * Math.abs(input);
   }
-
-  /**
-   * Returns an angle between 0 and max if the angle exceeds normal bounds
-   * 
-   * @param angle The angle to use.
-   * @param max   The maximum possible value.
-   * @return The angle with range of 0 to max.
-   */
-  public static double normalizeAngle(double angle, double max) {
-    return ((angle % max) + max) % max;
-  }
 }

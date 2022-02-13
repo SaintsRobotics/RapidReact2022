@@ -26,14 +26,4 @@ public class UtilityTest {
     double oddSquareExpectedTwo = -16;
     assertEquals(oddSquareExpectedTwo, oddSquareResultTwo, DELTA);
   }
-
-  @Test
-  public void normalizeAngleTest() {
-    double normalizeAngleResultOne = Utils.normalizeAngle(120, 360);
-    double normalizeAngleExpectedOne = 120;
-    assertEquals(normalizeAngleResultOne, normalizeAngleExpectedOne, DELTA);
-    double normalizeAngleResultTwo = Utils.normalizeAngle(400, 360);
-    double normalizeAngleExpectedTwo = 40;
-    assertEquals(normalizeAngleResultTwo, normalizeAngleExpectedTwo, DELTA);
-  }
 }
