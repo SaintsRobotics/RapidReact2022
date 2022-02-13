@@ -13,7 +13,7 @@ import frc.robot.HardwareMap.ShooterHardware;
 /** Subsystem that controls the shooter. */
 public class ShooterSubsystem extends SubsystemBase {
   private final WPI_TalonFX m_flywheelMotor;
-
+  private double m_targetPower;
   /**
    * Creates a new {@link ShooterSubsystem}.
    * 
@@ -21,20 +21,24 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public ShooterSubsystem(ShooterHardware shooterHardware) {
     m_flywheelMotor = shooterHardware.shooter;
+    m_targetPower = 0;
+  }
+
+  public void setPower(double power){
+    m_targetPower = power;
+  }
+
+  public double getFlywheelRPM(){
+    return m_flywheelMotor.getSelectedSensorVelocity();
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter Speed", m_flywheelMotor.get());
+    // This method will be called once per scheduler run
+    m_flywheelMotor.set(m_targetPower);
+    SmartDashboard.putNumber("Power", m_targetPower);
+    SmartDashboard.putNumber("Target RPM", m_targetPower*6380);
+    SmartDashboard.putNumber("Current RPM", getFlywheelRPM());
   }
 
-  /**
-   * Sets the speed of the flywheel.
-   * 
-   * @param power The speed of the flywheel (-1 to 1).
-   */
-  public void set(double power) {
-    m_flywheelMotor.set(power);
-    SmartDashboard.putNumber("Desired Shooter Speed", power);
-  }
 }
