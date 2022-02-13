@@ -10,21 +10,6 @@ package frc.robot;
  */
 public class Utils {
   /**
-   * If input is within tolerance of desiredVal, it returns desiredVal. If
-   * input is outside the tolerance, then it returns input.
-   * 
-   * @param input      The input number.
-   * @param desiredVal The desired value.
-   * @param tolerance  The tolerance.
-   */
-  public static double tolerance(double input, double desiredVal, double tolerance) {
-    if (Math.abs(input - desiredVal) < tolerance) {
-      return desiredVal;
-    }
-    return input;
-  }
-
-  /**
    * Makes lower inputs smaller which allows for finer joystick control.
    * 
    * @param input The number to apply odd square to.
