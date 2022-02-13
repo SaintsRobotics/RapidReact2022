@@ -9,20 +9,6 @@ package frc.robot;
  * or subsystem.
  */
 public class Utils {
-	/**
-	 * If the input is close enough to zero then treat it as zero.
-	 * 
-	 * @param input    The input to apply a dead zone to.
-	 * @param deadZone The absolute range to apply the deadzone.
-	 * @return The dead zoned value.
-	 */
-	public static double deadZone(double input, double deadZone) {
-		if (Math.abs(input) < deadZone) {
-			return 0;
-		}
-		return input;
-	}
-
   /**
    * If input is within tolerance of desiredVal, it returns desiredVal. If
    * input is outside the tolerance, then it returns input.
