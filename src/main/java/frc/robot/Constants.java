@@ -76,6 +76,9 @@ public final class Constants {
 
   public static final class ShooterConstants {
     public static final int kShooterMotorPort = 9;
+    public static final int kticksPerRotation = 2048;
+    public static final int kmillisecondsPerMinute = 60000;
+    public static final int kmillisecondsPerTenthSecond = 100;
 
     // TODO update this value (i just guessed a random number)
     public static final double kShooterRPM = 4000;
