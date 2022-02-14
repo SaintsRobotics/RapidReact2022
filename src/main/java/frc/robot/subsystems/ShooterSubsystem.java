@@ -4,16 +4,19 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap.ShooterHardware;
 
 /** Subsystem that controls the shooter. */
 public class ShooterSubsystem extends SubsystemBase {
-  private final WPI_TalonFX m_flywheelMotor;
-  private double m_targetPower;
+  private final WPI_TalonFX m_shooterMotor;
+
+  private final BangBangController m_bangBangController = new BangBangController();
 
   /**
    * Creates a new {@link ShooterSubsystem}.
@@ -21,24 +24,10 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param shooterHardware The hardware for the {@link ShooterSubsystem}.
    */
   public ShooterSubsystem(ShooterHardware shooterHardware) {
-    m_flywheelMotor = shooterHardware.shooter;
-    m_targetPower = 0;
+    m_shooterMotor = shooterHardware.shooter;
+    m_shooterMotor.setNeutralMode(NeutralMode.Coast);
   }
 
-  public void setPower(double power) {
-    m_targetPower = power;
-  }
-
-  /*
-   * I was too lazy to make this a java doc, so this is what you may need to know
-   * when making one
-   * 4096 ticks per rotation
-   * 60,000 ms in a min and m_flywheelMotor.getSelectedSensorVelocity() gives
-   * ticks/100ms
-   */
-  public double getFlywheelRPM() {
-    return m_flywheelMotor.getSelectedSensorVelocity() * 600 / 2048;
-  }
   /*
    * Following is data (DO NOT DELETE):
    * at max power when copnnected to just a gear gives us 6450 +/- 100 (aaron at
@@ -65,11 +54,30 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    m_flywheelMotor.set(m_targetPower);
-    SmartDashboard.putNumber("Power", m_targetPower);
-    SmartDashboard.putNumber("Target RPM", m_targetPower * 6380);
-    SmartDashboard.putNumber("Current RPM", getFlywheelRPM());
+    m_shooterMotor.set(m_bangBangController.calculate(getFlywheelRPM()));
+
+    SmartDashboard.putNumber("Current Shooter Speed", m_shooterMotor.get());
+    SmartDashboard.putNumber("Current Shooter RPM", getFlywheelRPM());
   }
 
+  /*
+   * I was too lazy to make this a java doc, so this is what you may need to know
+   * when making one
+   * 4096 ticks per rotation
+   * 60,000 ms in a min and m_shooterMotor.getSelectedSensorVelocity() gives
+   * ticks/100ms
+   */
+  public double getFlywheelRPM() {
+    return m_shooterMotor.getSelectedSensorVelocity() * 600 / 2048;
+  }
+
+  /**
+   * Sets the RPM of the shooter.
+   * 
+   * @param revs RPM of the shooter.
+   */
+  public void set(double revs) {
+    m_bangBangController.setSetpoint(revs);
+    SmartDashboard.putNumber("Target Shooter RPM", revs);
+  }
 }
