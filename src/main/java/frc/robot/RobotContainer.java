@@ -31,7 +31,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private HardwareMap m_hardwareMap = new HardwareMap();
+  private final HardwareMap m_hardwareMap = new HardwareMap();
   private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
       m_hardwareMap.swerveDrivetrainHardware);
 
