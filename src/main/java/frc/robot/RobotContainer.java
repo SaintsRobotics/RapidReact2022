@@ -36,6 +36,7 @@ public class RobotContainer {
   private HardwareMap m_hardwareMap = new HardwareMap();
   private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
       m_hardwareMap.swerveDrivetrainHardware);
+
   private final MoveCommand m_defaultMoveCommand;
   private final MoveCommand m_aimingMoveCommand;
 
@@ -84,7 +85,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Toggles the shooter when Y button is pressed.
-    new JoystickButton(m_driveController, Button.kY.value).toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
+    new JoystickButton(m_driveController, Button.kY.value)
+        .toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
 
     // Resets the odometry when the back button is pressed.
     new JoystickButton(m_driveController, Button.kBack.value)
