@@ -27,7 +27,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    m_robotContainer.m_hardwareMap.swerveDrivetrainHardware.gyro.calibrate();
   }
 
   /**

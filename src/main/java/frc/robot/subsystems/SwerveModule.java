@@ -6,12 +6,13 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.AbsoluteEncoder;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.HardwareMap.SwerveModuleHardware;
+import frc.robot.Constants.SwerveConstants;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
 public class SwerveModule {
@@ -25,17 +26,25 @@ public class SwerveModule {
   /**
    * Creates a new {@link SwerveModule}.
    * 
-   * @param hardware       the hardware for the swerve module
-   * @param driveMotor     motor that drives the wheel
-   * @param turningMotor   motor that changes the angle of the wheel
-   * @param turningEncoder absolute encoder for the swerve module
+   * @param driveMotorChannel      ID for the drive motor.
+   * @param turningMotorChannel    ID for the turning motor.
+   * @param turningEncoderChannel  ID for the turning encoder.
+   * @param turningEncoderReversed Whether the turning encoder is reversed.
+   * @param turningEncoderOffset   Offset of the turning encoder.
    */
-  public SwerveModule(SwerveModuleHardware hardware, CANSparkMax driveMotor, CANSparkMax turningMotor,
-      AbsoluteEncoder turningEncoder) {
-    m_driveMotor = driveMotor;
-    m_turningMotor = turningMotor;
+  public SwerveModule(
+      int driveMotorChannel,
+      int turningMotorChannel,
+      int turningEncoderChannel,
+      Boolean turningEncoderReversed,
+      double turningEncoderOffset) {
+    m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
+    m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-    m_turningEncoder = turningEncoder;
+    m_turningEncoder = new AbsoluteEncoder(turningEncoderChannel, turningEncoderReversed, turningEncoderOffset);
+
+    m_driveMotor.getEncoder().setVelocityConversionFactor(ModuleConstants.kWheelCircumferenceMeters
+        / 60 / ModuleConstants.kDrivingGearRatio);
 
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_driveMotor.setIdleMode(IdleMode.kBrake);
@@ -48,8 +57,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity() * ModuleConstants.kWheelCircumferenceMeters
-        / 60 / ModuleConstants.kDrivingGearRatio, m_turningEncoder.get());
+    return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(), m_turningEncoder.get());
   }
 
   /**
@@ -69,7 +77,7 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, m_turningEncoder.get());
 
-    final double driveOutput = state.speedMetersPerSecond;
+    final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
     final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get().getRadians(),
         state.angle.getRadians());
 
