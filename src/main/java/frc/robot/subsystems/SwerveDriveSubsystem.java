@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -13,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Utils;
@@ -29,7 +31,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   private final AHRS m_gyro;
   private final SwerveDriveOdometry m_odometry;
 
-  private final PIDController m_headPidController = new PIDController(-0.01, 0, 0);
+  // TODO tune pid
+  private final PIDController m_headingCorrectionPID = new PIDController(1.5, 0, 0);
+  private final Timer m_headingCorrectionTimer;
 
   private final Field2d m_field = new Field2d();
 
@@ -46,10 +50,16 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_rearRight = hardware.rearRight;
 
     m_gyro = hardware.gyro;
+    m_gyro.calibrate();
 
     m_odometry = new SwerveDriveOdometry(SwerveConstants.kDriveKinematics, m_gyro.getRotation2d());
+    m_gyro.reset();
+    m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
 
-    m_headPidController.enableContinuousInput(0, 2 * Math.PI);
+    m_headingCorrectionPID.enableContinuousInput(-Math.PI, Math.PI);
+    m_headingCorrectionPID.setSetpoint(MathUtil.angleModulus(m_gyro.getRotation2d().getRadians()));
+    m_headingCorrectionTimer = new Timer();
+    m_headingCorrectionTimer.start();
   }
 
   @Override
@@ -59,6 +69,24 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     printToDashboard();
     m_field.setRobotPose(m_odometry.getPoseMeters());
+    SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
+
+    SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
+
+    SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
+    SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
+    SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
+
+    SmartDashboard.putNumber("Gyro Angle", MathUtil.inputModulus(m_gyro.getAngle(), 0, 360));
+
+    SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
+    SmartDashboard.putNumber("Heading Correction Timer", m_headingCorrectionTimer.get());
   }
 
   /**
@@ -80,7 +108,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Method to drive the robot using joystick info. (and heading correction)
+   * Method to drive the robot.
    *
    * @param xSpeed        Speed of the robot in the x direction in meters per
    *                      second (forward). Positive is forward.
@@ -91,17 +119,35 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    *                      field. Positive is counterclockwise.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    double rotation = rot;
+
+    // resets the timer when the robot is turning, used to measure the time since the robot has stopped turning
+    if (rot != 0) {
+      m_headingCorrectionTimer.reset();
+    }
+
+    // corrects the heading of the robot to prevent it from drifting
+    double currentAngle = MathUtil.angleModulus(m_gyro.getRotation2d().getRadians());
+
+    if ((xSpeed == 0 && ySpeed == 0) || m_headingCorrectionTimer.get() < SwerveConstants.kTurningStopTime) {
+      m_headingCorrectionPID.setSetpoint(currentAngle);
+      SmartDashboard.putString("Heading Correction", "Setting Setpoint");
+    } else {
+      rotation = m_headingCorrectionPID.calculate(currentAngle);
+      SmartDashboard.putString("Heading Correction", "Correcting Heading");
+    }
+
     // this check prevents the wheels from resetting to straight when the robot
     // stops moving
-    if (xSpeed == 0 && ySpeed == 0 && rot == 0) {
+    if (xSpeed == 0 && ySpeed == 0 && rotation == 0) {
       m_frontLeft.setDesiredState();
       m_rearLeft.setDesiredState();
       m_frontRight.setDesiredState();
       m_rearRight.setDesiredState();
     } else {
       SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(
-          fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
-              : new ChassisSpeeds(xSpeed, ySpeed, rot));
+          fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, m_gyro.getRotation2d())
+              : new ChassisSpeeds(xSpeed, ySpeed, rotation));
 
       SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
 
@@ -113,7 +159,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Desired X", xSpeed);
     SmartDashboard.putNumber("Desired Y", ySpeed);
-    SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rot));
+    SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
   }
 
   /** Zeroes the heading of the robot. */
