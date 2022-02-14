@@ -28,30 +28,6 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterMotor.setNeutralMode(NeutralMode.Coast);
   }
 
-  /*
-   * Following is data (DO NOT DELETE):
-   * at max power when copnnected to just a gear gives us 6450 +/- 100 (aaron at
-   * 12.3V) (50%)
-   * when connected to the shooter max rpm is 6010 +/- 10 (i actually paid
-   * attenion and also aaron at 12.3V)
-   * at 0.8 power 4715 +/- 10
-   * at 0.67 power 3985 +/- 5
-   * at 0.5 power 2980 +/- 5
-   * at 0.33 power 1900 +/- 10
-   * switching battery to ishaan at 12.9V (98%)
-   * at 1 power 6280 +/- 10
-   * at 0.8 power 4900 +/- 10
-   * at 0.67 4160 +/- 10
-   * at 0.5 3110 +/- 10
-   * at 0.33 1980 +/- 10
-   * switching to karthik at 33%
-   * at 1 5935 +/- 10
-   * at 0.8 4640 +/- 10
-   * at 0.67 3935 +/- 15
-   * at 0.5 2950 +/- 10
-   * at 0.33 1875 +/- 10
-   */
-
   @Override
   public void periodic() {
     m_shooterMotor.set(m_bangBangController.calculate(getFlywheelRPM()));
