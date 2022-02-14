@@ -60,13 +60,9 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Current Shooter RPM", getFlywheelRPM());
   }
 
-  /*
-   * I was too lazy to make this a java doc, so this is what you may need to know
-   * when making one
-   * 2048 ticks per rotation
-   * 60,000 ms in a min
-   * m_shooterMotor.getSelectedSensorVelocity() gives ticks/100ms
-   */
+/**
+ * Gets the RPM of the flywheel
+ */
   public double getFlywheelRPM() {
     return m_shooterMotor.getSelectedSensorVelocity() * Constants.ShooterConstants.kMillisecondsPerMinute
         / Constants.ShooterConstants.kTicksPerRotation / Constants.ShooterConstants.kMillisecondsPerTenthSecond;
