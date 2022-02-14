@@ -62,9 +62,9 @@ public class ShooterSubsystem extends SubsystemBase {
   /*
    * I was too lazy to make this a java doc, so this is what you may need to know
    * when making one
-   * 4096 ticks per rotation
-   * 60,000 ms in a min and m_shooterMotor.getSelectedSensorVelocity() gives
-   * ticks/100ms
+   * 2048 ticks per rotation
+   * 60,000 ms in a min 
+   * m_shooterMotor.getSelectedSensorVelocity() gives ticks/100ms
    */
   public double getFlywheelRPM() {
     return m_shooterMotor.getSelectedSensorVelocity() * 600 / 2048;
