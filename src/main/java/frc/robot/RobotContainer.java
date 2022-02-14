@@ -36,7 +36,7 @@ public class RobotContainer {
   private HardwareMap m_hardwareMap = new HardwareMap();
   private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
       m_hardwareMap.swerveDrivetrainHardware);
-  private ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(m_hardwareMap.shooterHardware);
+  private ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   
   private final MoveCommand m_defaultMoveCommand;
   private final MoveCommand m_aimingMoveCommand;

@@ -1,6 +1,5 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -71,19 +70,12 @@ public class HardwareMap {
                 SwerveConstants.kRearRightTurningEncoderOffset);
     }
 
-    /** File for storing the hardware of the shooter. */
-    public class ShooterHardware {
-        public WPI_TalonFX shooter = new WPI_TalonFX(Constants.ShooterConstants.kShooterMotorPort);
-    }
-
     public SwerveModuleHardware swerveModuleHardware;
     public SwerveDrivetrainHardware swerveDrivetrainHardware;
-    public ShooterHardware shooterHardware;
 
     /** Creates a new {@link HardwareMap}. */
     public HardwareMap() {
         swerveModuleHardware = new SwerveModuleHardware();
         swerveDrivetrainHardware = new SwerveDrivetrainHardware();
-        shooterHardware = new ShooterHardware();
     }
 }

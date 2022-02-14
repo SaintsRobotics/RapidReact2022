@@ -10,21 +10,20 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.HardwareMap.ShooterHardware;
+import frc.robot.Constants.ShooterConstants;
 
-/** Subsystem that controls the shooter. */
+/**
+ * Subsystem that controls the RPM of the shooter by using a bang bang
+ * controller.
+ */
 public class ShooterSubsystem extends SubsystemBase {
-  private final WPI_TalonFX m_shooterMotor;
+  private final WPI_TalonFX m_shooterMotor = new WPI_TalonFX(ShooterConstants.kShooterMotorPort);
 
   private final BangBangController m_bangBangController = new BangBangController();
 
-  /**
-   * Creates a new {@link ShooterSubsystem}.
-   * 
-   * @param shooterHardware The hardware for the {@link ShooterSubsystem}.
-   */
-  public ShooterSubsystem(ShooterHardware shooterHardware) {
-    m_shooterMotor = shooterHardware.shooter;
+  /** Creates a new {@link ShooterSubsystem}. */
+  public ShooterSubsystem() {
+    // TODO check if it is set to coast by default (if so delete line below)
     m_shooterMotor.setNeutralMode(NeutralMode.Coast);
   }
 
