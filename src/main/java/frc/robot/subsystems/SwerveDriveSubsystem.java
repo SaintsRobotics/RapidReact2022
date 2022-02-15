@@ -94,6 +94,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
     SmartDashboard.putNumber("Heading Correction Timer", m_headingCorrectionTimer.get()); SmartDashboard.putData("Field", m_field2d);
+  
+    m_frontLeft.printSimulatedDriveSpeed(m_frontLeft.calculateSimulatedDriveSpeed());
+    m_rearLeft.printSimulatedDriveSpeed(m_rearLeft.calculateSimulatedDriveSpeed());
+    m_frontRight.printSimulatedDriveSpeed(m_frontRight.calculateSimulatedDriveSpeed());
+    m_rearLeft.printSimulatedDriveSpeed(m_rearLeft.calculateSimulatedDriveSpeed());
   }
 
   /**

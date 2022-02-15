@@ -12,6 +12,7 @@ import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.AbsoluteEncoder;
+import frc.robot.Constants;
 import frc.robot.Constants.ModuleConstants;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
@@ -77,6 +78,10 @@ public class SwerveModule {
     m_driveMotor.set(driveOutput);
     m_turningMotor.set(turnOutput);
     m_turningEncoder.sendVoltage(turnOutput); //sim swerve
+  }
+
+  public double calculateSimulatedDriveSpeed() {
+    return Constants.SwerveConstants.kMaxSpeedMetersPerSecond / Constants.ModuleConstants.kDrivingGearRatio;
   }
 
   public void printSimulatedDriveSpeed(double driveSpeed) {
