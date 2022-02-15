@@ -21,6 +21,8 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -31,26 +33,26 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-	private HardwareMap m_hardwareMap = new HardwareMap();
-	private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
+	private final HardwareMap m_hardwareMap = new HardwareMap();
+	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
 			m_hardwareMap.swerveDrivetrainHardware);
 
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
 
-	private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+	private final XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
-		DoubleSupplier x = () -> Utils
+		final DoubleSupplier x = () -> Utils
 				.oddSquare(MathUtil.applyDeadband(-m_driveController.getLeftY(), OIConstants.kControllerDeadband))
 				* SwerveConstants.kMaxSpeedMetersPerSecond;
-		DoubleSupplier y = () -> Utils
+		final DoubleSupplier y = () -> Utils
 				.oddSquare(MathUtil.applyDeadband(-m_driveController.getLeftX(), OIConstants.kControllerDeadband))
 				* SwerveConstants.kMaxSpeedMetersPerSecond;
-		DoubleSupplier rot = () -> Utils
+		final DoubleSupplier rot = () -> Utils
 				.oddSquare(MathUtil.applyDeadband(-m_driveController.getRightX(), OIConstants.kControllerDeadband))
 				* SwerveConstants.kMaxAngularSpeedRadiansPerSecond;
 		BooleanSupplier fieldRelative = () -> m_driveController.getRightBumper();
@@ -99,6 +101,10 @@ public class RobotContainer {
 		new JoystickButton(m_driveController, Button.kB.value)
 				.whenHeld(new LimelightAimingCommand(m_aimingMoveCommand,
 						DriverStation.getAlliance() == Alliance.Blue ? 1 : 2));
+
+		// Toggles the shooter when Y button is pressed.
+		new JoystickButton(m_driveController, Button.kY.value)
+				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
 	}
 
 	/**
