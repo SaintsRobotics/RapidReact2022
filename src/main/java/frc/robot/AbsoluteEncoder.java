@@ -50,7 +50,7 @@ public class AbsoluteEncoder {
      * 
      * @param turnVoltage Voltage that will go to the turning motor, range: [-1, 1].
      */
-    public void sendVoltage(double turnVoltage) {
+    public void simulateVoltage(double turnVoltage) {
       // gear ratio between motor and wheel / encoder
       double gearRatio = 12.8;
 

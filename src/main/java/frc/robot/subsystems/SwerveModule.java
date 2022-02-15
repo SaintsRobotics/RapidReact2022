@@ -77,7 +77,7 @@ public class SwerveModule {
 
     m_driveMotor.set(driveOutput);
     m_turningMotor.set(turnOutput);
-    m_turningEncoder.sendVoltage(turnOutput); //sim swerve
+    m_turningEncoder.simulateVoltage(turnOutput); //sim swerve
   }
 
   public double calculateSimulatedDriveSpeed() {
