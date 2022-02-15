@@ -24,8 +24,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Creates a new {@link ShooterSubsystem}. */
   public ShooterSubsystem() {
-    // TODO check if it is set to coast by default (if so delete line below)
-    m_shooterMotor.setNeutralMode(NeutralMode.Coast);
   }
 
   @Override
