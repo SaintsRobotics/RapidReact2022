@@ -84,10 +84,6 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Toggles the shooter when Y button is pressed.
-    new JoystickButton(m_driveController, Button.kY.value)
-        .toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
-
     // Resets the odometry when the back button is pressed.
     new JoystickButton(m_driveController, Button.kBack.value)
         .whenPressed(() -> m_swerveDriveSubsystem.resetOdometry(new Pose2d()), m_swerveDriveSubsystem);
@@ -105,6 +101,10 @@ public class RobotContainer {
     new JoystickButton(m_driveController, Button.kB.value)
         .whenHeld(new LimelightAimingCommand(m_aimingMoveCommand,
             DriverStation.getAlliance() == Alliance.Blue ? 1 : 2));
+
+    // Toggles the shooter when Y button is pressed.
+    new JoystickButton(m_driveController, Button.kY.value)
+        .toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
   }
 
   /**
