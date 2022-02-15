@@ -99,6 +99,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     m_rearLeft.printSimulatedDriveSpeed(m_rearLeft.calculateSimulatedDriveSpeed());
     m_frontRight.printSimulatedDriveSpeed(m_frontRight.calculateSimulatedDriveSpeed());
     m_rearLeft.printSimulatedDriveSpeed(m_rearLeft.calculateSimulatedDriveSpeed());
+
+    //debug, why doesn't anything here run!!!!
   }
 
   /**
