@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.simulation.AnalogInputSim;
@@ -57,18 +58,11 @@ public class AbsoluteEncoder {
       // maximum RPM for motor under 0 load
       double motorRPM = 5000;
 
-      // how long it takes to run one loop of the periodic (in seconds)
-      double tickPeriod = Robot.kDefaultPeriod;
-
-      if (turnVoltage > 1) {
-          turnVoltage = 1;
-      } else if (turnVoltage < -1) {
-          turnVoltage = -1;
-      }
+      turnVoltage = MathUtil.clamp(turnVoltage, -1, 1);
 
       // started with motorRPM and converted to wheel rotations per tick
       // RPM * (min / sec) * (s / tick) * (wheel rotations / motor rotations)
-      double wheelRotationsPerTick = motorRPM / 60 * tickPeriod / gearRatio; // 0.143
+      double wheelRotationsPerTick = motorRPM / 60 * Robot.kDefaultPeriod / gearRatio; // 0.143
       double wheelRotationsSinceLastTick = wheelRotationsPerTick * turnVoltage;
       double voltsSinceLastTick = 5 * wheelRotationsSinceLastTick;
       double polarity = m_reversed ? -1 : 1;
@@ -78,9 +72,7 @@ public class AbsoluteEncoder {
 
       SmartDashboard.putNumber("turning voltage" + m_analogIn.getChannel(), turnVoltage);
 
-      // convert output to a number between 0 and 5 (continuous unit circle)
-      outputVoltage = (((outputVoltage % 5) + 5) % 5);
-
+      outputVoltage = MathUtil.inputModulus(outputVoltage, 0, 5);
       // basically this "hijacks" the simulated absolute encoder to say that it's
       // reading the voltage that u give it, range: [0, 5]
       m_analogInputSim.setVoltage(outputVoltage);
