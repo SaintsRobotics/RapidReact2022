@@ -26,7 +26,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_shooterMotor.set(m_bangBangController.calculate(m_shooterMotor.getSelectedSensorVelocity()));
+    m_shooterMotor.set(m_bangBangController.getSetpoint() == 0 ? 0
+        : m_bangBangController.calculate(m_shooterMotor.getSelectedSensorVelocity()));
 
     SmartDashboard.putNumber("Current Shooter Power", m_shooterMotor.get());
     SmartDashboard.putNumber("Current Shooter Speed", m_shooterMotor.getSelectedSensorVelocity());
