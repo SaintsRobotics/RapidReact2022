@@ -22,6 +22,8 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -104,6 +106,9 @@ public class RobotContainer {
                 new JoystickButton(m_driveController, Button.kB.value)
                                 .whenHeld(new LimelightAimingCommand(m_aimingMoveCommand,
                                                 DriverStation.getAlliance() == Alliance.Blue ? 1 : 2));
+                // Toggles the shooter when Y button is pressed.
+                new JoystickButton(m_driveController, Button.kY.value)
+                    .toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
         }
 
         /**
