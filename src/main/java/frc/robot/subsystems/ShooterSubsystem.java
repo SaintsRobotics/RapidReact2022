@@ -4,13 +4,11 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 /**
@@ -28,27 +26,19 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_shooterMotor.set(m_bangBangController.calculate(getFlywheelRPM()));
+    m_shooterMotor.set(m_bangBangController.calculate(m_shooterMotor.getSelectedSensorVelocity()));
 
-    SmartDashboard.putNumber("Current Shooter Speed", m_shooterMotor.get());
-    SmartDashboard.putNumber("Current Shooter RPM", getFlywheelRPM());
-  }
-
-/**
- * Gets the RPM of the flywheel
- */
-  public double getFlywheelRPM() {
-    return m_shooterMotor.getSelectedSensorVelocity() * Constants.ShooterConstants.kMillisecondsPerMinute
-        / Constants.ShooterConstants.kTicksPerRotation / Constants.ShooterConstants.kMillisecondsPerTenthSecond;
+    SmartDashboard.putNumber("Current Shooter Power", m_shooterMotor.get());
+    SmartDashboard.putNumber("Current Shooter Speed", m_shooterMotor.getSelectedSensorVelocity());
   }
 
   /**
-   * Sets the RPM of the shooter.
+   * Sets the speed of the shooter.
    * 
-   * @param revs RPM of the shooter.
+   * @param speed Speed of the shooter in ticks per decisecond.
    */
-  public void set(double revs) {
-    m_bangBangController.setSetpoint(revs);
-    SmartDashboard.putNumber("Target Shooter RPM", revs);
+  public void set(double speed) {
+    m_bangBangController.setSetpoint(speed);
+    SmartDashboard.putNumber("Target Shooter Speed", speed);
   }
 }
