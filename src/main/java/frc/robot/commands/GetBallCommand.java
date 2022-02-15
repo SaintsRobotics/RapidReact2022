@@ -30,6 +30,7 @@ public class GetBallCommand extends CommandBase {
     Limelight.setLED(3);
     m_pid.setSetpoint(0.0); // 0.0 means the limelight is pointed at the right direction
     m_pid.setTolerance(Math.PI/30);
+    Limelight.setCameraMode(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
