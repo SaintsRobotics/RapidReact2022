@@ -62,6 +62,10 @@ public final class Limelight {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tl").getDouble(0);
     }
 
+    public static double getState() {
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").getDouble(0); // 0 is the default param
+    }
+
     /**
      * Sets limelight’s LED state.
      * <p>
