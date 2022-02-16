@@ -36,9 +36,8 @@ public class RobotContainer {
   private final HardwareMap m_hardwareMap = new HardwareMap();
   private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
       m_hardwareMap.swerveDrivetrainHardware);
+  private final ClimberArmSubsystem m_climberSubsystem = new ClimberArmSubsystem();
 
-  private ClimberArmSubsystem m_climberSubsystem = new ClimberArmSubsystem(m_hardwareMap.climberArmHardware);
-  private ClimberArmCommand m_climberCommand = new ClimberArmCommand(m_climberSubsystem, m_operatorController);
   private final MoveCommand m_defaultMoveCommand;
   private final MoveCommand m_aimingMoveCommand;
 
@@ -74,8 +73,7 @@ public class RobotContainer {
     Limelight.setCameraMode(1);
 
     m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
-
-    m_climberSubsystem.setDefaultCommand(m_climberCommand);
+    m_climberSubsystem.setDefaultCommand(new ClimberArmCommand(m_climberSubsystem, m_operatorController));
 
     SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
     SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
