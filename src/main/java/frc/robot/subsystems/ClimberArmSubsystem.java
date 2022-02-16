@@ -14,7 +14,7 @@ public class ClimberArmSubsystem extends SubsystemBase {
   private CANSparkMax m_left = new CANSparkMax(ClimberConstants.kLeftArmPort, MotorType.kBrushless);
   private CANSparkMax m_right = new CANSparkMax(ClimberConstants.kRightArmPort, MotorType.kBrushless);
 
-  /** Creates a new ClimberArmSubsystem. */
+  /** Creates a new {@link ClimberArmSubsystem}. */
   public ClimberArmSubsystem() {
   }
 
