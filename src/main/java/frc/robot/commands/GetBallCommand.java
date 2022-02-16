@@ -6,45 +6,44 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Limelight;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class GetBallCommand extends CommandBase {
   private final PIDController m_pid = new PIDController(0.03, 0, 0);
-  private SwerveDriveSubsystem m_swerveSubsystem;
-  /** Creates a new AutonAimingCommand. */
+  private final SwerveDriveSubsystem m_swerveSubsystem;
+  private final int m_pipeline;
 
-  public void AutonAimingCommand(SwerveDriveSubsystem swerveSubsystem) {
+  /** Creates a new {@link GetBallCommand}. */
+  public GetBallCommand(SwerveDriveSubsystem swerveSubsystem, int pipeline) {
     m_swerveSubsystem = swerveSubsystem;
     addRequirements(m_swerveSubsystem);
-  
-  }
-    // Use addRequirements() here to declare subsystem dependencies.
-  
 
-  // Called when the command is initially scheduled.
+    m_pipeline = pipeline;
+
+    m_pid.setTolerance(0.1);
+  }
+
   @Override
   public void initialize() {
-    m_pid.reset();
-    Limelight.setLED(3);
-    m_pid.setSetpoint(0.0); // 0.0 means the limelight is pointed at the right direction
-    m_pid.setTolerance(Math.PI/30);
+    Limelight.setPipeline(m_pipeline);
+    Limelight.setLED(0);
     Limelight.setCameraMode(0);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("Ball Resolved", Limelight.getState());
-    m_swerveSubsystem.drive(m_pid.calculate(Limelight.getX()), m_pid.calculate(Limelight.getY()), 0, true);
+    m_swerveSubsystem.drive(m_pid.atSetpoint() ? 0.1 : 0, 0, m_pid.calculate(Limelight.getX(), 0), false);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_swerveSubsystem.drive(0, 0, 0, true);
+    m_swerveSubsystem.drive(0, 0, 0, false);
     Limelight.setLED(1);
   }
 
+  @Override
+  public boolean isFinished() {
+    return !Limelight.hasTarget();
+  }
 }
