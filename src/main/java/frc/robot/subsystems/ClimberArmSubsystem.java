@@ -8,10 +8,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ClimberConstants;
 
 public class ClimberArmSubsystem extends SubsystemBase {
-  private CANSparkMax m_right = new CANSparkMax(0, MotorType.kBrushless);
-  private CANSparkMax m_left = new CANSparkMax(0, MotorType.kBrushless);
+  private CANSparkMax m_right = new CANSparkMax(ClimberConstants.kRightArmPort, MotorType.kBrushless);
+  private CANSparkMax m_left = new CANSparkMax(ClimberConstants.kLeftArmPort, MotorType.kBrushless);
 
   /** Creates a new ClimberArmSubsystem. */
   public ClimberArmSubsystem() {
