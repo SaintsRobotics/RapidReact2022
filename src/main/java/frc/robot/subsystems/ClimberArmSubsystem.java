@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
@@ -18,14 +19,15 @@ public class ClimberArmSubsystem extends SubsystemBase {
   public ClimberArmSubsystem() {
   }
 
-  public void climb(double m_desiredSpeed) {
-    m_right.set(m_desiredSpeed);
-    m_left.set(m_desiredSpeed);
-  }
-
-  public void unclimb() {
-    m_right.set(0);
-    m_left.set(0);
+  /**
+   * Sets the speed of the climber.
+   * 
+   * @param speed Speed of the climber from -1 to 1.
+   */
+  public void set(double speed) {
+    m_right.set(speed);
+    m_left.set(speed);
+    SmartDashboard.putNumber("Desired Climber Speed", speed);
   }
 
   @Override
