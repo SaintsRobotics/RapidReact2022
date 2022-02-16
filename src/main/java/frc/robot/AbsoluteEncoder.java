@@ -1,6 +1,6 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 public class AbsoluteEncoder {
@@ -27,15 +27,13 @@ public class AbsoluteEncoder {
 	}
 
 	/**
-	 * Returns the angle as a {@link Rotation2d}. Zero points toward the front of
-	 * the robot.
-	 * <i>The value INCREASES as the wheel is turned COUNTER-CLOCKWISE</i>
+	 * Returns the angle of the encoder. Zero points toward the front of the robot.
+	 * The value increases as the wheel is turned counterclockwise.
 	 * 
-	 * @return The angle as a {@link Rotation2d}.
+	 * @return The angle between -pi and pi.
 	 */
-	public Rotation2d get() {
-		double angle = (m_analogIn.getVoltage() / 5 * 2 * Math.PI) - m_offset;
-
-		return m_reversed ? new Rotation2d(5 - angle) : new Rotation2d(angle);
+	public double get() {
+		// TODO change offset to volts
+		return MathUtil.angleModulus(((m_analogIn.getVoltage() / 5 * 2 * Math.PI) - m_offset) * (m_reversed ? -1 : 1));
 	}
 }
