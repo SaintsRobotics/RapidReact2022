@@ -54,10 +54,12 @@ public final class Constants {
     public static final double kWheelBase = 0.67;
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2), new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2), new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+        new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+        new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxSpeedMetersPerSecond = 3.6;
 
     public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
 
@@ -74,6 +76,6 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double kJoystickDeadzone = 0.11;
+    public static final double kControllerDeadband = 0.11;
   }
 }
