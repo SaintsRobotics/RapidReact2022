@@ -7,13 +7,15 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
 public class ClimberArmSubsystem extends SubsystemBase {
-  private CANSparkMax m_left = new CANSparkMax(ClimberConstants.kLeftArmPort, MotorType.kBrushless);
-  private CANSparkMax m_right = new CANSparkMax(ClimberConstants.kRightArmPort, MotorType.kBrushless);
+  private MotorControllerGroup m_climberMotor = new MotorControllerGroup(
+      new CANSparkMax(ClimberConstants.kLeftArmPort, MotorType.kBrushless),
+      new CANSparkMax(ClimberConstants.kRightArmPort, MotorType.kBrushless));
 
   /** Creates a new {@link ClimberArmSubsystem}. */
   public ClimberArmSubsystem() {
@@ -25,8 +27,7 @@ public class ClimberArmSubsystem extends SubsystemBase {
    * @param speed Speed of the climber from -1 to 1.
    */
   public void set(double speed) {
-    m_right.set(speed);
-    m_left.set(speed);
+    m_climberMotor.set(speed);
     SmartDashboard.putNumber("Desired Climber Speed", speed);
   }
 
