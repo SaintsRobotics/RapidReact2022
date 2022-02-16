@@ -19,6 +19,6 @@ public class ClimberArmCommand extends CommandBase {
 
   @Override
   public void execute() {
-    m_climberSubsystem.climb(0.2);
+    m_climberSubsystem.set(0.2);
   }
 }
