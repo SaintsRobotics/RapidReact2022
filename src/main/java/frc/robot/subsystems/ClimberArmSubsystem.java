@@ -33,6 +33,6 @@ public class ClimberArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    SmartDashboard.putNumber("Climber Speed", m_climberMotor.get());
   }
 }
