@@ -48,6 +48,8 @@ public class MoveCommand extends CommandBase {
   private DoubleSupplier m_rotSpeedSupplier;
   private BooleanSupplier m_fieldRelativeSupplier = () -> true;
 
+  private boolean m_willFinish = false;
+
   /**
    * Creates a new {@link MoveCommand}. Call methods to make the robot move.
    * 
@@ -92,8 +94,7 @@ public class MoveCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    // TODO add logic to determine when to finish
-    return false;
+    return m_willFinish ? m_xPID.atSetpoint() && m_yPID.atSetpoint() && m_rotPID.atSetpoint() : false;
   }
 
   /**
@@ -103,6 +104,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withXSpeedSupplier(DoubleSupplier x) {
+    m_willFinish = false;
     m_xSpeedSupplier = x;
     m_deltaX = 0;
     return this;
@@ -115,6 +117,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withYSpeedSupplier(DoubleSupplier y) {
+    m_willFinish = false;
     m_ySpeedSupplier = y;
     m_deltaY = 0;
     return this;
@@ -127,6 +130,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withRotSpeedSupplier(DoubleSupplier rot) {
+    m_willFinish = false;
     m_rotSpeedSupplier = rot;
     m_deltaRot = 0;
     return this;
@@ -156,6 +160,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withFieldRelativePos(double x, double y) {
+    m_willFinish = true;
     m_deltaX += x;
     m_deltaY += y;
     m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_startPose.getX() + m_deltaX);
@@ -243,6 +248,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteX(double x) {
+    m_willFinish = true;
     m_deltaX = x - m_driveSubsystem.getPose().getX();
     m_xSpeedSupplier = () -> m_xPID.calculate(m_driveSubsystem.getPose().getX(), m_startPose.getX() + m_deltaX);
     return this;
@@ -255,6 +261,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withAbsoluteY(double y) {
+    m_willFinish = true;
     m_deltaY = y - m_driveSubsystem.getPose().getY();
     m_ySpeedSupplier = () -> m_yPID.calculate(m_driveSubsystem.getPose().getY(), m_startPose.getY() + m_deltaY);
     return this;
@@ -267,6 +274,7 @@ public class MoveCommand extends CommandBase {
    * @return This, for method chaining.
    */
   public MoveCommand withChangeInHeading(double rot) {
+    m_willFinish = true;
     m_deltaRot += Math.toRadians(rot);
     m_rotSpeedSupplier = () -> m_rotPID.calculate(
         m_driveSubsystem.getPose().getRotation().getRadians(), m_startPose.getRotation().getRadians() + m_deltaRot);
@@ -282,4 +290,5 @@ public class MoveCommand extends CommandBase {
   public MoveCommand withAbsoluteHeading(double rot) {
     return withChangeInHeading(rot - m_driveSubsystem.getPose().getRotation().getDegrees());
   }
+
 }
