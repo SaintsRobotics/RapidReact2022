@@ -11,10 +11,10 @@ public class AbsoluteEncoder {
 	/**
 	 * Construct an absolute encoder, most likely a US Digital MA3 encoder.
 	 * 
-	 * @param channel  analog in (aka sometime also refered to as AIO) port on the
-	 *                 robotRIO
-	 * @param offset   Offset of the analog input in volts. Set this to the voltage
-	 *                 the analog input returns when the wheel is pointed forward.
+	 * @param channel analog in (aka sometime also refered to as AIO) port on the
+	 *                robotRIO
+	 * @param offset  Offset of the analog input in volts. Set this to the voltage
+	 *                the analog input returns when the wheel is pointed forward.
 	 */
 	public AbsoluteEncoder(int channel, double offset) {
 		m_analogIn = new AnalogInput(channel);
@@ -29,6 +29,8 @@ public class AbsoluteEncoder {
 	 */
 	public double get() {
 		// Takes the voltage of the analog input (0 to 5) and converts it to an angle.
-		return MathUtil.angleModulus((m_analogIn.getVoltage() - m_offset) / 5 * 2 * Math.PI);
+		// This value needs to be negated because the analog input value increases as
+		// the module is turned clockwise, which is the opposite of what we need.
+		return MathUtil.angleModulus(-(m_analogIn.getVoltage() - m_offset) / 5 * 2 * Math.PI);
 	}
 }
