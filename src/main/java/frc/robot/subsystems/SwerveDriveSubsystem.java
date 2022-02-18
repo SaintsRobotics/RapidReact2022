@@ -59,7 +59,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(), m_rearLeft.getState(),
+		m_odometry.update(
+				m_gyro.getRotation2d(),
+				m_frontLeft.getState(),
+				m_rearLeft.getState(),
 				m_frontRight.getState(),
 				m_rearRight.getState());
 
