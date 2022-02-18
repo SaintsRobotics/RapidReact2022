@@ -13,25 +13,21 @@ public class HardwareMap {
         SwerveConstants.kFrontLeftDriveMotorPort,
         SwerveConstants.kFrontLeftTurningMotorPort,
         SwerveConstants.kFrontLeftTurningEncoderPort,
-        SwerveConstants.kFrontLeftTurningEncoderReversed,
         SwerveConstants.kFrontLeftTurningEncoderOffset);
     public SwerveModule rearLeft = new SwerveModule(
         SwerveConstants.kRearLeftDriveMotorPort,
         SwerveConstants.kRearLeftTurningMotorPort,
         SwerveConstants.kRearLeftTurningEncoderPort,
-        SwerveConstants.kRearLeftTurningEncoderReversed,
         SwerveConstants.kRearLeftTurningEncoderOffset);
     public SwerveModule frontRight = new SwerveModule(
         SwerveConstants.kFrontRightDriveMotorPort,
         SwerveConstants.kFrontRightTurningMotorPort,
         SwerveConstants.kFrontRightTurningEncoderPort,
-        SwerveConstants.kFrontRightTurningEncoderReversed,
         SwerveConstants.kFrontRightTurningEncoderOffset);
     public SwerveModule rearRight = new SwerveModule(
         SwerveConstants.kRearRightDriveMotorPort,
         SwerveConstants.kRearRightTurningMotorPort,
         SwerveConstants.kRearRightTurningEncoderPort,
-        SwerveConstants.kRearRightTurningEncoderReversed,
         SwerveConstants.kRearRightTurningEncoderOffset);
 
     public AHRS gyro = new AHRS();
