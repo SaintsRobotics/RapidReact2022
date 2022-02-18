@@ -11,7 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveConstants;
 
@@ -20,7 +20,7 @@ public class SwerveModule {
 	private final CANSparkMax m_driveMotor;
 	private final CANSparkMax m_turningMotor;
 
-	private final AnalogPotentiometer m_turningEncoder;
+	private final AnalogEncoder m_turningEncoder;
 
 	private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
 
@@ -42,7 +42,9 @@ public class SwerveModule {
 		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-		m_turningEncoder = new AnalogPotentiometer(turningEncoderChannel, 2 * Math.PI, turningEncoderOffset);
+		// TODO remove offsets and adjust hardware to compensate
+		m_turningEncoder = new AnalogEncoder(turningEncoderChannel);
+		m_turningEncoder.setDistancePerRotation(2 * Math.PI);
 
 		m_driveMotor.getEncoder().setVelocityConversionFactor(
 				ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio);
