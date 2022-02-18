@@ -17,8 +17,8 @@ public class AbsoluteEncoder {
 	 * @param reversed set this to <i>TRUE</i> if physically turning the swerve
 	 *                 wheel <i>CLOCKWISE</i> (looking down from the top of the bot)
 	 *                 <i>INCREASES</i> the raw voltage that the encoder provides.
-	 * @param offset   swerve offset in <i>RADIANS</i>. This value is
-	 *                 <i>SUBTRACTED</i> from the encoder output.
+	 * @param offset   Offset of the analog input in volts. Set this to the voltage
+	 *                 the analog input returns when the wheel is pointed forward.
 	 */
 	public AbsoluteEncoder(int channel, boolean reversed, double offset) {
 		m_analogIn = new AnalogInput(channel);
@@ -33,7 +33,6 @@ public class AbsoluteEncoder {
 	 * @return The angle between -pi and pi.
 	 */
 	public double get() {
-		// TODO change offset to volts
-		return MathUtil.angleModulus(((m_analogIn.getVoltage() / 5 * 2 * Math.PI) - m_offset) * (m_reversed ? -1 : 1));
+		return MathUtil.angleModulus((m_analogIn.getVoltage() - m_offset) / 5 * 2 * Math.PI * (m_reversed ? -1 : 1));
 	}
 }
