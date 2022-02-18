@@ -33,6 +33,7 @@ public class AbsoluteEncoder {
 	 * @return The angle between -pi and pi.
 	 */
 	public double get() {
+		// Takes the voltage of the analog input (0 to 5) and converts it to an angle.
 		return MathUtil.angleModulus((m_analogIn.getVoltage() - m_offset) / 5 * 2 * Math.PI * (m_reversed ? -1 : 1));
 	}
 }
