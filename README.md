@@ -2,6 +2,16 @@
 
 Saints Robotics 1899's code for the 2022 season.
 
+## Status
+
+Here is a list of all the things the code can do.
+
+* Swerve drive with heading correction.
+* Autonomous driving to absolute or relative positions.
+* Aiming at the shooting target and balls using the Limelight.
+* Unit tests for utility methods.
+* Controlling shooter speed with a bang bang controller.
+
 ## Commit Message Prefixes
 
 All commit messages must start with one of the following prefixes.
@@ -14,7 +24,7 @@ All commit messages must start with one of the following prefixes.
 * **"test:"** - New tests or correcting existing tests
 * **"chore:"** - Miscellaneous changes
 
-## Examples
+### Examples
 
 * feat: created swerve functions
 * fix: autonomous turning bug
@@ -25,3 +35,11 @@ All commit messages must start with one of the following prefixes.
 * chore: licensing and credits
 
 Remember to add your name at the end of a commit when not using your own account. This will help us know who to talk to about commits.
+
+## Setting Swerve Module Offsets
+
+Instructions for how to set the offsets of the turning encoders of the swerve modules.
+
+1. Point all the wheels straight forward.
+2. Find the voltage values of the absolute encoders in shuffleboard (Open the left hand window and it's under LiveWindow > Ungrouped > AnalogInput[] > Value)
+3. Save the values from shuffleboard into the turning encoder offset constants. Be sure to match up the value with the correct wheel.
