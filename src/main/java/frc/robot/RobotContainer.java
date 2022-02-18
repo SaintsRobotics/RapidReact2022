@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -30,6 +29,8 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -40,9 +41,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-	private final HardwareMap m_hardwareMap = new HardwareMap();
-	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem(
-			m_hardwareMap.swerveDrivetrainHardware);
+	private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
 
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
@@ -53,14 +52,17 @@ public class RobotContainer {
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
-		final DoubleSupplier x = () -> Utils
-				.oddSquare(MathUtil.applyDeadband(-m_driveController.getLeftY(), OIConstants.kControllerDeadband))
+		DoubleSupplier x = () -> Utils
+				.oddSquare(MathUtil.applyDeadband(-m_driveController.getLeftY(),
+						OIConstants.kControllerDeadband))
 				* SwerveConstants.kMaxSpeedMetersPerSecond;
-		final DoubleSupplier y = () -> Utils
-				.oddSquare(MathUtil.applyDeadband(-m_driveController.getLeftX(), OIConstants.kControllerDeadband))
+		DoubleSupplier y = () -> Utils
+				.oddSquare(MathUtil.applyDeadband(-m_driveController.getLeftX(),
+						OIConstants.kControllerDeadband))
 				* SwerveConstants.kMaxSpeedMetersPerSecond;
-		final DoubleSupplier rot = () -> Utils
-				.oddSquare(MathUtil.applyDeadband(-m_driveController.getRightX(), OIConstants.kControllerDeadband))
+		DoubleSupplier rot = () -> Utils
+				.oddSquare(MathUtil.applyDeadband(-m_driveController.getRightX(),
+						OIConstants.kControllerDeadband))
 				* SwerveConstants.kMaxAngularSpeedRadiansPerSecond;
 		BooleanSupplier fieldRelative = () -> m_driveController.getRightBumper();
 		m_defaultMoveCommand = new MoveCommand(m_swerveDriveSubsystem)
@@ -78,10 +80,6 @@ public class RobotContainer {
 		Limelight.setCameraMode(1);
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
-
-		SmartDashboard.putNumber("Controller X", -m_driveController.getLeftY());
-		SmartDashboard.putNumber("Controller Y", -m_driveController.getLeftX());
-		SmartDashboard.putNumber("Controller Rot", -m_driveController.getRightY());
 	}
 
 	/**
@@ -93,7 +91,8 @@ public class RobotContainer {
 	private void configureButtonBindings() {
 		// Resets the odometry when the back button is pressed.
 		new JoystickButton(m_driveController, Button.kBack.value)
-				.whenPressed(() -> m_swerveDriveSubsystem.resetOdometry(new Pose2d()), m_swerveDriveSubsystem);
+				.whenPressed(() -> m_swerveDriveSubsystem.resetOdometry(new Pose2d()),
+						m_swerveDriveSubsystem);
 
 		// Zeroes the heading when the start button is pressed
 		new JoystickButton(m_driveController, Button.kStart.value)
@@ -108,6 +107,10 @@ public class RobotContainer {
 		new JoystickButton(m_driveController, Button.kB.value)
 				.whenHeld(new LimelightAimingCommand(m_aimingMoveCommand,
 						DriverStation.getAlliance() == Alliance.Blue ? 1 : 2));
+
+		// Toggles the shooter when Y button is pressed.
+		new JoystickButton(m_driveController, Button.kY.value)
+				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
 	}
 
 	/**
@@ -116,7 +119,7 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		return pathFollowCommand();
+		return null;
 	}
 
 	public Command pathFollowCommand() {
@@ -143,12 +146,12 @@ public class RobotContainer {
 
 		return new SwerveControllerCommand(
 				trajectory,
-				m_swerveDriveSubsystem::getCurrentPose,
+				m_swerveDriveSubsystem::getPose,
 				SwerveConstants.kDriveKinematics,
 				xPID,
 				yPID,
 				rotPID,
-				m_swerveDriveSubsystem::setSwerveModuleStates,
+				m_swerveDriveSubsystem::setModuleStates,
 				m_swerveDriveSubsystem);
 	}
 }

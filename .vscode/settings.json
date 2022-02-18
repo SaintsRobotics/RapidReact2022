@@ -32,6 +32,7 @@
     "AHRS",
     "Deadband",
     "deadzone",
+    "decisecond",
     "kauailabs",
     "linuxaarch",
     "linuxathena",
@@ -44,6 +45,7 @@
     "setpoint",
     "teleop",
     "teleoperated",
+    "Ungrouped",
     "windowsx",
     "wpilib"
   ]

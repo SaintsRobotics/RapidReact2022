@@ -13,184 +13,177 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Utils;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.HardwareMap.SwerveDrivetrainHardware;
 
 /** Controls the drivetrain of the robot using swerve. */
 public class SwerveDriveSubsystem extends SubsystemBase {
-  private final SwerveModule m_frontLeft;
-  private final SwerveModule m_rearLeft;
-  private final SwerveModule m_frontRight;
-  private final SwerveModule m_rearRight;
+	private final SwerveModule m_frontLeft = new SwerveModule(
+			SwerveConstants.kFrontLeftDriveMotorPort,
+			SwerveConstants.kFrontLeftTurningMotorPort,
+			SwerveConstants.kFrontLeftTurningEncoderPort,
+			SwerveConstants.kFrontLeftTurningEncoderReversed,
+			SwerveConstants.kFrontLeftTurningEncoderOffset);
+	private final SwerveModule m_rearLeft = new SwerveModule(
+			SwerveConstants.kRearLeftDriveMotorPort,
+			SwerveConstants.kRearLeftTurningMotorPort,
+			SwerveConstants.kRearLeftTurningEncoderPort,
+			SwerveConstants.kRearLeftTurningEncoderReversed,
+			SwerveConstants.kRearLeftTurningEncoderOffset);
+	private final SwerveModule m_frontRight = new SwerveModule(
+			SwerveConstants.kFrontRightDriveMotorPort,
+			SwerveConstants.kFrontRightTurningMotorPort,
+			SwerveConstants.kFrontRightTurningEncoderPort,
+			SwerveConstants.kFrontRightTurningEncoderReversed,
+			SwerveConstants.kFrontRightTurningEncoderOffset);
+	private final SwerveModule m_rearRight = new SwerveModule(
+			SwerveConstants.kRearRightDriveMotorPort,
+			SwerveConstants.kRearRightTurningMotorPort,
+			SwerveConstants.kRearRightTurningEncoderPort,
+			SwerveConstants.kRearRightTurningEncoderReversed,
+			SwerveConstants.kRearRightTurningEncoderOffset);
 
-  private final AHRS m_gyro;
-  private final SwerveDriveOdometry m_odometry;
+	private final AHRS m_gyro = new AHRS();
+	private final SwerveDriveOdometry m_odometry;
 
-  // TODO tune pid
-  private final PIDController m_headingCorrectionPID = new PIDController(1.5, 0, 0);
-  private final Timer m_headingCorrectionTimer;
+	// TODO tune pid
+	private final PIDController m_headingCorrectionPID = new PIDController(1.5, 0, 0);
+	private final Timer m_headingCorrectionTimer;
 
-  private final Field2d m_field = new Field2d();
+	/** Creates a new {@link SwerveDriveSubsystem}. */
+	public SwerveDriveSubsystem() {
+		m_gyro.reset();
+		m_gyro.calibrate();
 
-  /**
-   * Creates a new {@link SwerveDriveSubsystem}.
-   * 
-   * @param hardware the hardware for the {@link SwerveDriveSubsystem}
-   */
-  public SwerveDriveSubsystem(SwerveDrivetrainHardware hardware) {
-    SmartDashboard.putData("Field", m_field);
-    m_frontLeft = hardware.frontLeft;
-    m_rearLeft = hardware.rearLeft;
-    m_frontRight = hardware.frontRight;
-    m_rearRight = hardware.rearRight;
+		m_odometry = new SwerveDriveOdometry(SwerveConstants.kDriveKinematics, m_gyro.getRotation2d());
 
-    m_gyro = hardware.gyro;
-    m_gyro.calibrate();
+		m_headingCorrectionPID.enableContinuousInput(-Math.PI, Math.PI);
+		m_headingCorrectionPID.setSetpoint(MathUtil.angleModulus(m_gyro.getRotation2d().getRadians()));
+		m_headingCorrectionTimer = new Timer();
+		m_headingCorrectionTimer.start();
+	}
 
-    m_odometry = new SwerveDriveOdometry(SwerveConstants.kDriveKinematics, m_gyro.getRotation2d());
-    m_gyro.reset();
-    m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
+	@Override
+	public void periodic() {
+		m_odometry.update(
+				m_gyro.getRotation2d(),
+				m_frontLeft.getState(),
+				m_rearLeft.getState(),
+				m_frontRight.getState(),
+				m_rearRight.getState());
 
-    m_headingCorrectionPID.enableContinuousInput(-Math.PI, Math.PI);
-    m_headingCorrectionPID.setSetpoint(MathUtil.angleModulus(m_gyro.getRotation2d().getRadians()));
-    m_headingCorrectionTimer = new Timer();
-    m_headingCorrectionTimer.start();
-  }
+		SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
+		SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
+		SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
+		SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
 
-  @Override
-  public void periodic() {
-    m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(), m_rearLeft.getState(), m_frontRight.getState(),
-        m_rearRight.getState());
+		SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
+		SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
+		SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
+		SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
 
-    printToDashboard();
-    m_field.setRobotPose(m_odometry.getPoseMeters());
-    SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
+		SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
+		SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
+		SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
 
-    SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
+		SmartDashboard.putNumber("Gyro Angle", MathUtil.inputModulus(m_gyro.getAngle(), 0, 360));
 
-    SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
-    SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
-    SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
+		SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
+		SmartDashboard.putNumber("Heading Correction Timer", m_headingCorrectionTimer.get());
+	}
 
-    SmartDashboard.putNumber("Gyro Angle", MathUtil.inputModulus(m_gyro.getAngle(), 0, 360));
+	/**
+	 * Returns the currently-estimated pose of the robot.
+	 *
+	 * @return The pose.
+	 */
+	public Pose2d getPose() {
+		return m_odometry.getPoseMeters();
+	}
 
-    SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
-    SmartDashboard.putNumber("Heading Correction Timer", m_headingCorrectionTimer.get());
-  }
+	/**
+	 * Resets the odometry to the specified pose.
+	 *
+	 * @param pose The pose to which to set the odometry.
+	 */
+	public void resetOdometry(Pose2d pose) {
+		m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+	}
 
-  /**
-   * Returns the currently-estimated pose of the robot.
-   *
-   * @return The pose.
-   */
-  public Pose2d getCurrentPose() {
-    return m_odometry.getPoseMeters();
-  }
+	/**
+	 * Method to drive the robot.
+	 *
+	 * @param xSpeed        Speed of the robot in the x direction in meters per
+	 *                      second (forward). Positive is forward.
+	 * @param ySpeed        Speed of the robot in the y direction in meters per
+	 *                      second (sideways). Positive is left.
+	 * @param rot           Angular rate of the robot in radians per second.
+	 * @param fieldRelative Whether the provided x and y speeds are relative to the
+	 *                      field. Positive is counterclockwise.
+	 */
+	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+		double rotation = rot;
 
-  /**
-   * Resets the odometry to the specified pose.
-   *
-   * @param pose The pose to which to set the odometry.
-   */
-  public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(pose, m_gyro.getRotation2d());
-  }
+		// resets the timer when the robot is turning, used to measure the time since
+		// the robot has stopped turning
+		if (rot != 0) {
+			m_headingCorrectionTimer.reset();
+		}
 
-  /**
-   * Method to drive the robot.
-   *
-   * @param xSpeed        Speed of the robot in the x direction in meters per
-   *                      second (forward). Positive is forward.
-   * @param ySpeed        Speed of the robot in the y direction in meters per
-   *                      second (sideways). Positive is left.
-   * @param rot           Angular rate of the robot in radians per second.
-   * @param fieldRelative Whether the provided x and y speeds are relative to the
-   *                      field. Positive is counterclockwise.
-   */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    double rotation = rot;
+		// corrects the heading of the robot to prevent it from drifting
+		double currentAngle = MathUtil.angleModulus(m_gyro.getRotation2d().getRadians());
 
-    // resets the timer when the robot is turning, used to measure the time since the robot has stopped turning
-    if (rot != 0) {
-      m_headingCorrectionTimer.reset();
-    }
+		if ((xSpeed == 0 && ySpeed == 0) || m_headingCorrectionTimer.get() < SwerveConstants.kTurningStopTime) {
+			m_headingCorrectionPID.setSetpoint(currentAngle);
+			SmartDashboard.putString("Heading Correction", "Setting Setpoint");
+		} else {
+			rotation = m_headingCorrectionPID.calculate(currentAngle);
+			SmartDashboard.putString("Heading Correction", "Correcting Heading");
+		}
 
-    // corrects the heading of the robot to prevent it from drifting
-    double currentAngle = MathUtil.angleModulus(m_gyro.getRotation2d().getRadians());
+		// this check prevents the wheels from resetting to straight when the robot
+		// stops moving
+		if (xSpeed == 0 && ySpeed == 0 && rotation == 0) {
+			m_frontLeft.setDesiredState();
+			m_rearLeft.setDesiredState();
+			m_frontRight.setDesiredState();
+			m_rearRight.setDesiredState();
+		} else {
+			SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(
+					fieldRelative
+							? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, m_gyro.getRotation2d())
+							: new ChassisSpeeds(xSpeed, ySpeed, rotation));
 
-    if ((xSpeed == 0 && ySpeed == 0) || m_headingCorrectionTimer.get() < SwerveConstants.kTurningStopTime) {
-      m_headingCorrectionPID.setSetpoint(currentAngle);
-      SmartDashboard.putString("Heading Correction", "Setting Setpoint");
-    } else {
-      rotation = m_headingCorrectionPID.calculate(currentAngle);
-      SmartDashboard.putString("Heading Correction", "Correcting Heading");
-    }
+			SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
 
-    // this check prevents the wheels from resetting to straight when the robot
-    // stops moving
-    if (xSpeed == 0 && ySpeed == 0 && rotation == 0) {
-      m_frontLeft.setDesiredState();
-      m_rearLeft.setDesiredState();
-      m_frontRight.setDesiredState();
-      m_rearRight.setDesiredState();
-    } else {
-      SwerveModuleState[] swerveModuleStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(
-          fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, m_gyro.getRotation2d())
-              : new ChassisSpeeds(xSpeed, ySpeed, rotation));
+			m_frontLeft.setDesiredState(swerveModuleStates[0]);
+			m_rearLeft.setDesiredState(swerveModuleStates[1]);
+			m_frontRight.setDesiredState(swerveModuleStates[2]);
+			m_rearRight.setDesiredState(swerveModuleStates[3]);
+		}
 
-      SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.kMaxSpeedMetersPerSecond);
+		SmartDashboard.putNumber("Desired X", xSpeed);
+		SmartDashboard.putNumber("Desired Y", ySpeed);
+		SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
+	}
 
-      m_frontLeft.setDesiredState(swerveModuleStates[0]);
-      m_rearLeft.setDesiredState(swerveModuleStates[1]);
-      m_frontRight.setDesiredState(swerveModuleStates[2]);
-      m_rearRight.setDesiredState(swerveModuleStates[3]);
-    }
+	/**
+	 * Sets the swerve ModuleStates.
+	 *
+	 * @param desiredStates The desired SwerveModule states.
+	 */
+	public void setModuleStates(SwerveModuleState[] desiredStates) {
+		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxSpeedMetersPerSecond);
+		m_frontLeft.setDesiredState(desiredStates[0]);
+		m_rearLeft.setDesiredState(desiredStates[1]);
+		m_frontRight.setDesiredState(desiredStates[2]);
+		m_rearRight.setDesiredState(desiredStates[3]);
+	}
 
-    SmartDashboard.putNumber("Desired X", xSpeed);
-    SmartDashboard.putNumber("Desired Y", ySpeed);
-    SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
-  }
-
-  /** Zeroes the heading of the robot. */
-  public void zeroHeading() {
-    m_gyro.reset();
-  }
-
-  public void setSwerveModuleStates(SwerveModuleState[] swerveModuleStates) { 
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_rearLeft.setDesiredState(swerveModuleStates[1]);
-    m_frontRight.setDesiredState(swerveModuleStates[2]);
-    m_rearRight.setDesiredState(swerveModuleStates[3]);
-  }
-
-  private void printToDashboard () {
-    SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
-
-    SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
-
-    SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
-    SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
-    SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
-
-    SmartDashboard.putNumber("Gyro Angle", Utils.normalizeAngle(m_gyro.getAngle(), 360));
-
-    SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headPidController.getSetpoint()));
-  }
+	/** Zeroes the heading of the robot. */
+	public void zeroHeading() {
+		m_gyro.reset();
+	}
 }
