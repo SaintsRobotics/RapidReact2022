@@ -5,24 +5,21 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.HardwareMap.IntakeHardware;
+import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-
-  private CANSparkMax m_intakeController;
-  private CANSparkMax m_armController;
-  private CANSparkMax m_feederController;
+  private CANSparkMax m_intakeController = new CANSparkMax(25, null);
+  private CANSparkMax m_armController = new CANSparkMax(24, null);
+  private CANSparkMax m_feederController = new CANSparkMax(23, null);
   private double m_desiredInputSpeed;
   private double m_desiredFeederSpeed;
 
-  /** Creates a new IntakeSubsystem. */
-  public IntakeSubsystem(IntakeHardware intake) {
-    m_intakeController = intake.intakeController;
-    m_armController = intake.armController;
-    m_feederController = intake.feederController;
+  /** Creates a new {@link IntakeSubsystem}. */
+  public IntakeSubsystem() {
+    m_armController.setIdleMode(IdleMode.kBrake);
   }
 
   @Override
@@ -45,11 +42,11 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void intake() {
-    m_desiredInputSpeed = Constants.IntakeConstants.INTAKE_SPEED;
+    m_desiredInputSpeed = IntakeConstants.kIntakeSpeed;
   }
 
   public void outtake() {
-    m_desiredInputSpeed = -Constants.IntakeConstants.INTAKE_SPEED;
+    m_desiredInputSpeed = -IntakeConstants.kIntakeSpeed;
   }
 
   public void stopIntake() {
