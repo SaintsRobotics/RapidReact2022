@@ -128,7 +128,7 @@ public class RobotContainer {
 	 * 
 	 * @param trajectoryJSON The name of the json file containing the path. In the
 	 *                       format "paths/trajectory.wpilib.json". Should be stored
-	 *                       under deploy > paths.
+	 *                       under deploy>paths.
 	 * @return {@link SwerveControllerCommand} that follows the given
 	 *         {@link Trajectory}.
 	 */
