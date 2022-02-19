@@ -133,8 +133,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	 * @param fieldRelative Whether the provided x and y speeds are relative to the
 	 *                      field. Positive is counterclockwise.
 	 */
-
-
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
 		double rotation = rot;
 
@@ -184,6 +182,19 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		double degressSinceLastTick = degreeRotationSpeed * Robot.kDefaultPeriod;
 		printSimulatedGyro(Math.toDegrees(currentAngle) + degressSinceLastTick);
 
+	}
+
+	/**
+	 * Sets the {@link SwerveModuleState SwerveModuleStates}.
+	 *
+	 * @param desiredStates The desired {@link SwerveModuleState SwerveModuleStates}.
+	 */
+	public void setModuleStates(SwerveModuleState[] desiredStates) {
+		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxSpeedMetersPerSecond);
+		m_frontLeft.setDesiredState(desiredStates[0]);
+		m_rearLeft.setDesiredState(desiredStates[1]);
+		m_frontRight.setDesiredState(desiredStates[2]);
+		m_rearRight.setDesiredState(desiredStates[3]);
 	}
 
 	/** Zeroes the heading of the robot. */
