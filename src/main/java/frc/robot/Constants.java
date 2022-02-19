@@ -47,6 +47,8 @@ public final class Constants {
 		public static final double kFrontRightTurningEncoderOffset = 2.9;
 		public static final double kRearRightTurningEncoderOffset = 1.9;
 
+		public static final double speedScaling = 0.2; //temporary value
+
 		/** Distance between centers of right and left wheels on robot. */
 		public static final double kTrackWidth = 0.5;
 

@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 
 /** Controls the drivetrain of the robot using swerve. */
@@ -125,6 +126,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	 */
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
 		double rotation = rot;
+		xSpeed *= Constants.SwerveConstants.speedScaling;
+		ySpeed *= Constants.SwerveConstants.speedScaling;
+		rot *= Constants.SwerveConstants.speedScaling;
 
 		// resets the timer when the robot is turning, used to measure the time since
 		// the robot has stopped turning
