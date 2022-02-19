@@ -8,8 +8,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.hal.SimDouble;
-import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -17,6 +15,7 @@ import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.simulation.AnalogEncoderSim;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Robot;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
 public class SwerveModule {
@@ -27,6 +26,8 @@ public class SwerveModule {
 	private final AnalogEncoderSim m_turningEncoderSim;
 
 	private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
+
+	private SwerveModuleState m_state = new SwerveModuleState();
 
 	/**
 	 * Creates a new {@link SwerveModule}.
@@ -65,7 +66,9 @@ public class SwerveModule {
 	 * @return The current state of the module.
 	 */
 	public SwerveModuleState getState() {
-		return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(), new Rotation2d(m_turningEncoder.get()));
+		return new SwerveModuleState(
+				Robot.isReal() ? m_driveMotor.getEncoder().getVelocity() : m_state.speedMetersPerSecond,
+				new Rotation2d(m_turningEncoder.get()));
 	}
 
 	/**
@@ -83,23 +86,13 @@ public class SwerveModule {
 	 * @param desiredState Desired state with speed and angle.
 	 */
 	public void setDesiredState(SwerveModuleState desiredState) {
-		SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.get()));
+		SwerveModuleState m_state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.get()));
 
-		final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
-		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get(), state.angle.getRadians());
+		final double driveOutput = m_state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
+		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get(), m_state.angle.getRadians());
 
 		m_driveMotor.set(driveOutput);
 		m_turningMotor.set(turnOutput);
-		m_turningEncoderSim.setTurns(state.angle.getRadians());
-	}
-
-	public double calculateSimulatedDriveSpeed() {
-		return SwerveConstants.kMaxSpeedMetersPerSecond / ModuleConstants.kDrivingGearRatio;
-	}
-
-	public void printSimulatedDriveSpeed(double driveSpeed) {
-		int dev = SimDeviceDataJNI.getSimDeviceHandle("SPARK MAX [" + m_driveMotor.getDeviceId() + "]");
-		SimDouble speed = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "velocity"));
-		speed.set(driveSpeed);
+		m_turningEncoderSim.setTurns(m_state.angle.getRadians());
 	}
 }
