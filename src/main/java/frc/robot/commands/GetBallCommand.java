@@ -33,6 +33,7 @@ public class GetBallCommand extends CommandBase {
 
   @Override
   public void execute() {
+    Limelight.setLED(0);
     m_swerveSubsystem.drive(m_pid.atSetpoint() ? 0.1 : 0, 0, m_pid.calculate(Limelight.getX(), 0), false);
   }
 

@@ -92,7 +92,7 @@ public class RobotContainer {
                 .whenPressed(() -> m_swerveDriveSubsystem.zeroHeading(), m_swerveDriveSubsystem);
 
         new JoystickButton(m_driveController, Button.kX.value)
-                .whenPressed(new GetBallCommand(m_swerveDriveSubsystem,
+                .whenHeld(new GetBallCommand(m_swerveDriveSubsystem,
                         DriverStation.getAlliance() == Alliance.Blue ? 2 : 1));
 
         // Aims at target while the A button is held.
