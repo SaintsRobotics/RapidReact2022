@@ -178,9 +178,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
 
 		double degreeRotationSpeed = Math.toDegrees(rotation);
-		double degressSinceLastTick = degreeRotationSpeed * Robot.kDefaultPeriod;
-		printSimulatedGyro(Math.toDegrees(currentAngle) + degressSinceLastTick);
-
+		double degreesSinceLastTick = degreeRotationSpeed * Robot.kDefaultPeriod;
+		printSimulatedGyro(m_gyro.getAngle() + degreesSinceLastTick);
 	}
 
 	/**
