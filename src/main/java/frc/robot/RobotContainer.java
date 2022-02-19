@@ -123,7 +123,7 @@ public class RobotContainer {
 	}
 
 	public Command pathFollowCommand() {
-		String trajectoryJSON = "output/l.wpilib.json";
+		String trajectoryJSON = "paths/Triganel.wpilib.json";
 		Trajectory trajectory = new Trajectory();
 
 		try {
