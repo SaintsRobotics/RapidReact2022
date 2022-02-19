@@ -170,9 +170,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * Sets the swerve ModuleStates.
+	 * Sets the {@link SwerveModuleState SwerveModuleStates}.
 	 *
-	 * @param desiredStates The desired SwerveModule states.
+	 * @param desiredStates The desired {@link SwerveModuleState SwerveModuleStates}.
 	 */
 	public void setModuleStates(SwerveModuleState[] desiredStates) {
 		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxSpeedMetersPerSecond);
