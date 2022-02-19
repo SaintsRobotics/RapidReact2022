@@ -30,7 +30,6 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.FeederCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimelightAimingCommand;
-import frc.robot.commands.MoveArmCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.ShooterCommand;
@@ -87,7 +86,6 @@ public class RobotContainer {
 		Limelight.setCameraMode(1);
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
-		m_intakeSubsystem.setDefaultCommand(new MoveArmCommand(m_intakeSubsystem, m_operatorController));
 	}
 
 	/**
@@ -119,6 +117,7 @@ public class RobotContainer {
 		// Toggles the shooter when Y button is pressed.
 		new JoystickButton(m_driveController, Button.kY.value)
 				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
+
 		// Allows the bot to drift while left bumper is held
 		new JoystickButton(m_driveController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())

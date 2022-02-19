@@ -81,6 +81,10 @@ public final class Constants {
 	}
 
 	public static final class IntakeConstants {
+		// TODO update angles with intake
+		public static final double kRaisedArmAngle = 0;
+		public static final double kLoweredArmAngle = 0;
+
 		public static final double kIntakeSpeed = 0.45;
 
 		public static final int kWheelsPort = 25;
