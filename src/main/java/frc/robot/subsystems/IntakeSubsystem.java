@@ -6,14 +6,15 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private CANSparkMax m_intakeController = new CANSparkMax(25, null);
-  private CANSparkMax m_armController = new CANSparkMax(24, null);
-  private CANSparkMax m_feederController = new CANSparkMax(23, null);
+  private CANSparkMax m_intakeController = new CANSparkMax(25, MotorType.kBrushless);
+  private CANSparkMax m_armController = new CANSparkMax(24, MotorType.kBrushless);
+  private CANSparkMax m_feederController = new CANSparkMax(23, MotorType.kBrushless);
   private double m_desiredInputSpeed;
   private double m_desiredFeederSpeed;
 
