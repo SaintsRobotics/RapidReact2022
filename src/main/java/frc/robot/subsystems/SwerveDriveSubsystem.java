@@ -50,7 +50,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			SwerveConstants.kRearRightTurningEncoderOffset);
 
 	private final AHRS m_gyro = new AHRS();
-	
 
 	private final SwerveDriveOdometry m_odometry;
 	private final Field2d m_field2d = new Field2d();
@@ -187,7 +186,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	/**
 	 * Sets the {@link SwerveModuleState SwerveModuleStates}.
 	 *
-	 * @param desiredStates The desired {@link SwerveModuleState SwerveModuleStates}.
+	 * @param desiredStates The desired {@link SwerveModuleState
+	 *                      SwerveModuleStates}.
 	 */
 	public void setModuleStates(SwerveModuleState[] desiredStates) {
 		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxSpeedMetersPerSecond);
