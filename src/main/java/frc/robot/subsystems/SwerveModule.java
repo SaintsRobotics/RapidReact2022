@@ -86,7 +86,7 @@ public class SwerveModule {
 	 * @param desiredState Desired state with speed and angle.
 	 */
 	public void setDesiredState(SwerveModuleState desiredState) {
-		SwerveModuleState m_state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.get()));
+		m_state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.get()));
 
 		final double driveOutput = m_state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
 		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get(), m_state.angle.getRadians());
