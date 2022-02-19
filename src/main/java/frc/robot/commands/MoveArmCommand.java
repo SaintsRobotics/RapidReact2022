@@ -9,14 +9,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class MoveArmCommand extends CommandBase {
-
   private IntakeSubsystem m_intakeSubsystem;
   private XboxController m_controller;
 
   /** Creates a new MoveArmCommand. */
-  public MoveArmCommand(IntakeSubsystem intakeSubystem, XboxController controller) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_intakeSubsystem = intakeSubystem;
+  public MoveArmCommand(IntakeSubsystem intakeSubsystem, XboxController controller) {
+    m_intakeSubsystem = intakeSubsystem;
+    addRequirements(m_intakeSubsystem);
     m_controller = controller;
   }
 
