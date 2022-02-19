@@ -90,7 +90,7 @@ public class SwerveModule {
 
 			m_driveMotor.set(driveOutput);
 			m_turningMotor.set(turnOutput);
-			m_turningEncoderSim.setPosition(new Rotation2d(state.angle.getRadians()));
+			m_turningEncoderSim.setTurns(state.angle.getRadians());
 	}
 
 	public double calculateSimulatedDriveSpeed() {
