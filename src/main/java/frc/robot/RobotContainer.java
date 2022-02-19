@@ -119,7 +119,7 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		return null;
+		return pathFollowCommand();
 	}
 
 	public Command pathFollowCommand() {
@@ -135,7 +135,7 @@ public class RobotContainer {
 
 		PIDController xPID = new PIDController(1, 0, 0);
 		PIDController yPID = new PIDController(1, 0, 0);
-		ProfiledPIDController rotPID = new ProfiledPIDController(1, 0.0, 0.0,
+		ProfiledPIDController rotPID = new ProfiledPIDController(1, 0, 0,
 				new TrapezoidProfile.Constraints(Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 2.6));
 		xPID.setTolerance(0.05);
 		yPID.setTolerance(0.05);
