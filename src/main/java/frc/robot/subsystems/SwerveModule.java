@@ -88,9 +88,9 @@ public class SwerveModule {
 		final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
 		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get(), state.angle.getRadians());
 
-			m_driveMotor.set(driveOutput);
-			m_turningMotor.set(turnOutput);
-			m_turningEncoderSim.setTurns(state.angle.getRadians());
+		m_driveMotor.set(driveOutput);
+		m_turningMotor.set(turnOutput);
+		m_turningEncoderSim.setTurns(state.angle.getRadians());
 	}
 
 	public double calculateSimulatedDriveSpeed() {
