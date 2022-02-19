@@ -13,8 +13,9 @@ import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.AbsoluteEncoder;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.simulation.AnalogEncoderSim;
+import frc.robot.Robot;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveConstants;
 
@@ -23,7 +24,8 @@ public class SwerveModule {
 	private final CANSparkMax m_driveMotor;
 	private final CANSparkMax m_turningMotor;
 
-	private final AbsoluteEncoder m_turningEncoder;
+	private final AnalogEncoder m_turningEncoder;
+	private final AnalogEncoderSim m_turningEncoderSim;
 
 	private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
 
@@ -45,7 +47,10 @@ public class SwerveModule {
 		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-		m_turningEncoder = new AbsoluteEncoder(turningEncoderChannel, turningEncoderReversed, turningEncoderOffset);
+		// TODO remove offsets and adjust hardware to compensate
+		m_turningEncoder = new AnalogEncoder(turningEncoderChannel);
+		m_turningEncoder.setDistancePerRotation(2 * Math.PI);
+		m_turningEncoderSim = new AnalogEncoderSim(m_turningEncoder);
 
 		m_driveMotor.getEncoder().setVelocityConversionFactor(
 				ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio);
@@ -84,8 +89,9 @@ public class SwerveModule {
 		final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
 		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get(), state.angle.getRadians());
 
-		m_driveMotor.set(driveOutput);
-		m_turningMotor.set(turnOutput);
+			m_driveMotor.set(driveOutput);
+			m_turningMotor.set(turnOutput);
+			m_turningEncoderSim.setPosition(new Rotation2d(state.angle.getRadians()));
 	}
 
 	public double calculateSimulatedDriveSpeed() {
