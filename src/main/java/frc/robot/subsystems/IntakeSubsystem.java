@@ -23,6 +23,9 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new {@link IntakeSubsystem}. */
   public IntakeSubsystem() {
     m_armMotor.setIdleMode(IdleMode.kBrake);
+
+    // TODO update tolerance
+    m_armPID.setTolerance(0.1);;
   }
 
   @Override
@@ -31,9 +34,10 @@ public class IntakeSubsystem extends SubsystemBase {
     m_armMotor.set(m_armPID.calculate(0));
   }
 
-  /** Raises the arm. */
+  /** Raises the arm and turns off the intake. */
   public void raiseArm() {
     m_armPID.setSetpoint(IntakeConstants.kRaisedArmAngle);
+    IntakeOff();
   }
 
   /** Lowers the arm. */
@@ -41,14 +45,18 @@ public class IntakeSubsystem extends SubsystemBase {
     m_armPID.setSetpoint(IntakeConstants.kLoweredArmAngle);
   }
 
-  /** Runs the intake. */
+  /** Runs the intake if the arm is lowered. */
   public void intake() {
-    m_intakeMotor.set(IntakeConstants.kIntakeSpeed);
+    m_intakeMotor.set(m_armPID.atSetpoint() && m_armPID.getSetpoint() == IntakeConstants.kLoweredArmAngle
+        ? IntakeConstants.kIntakeSpeed
+        : 0);
   }
 
-  /** Runs the intake in reverse. */
+  /** Runs the intake in reverse if the arm is lowered. */
   public void intakeReverse() {
-    m_intakeMotor.set(-IntakeConstants.kIntakeSpeed);
+    m_intakeMotor.set(m_armPID.atSetpoint() && m_armPID.getSetpoint() == IntakeConstants.kLoweredArmAngle
+        ? -IntakeConstants.kIntakeSpeed
+        : 0);
   }
 
   /** Turns off the intake. */
