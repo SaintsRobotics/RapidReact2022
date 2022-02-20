@@ -38,8 +38,8 @@ public class ShooterSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Error", m_shooterPID.getPositionError());
 		SmartDashboard.putNumber("PID output", pidOutput);
 		SmartDashboard.putNumber("Feedforward", feedForward);
-		SmartDashboard.putNumber("Current Shooter Power", m_shooterMotor.get());
-		SmartDashboard.putNumber("Current Shooter Speed", m_velocityInRPM);
+		SmartDashboard.putNumber("Current Shooter Speed (-1 to 1)", m_shooterMotor.get());
+		SmartDashboard.putNumber("Current Shooter RPM", m_velocityInRPM);
 	}
 
 	/**
