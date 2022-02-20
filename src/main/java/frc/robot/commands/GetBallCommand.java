@@ -11,47 +11,47 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /** Uses the {@link Limelight} to intake a ball belonging to our alliance. */
 public class GetBallCommand extends CommandBase {
-  private final SwerveDriveSubsystem m_swerveSubsystem;
-  private final PIDController m_pid = new PIDController(0.03, 0, 0);
-  private final int m_pipeline;
+	private final SwerveDriveSubsystem m_swerveSubsystem;
+	private final PIDController m_pid = new PIDController(0.03, 0, 0);
+	private final int m_pipeline;
 
-  /**
-   * Creates a new {@link GetBallCommand}.
-   * 
-   * @param subsystem The required subsystem.
-   * @param pipeline  Pipeline index to aim at the ball with.
-   */
-  public GetBallCommand(SwerveDriveSubsystem subsystem, int pipeline) {
-    m_swerveSubsystem = subsystem;
-    addRequirements(m_swerveSubsystem);
+	/**
+	 * Creates a new {@link GetBallCommand}.
+	 * 
+	 * @param subsystem The required subsystem.
+	 * @param pipeline  Pipeline index to aim at the ball with.
+	 */
+	public GetBallCommand(SwerveDriveSubsystem subsystem, int pipeline) {
+		m_swerveSubsystem = subsystem;
+		addRequirements(m_swerveSubsystem);
 
-    m_pipeline = pipeline;
+		m_pipeline = pipeline;
 
-    m_pid.setTolerance(0.1);
-  }
+		m_pid.setTolerance(0.1);
+	}
 
-  @Override
-  public void initialize() {
-    Limelight.setPipeline(m_pipeline);
-    Limelight.setLED(0);
-    Limelight.setCameraMode(0);
-  }
+	@Override
+	public void initialize() {
+		Limelight.setPipeline(m_pipeline);
+		Limelight.setLED(0);
+		Limelight.setCameraMode(0);
+	}
 
-  @Override
-  public void execute() {
-    Limelight.setLED(0);
-    m_swerveSubsystem.drive(m_pid.atSetpoint() ? 0.1 : 0, 0, m_pid.calculate(Limelight.getX(), 0), false);
-  }
+	@Override
+	public void execute() {
+		Limelight.setLED(0);
+		m_swerveSubsystem.drive(m_pid.atSetpoint() ? 0.1 : 0, 0, m_pid.calculate(Limelight.getX(), 0), false);
+	}
 
-  @Override
-  public void end(boolean interrupted) {
-    m_swerveSubsystem.drive(0, 0, 0, false);
-    Limelight.setLED(1);
-  }
+	@Override
+	public void end(boolean interrupted) {
+		m_swerveSubsystem.drive(0, 0, 0, false);
+		Limelight.setLED(1);
+	}
 
-  // Change
-  @Override
-  public boolean isFinished() {
-    return !Limelight.hasTarget();
-  }
+	// Change
+	@Override
+	public boolean isFinished() {
+		return !Limelight.hasTarget();
+	}
 }
