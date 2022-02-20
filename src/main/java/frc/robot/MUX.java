@@ -22,9 +22,7 @@ public class MUX {
 	}
 
 	/**
-	 * Constructor.
-	 * 
-	 * The I2C port and address is hardcoded in the constructor.
+	 * Creates a new {@link MUX}. There should only be one instance.
 	 */
 	public MUX() {
 		m_i2cBus = new I2C(I2C.Port.kMXP, 0x70);
