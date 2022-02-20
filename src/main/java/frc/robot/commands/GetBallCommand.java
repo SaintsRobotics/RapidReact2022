@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Limelight;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
+/** Uses the {@link Limelight} to intake a ball belonging to our alliance. */
 public class GetBallCommand extends CommandBase {
   private final PIDController m_pid = new PIDController(0.03, 0, 0);
   private final SwerveDriveSubsystem m_swerveSubsystem;
@@ -43,7 +44,7 @@ public class GetBallCommand extends CommandBase {
     Limelight.setLED(1);
   }
 
-  //Change
+  // Change
   @Override
   public boolean isFinished() {
     return !Limelight.hasTarget();
