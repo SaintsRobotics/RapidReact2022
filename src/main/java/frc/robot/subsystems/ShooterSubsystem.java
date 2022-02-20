@@ -25,8 +25,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
-		m_shooterPID.setSetpoint(0);
 		m_shooterMotor.setInverted(true);
+		m_shooterPID.setSetpoint(0);
 	}
 
 	@Override
