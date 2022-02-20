@@ -35,7 +35,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		double feedforward = m_feedforward.calculate(m_PID.getSetpoint());
 		m_shooterMotor.set(pidOutput + feedforward);
 
-		SmartDashboard.putNumber("PID output", pidOutput);
+		SmartDashboard.putNumber("PID Output", pidOutput);
 		SmartDashboard.putNumber("Feedforward", feedforward);
 		SmartDashboard.putNumber("Current Shooter Speed (-1 to 1)", m_shooterMotor.get());
 		SmartDashboard.putNumber("Current Shooter RPM", Utils.ticksToRPM(m_shooterMotor.getSelectedSensorVelocity()));
