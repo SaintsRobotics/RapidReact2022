@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
+/** Subsystem that controls the intake, arm, and feeder of the robot. */
 public class IntakeSubsystem extends SubsystemBase {
   private final CANSparkMax m_armMotor = new CANSparkMax(24, MotorType.kBrushless);
   private final CANSparkMax m_intakeMotor = new CANSparkMax(25, MotorType.kBrushless);
@@ -25,7 +26,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_armMotor.setIdleMode(IdleMode.kBrake);
 
     // TODO update tolerance
-    m_armPID.setTolerance(0.1);;
+    m_armPID.setTolerance(0.1);
   }
 
   @Override
