@@ -14,8 +14,8 @@ import frc.robot.Utils;
 import frc.robot.Constants.ShooterConstants;
 
 /**
- * Subsystem that controls the RPM of the shooter by using a bang bang
- * controller.
+ * Subsystem that controls the RPM of the shooter by using a PID controller with
+ * feed forward.
  */
 public class ShooterSubsystem extends SubsystemBase {
 	private final WPI_TalonFX m_shooterMotor = new WPI_TalonFX(ShooterConstants.kShooterMotorPort);
