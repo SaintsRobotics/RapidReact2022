@@ -27,6 +27,6 @@ public class Utils {
 	 * @return The speed in RPM.
 	 */
 	public static double ticksToRPM(double ticks) {
-		return ticks*600/2048;
+		return ticks * 600 / 2048;
 	}
 }
