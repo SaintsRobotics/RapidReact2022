@@ -20,8 +20,8 @@ import frc.robot.Constants.ShooterConstants;
 public class ShooterSubsystem extends SubsystemBase {
 	private final WPI_TalonFX m_shooterMotor = new WPI_TalonFX(ShooterConstants.kShooterMotorPort);
 
-	private final SimpleMotorFeedforward m_feedForward = new SimpleMotorFeedforward(0.1, 0);
 	private final PIDController m_shooterPID = new PIDController(0.0007, 0, 0);
+	private final SimpleMotorFeedforward m_feedForward = new SimpleMotorFeedforward(0.1, 0);
 
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
