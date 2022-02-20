@@ -15,9 +15,14 @@ public class GetBallCommand extends CommandBase {
   private final SwerveDriveSubsystem m_swerveSubsystem;
   private final int m_pipeline;
 
-  /** Creates a new {@link GetBallCommand}. */
-  public GetBallCommand(SwerveDriveSubsystem swerveSubsystem, int pipeline) {
-    m_swerveSubsystem = swerveSubsystem;
+  /**
+   * Creates a new {@link GetBallCommand}.
+   * 
+   * @param subsystem The required subsystem.
+   * @param pipeline  Pipeline index to aim at the ball with.
+   */
+  public GetBallCommand(SwerveDriveSubsystem subsystem, int pipeline) {
+    m_swerveSubsystem = subsystem;
     addRequirements(m_swerveSubsystem);
 
     m_pipeline = pipeline;
