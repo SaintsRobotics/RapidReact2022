@@ -21,7 +21,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final WPI_TalonFX m_shooterMotor = new WPI_TalonFX(ShooterConstants.kShooterMotorPort);
 
 	private final PIDController m_shooterPID = new PIDController(0.0007, 0, 0);
-	private final SimpleMotorFeedforward m_feedForward = new SimpleMotorFeedforward(0.1, 0);
+	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.1, 0);
 
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
@@ -32,12 +32,12 @@ public class ShooterSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		double pidOutput = m_shooterPID.calculate(Utils.ticksToRPM(m_shooterMotor.getSelectedSensorVelocity()));
-		double feedForward = m_feedForward.calculate(m_shooterPID.getSetpoint());
-		m_shooterMotor.set(pidOutput + feedForward);
+		double feedforward = m_feedforward.calculate(m_shooterPID.getSetpoint());
+		m_shooterMotor.set(pidOutput + feedforward);
 
 		SmartDashboard.putNumber("Error", m_shooterPID.getPositionError());
 		SmartDashboard.putNumber("PID output", pidOutput);
-		SmartDashboard.putNumber("Feedforward", feedForward);
+		SmartDashboard.putNumber("Feedforward", feedforward);
 		SmartDashboard.putNumber("Current Shooter Speed (-1 to 1)", m_shooterMotor.get());
 		SmartDashboard.putNumber("Current Shooter RPM", Utils.ticksToRPM(m_shooterMotor.getSelectedSensorVelocity()));
 	}
