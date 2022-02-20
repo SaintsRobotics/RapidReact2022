@@ -18,26 +18,26 @@ import frc.robot.Constants.ShooterConstants;
  * feed forward.
  */
 public class ShooterSubsystem extends SubsystemBase {
-	private final WPI_TalonFX m_shooterMotor = new WPI_TalonFX(ShooterConstants.kShooterMotorPort);
+	private final WPI_TalonFX m_motor = new WPI_TalonFX(ShooterConstants.kShooterMotorPort);
 
 	private final PIDController m_PID = new PIDController(ShooterConstants.kP, 0, 0);
 	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(ShooterConstants.kS, 0);
 
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
-		m_shooterMotor.setInverted(true);
+		m_motor.setInverted(true);
 		m_PID.setSetpoint(0);
 	}
 
 	@Override
 	public void periodic() {
-		double pidOutput = m_PID.calculate(Utils.toRPM(m_shooterMotor.getSelectedSensorVelocity()));
-		m_shooterMotor.set(pidOutput + m_feedforward.calculate(m_PID.getSetpoint()));
+		double pidOutput = m_PID.calculate(Utils.toRPM(m_motor.getSelectedSensorVelocity()));
+		m_motor.set(pidOutput + m_feedforward.calculate(m_PID.getSetpoint()));
 
 		SmartDashboard.putNumber("PID Output", pidOutput);
 		SmartDashboard.putNumber("Feedforward", m_feedforward.calculate(m_PID.getSetpoint()));
-		SmartDashboard.putNumber("Current Shooter Speed (-1 to 1)", m_shooterMotor.get());
-		SmartDashboard.putNumber("Current Shooter RPM", Utils.toRPM(m_shooterMotor.getSelectedSensorVelocity()));
+		SmartDashboard.putNumber("Current Shooter Speed (-1 to 1)", m_motor.get());
+		SmartDashboard.putNumber("Current Shooter RPM", Utils.toRPM(m_motor.getSelectedSensorVelocity()));
 	}
 
 	/**
