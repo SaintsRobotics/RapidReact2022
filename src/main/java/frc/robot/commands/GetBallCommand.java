@@ -11,8 +11,8 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /** Uses the {@link Limelight} to intake a ball belonging to our alliance. */
 public class GetBallCommand extends CommandBase {
-  private final PIDController m_pid = new PIDController(0.03, 0, 0);
   private final SwerveDriveSubsystem m_swerveSubsystem;
+  private final PIDController m_pid = new PIDController(0.03, 0, 0);
   private final int m_pipeline;
 
   /**
