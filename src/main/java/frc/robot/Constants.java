@@ -77,7 +77,7 @@ public final class Constants {
 	public static final class ShooterConstants {
 		public static final int kShooterMotorPort = 9;
 
-		public static final double kShooterSpeedRPM = 500;
+		public static final double kSpeedRPM = 500;
 	}
 
 	public static final class OIConstants {
