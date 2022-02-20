@@ -49,6 +49,6 @@ public class ShooterSubsystem extends SubsystemBase {
 	 */
 	public void set(double speed) {
 		m_shooterPID.setSetpoint(speed);
-		SmartDashboard.putNumber("Target Shooter Speed", speed);
+		SmartDashboard.putNumber("Target Shooter RPM", speed);
 	}
 }
