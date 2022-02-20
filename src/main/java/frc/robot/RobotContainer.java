@@ -30,7 +30,6 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -43,13 +42,11 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  */
 public class RobotContainer {
 	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
-	private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
 
 	private final XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
-	private final XboxController m_operatorController = new XboxController(OIConstants.kDriverControllerPort);
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
