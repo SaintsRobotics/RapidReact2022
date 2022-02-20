@@ -45,7 +45,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	/**
 	 * Sets the speed of the shooter.
 	 * 
-	 * @param speed Speed of the shooter in ticks per decisecond.
+	 * @param speed Speed of the shooter in RPM.
 	 */
 	public void set(double speed) {
 		m_shooterPID.setSetpoint(speed);
