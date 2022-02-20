@@ -21,7 +21,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final WPI_TalonFX m_shooterMotor = new WPI_TalonFX(ShooterConstants.kShooterMotorPort);
 
 	private final PIDController m_PID = new PIDController(0.0007, 0, 0);
-	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.1, 0);
+	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.6, 0);
 
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
