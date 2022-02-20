@@ -18,4 +18,7 @@ public class Utils {
 	public static double oddSquare(double input) {
 		return input * Math.abs(input);
 	}
+	public static double ticksToRPM(double ticks) {
+		return ticks*600/2048;
+	}
 }
