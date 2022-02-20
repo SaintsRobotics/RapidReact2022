@@ -20,21 +20,15 @@ public class IntakeSubsystem extends SubsystemBase {
   // TODO tune PID
   private final PIDController m_armPID = new PIDController(0.3, 0, 0);
 
-  private double m_desiredInputSpeed;
-  private double m_desiredFeederSpeed;
-
   /** Creates a new {@link IntakeSubsystem}. */
   public IntakeSubsystem() {
     m_armMotor.setIdleMode(IdleMode.kBrake);
-    m_armPID.setSetpoint(IntakeConstants.kRaisedArmAngle);
   }
 
   @Override
   public void periodic() {
     // TODO use encoder to determine arm position
     m_armMotor.set(m_armPID.calculate(0));
-    m_intakeMotor.set(m_desiredInputSpeed);
-    m_feederMotor.set(m_desiredFeederSpeed);
   }
 
   /** Raises the arm. */
@@ -47,23 +41,28 @@ public class IntakeSubsystem extends SubsystemBase {
     m_armPID.setSetpoint(IntakeConstants.kLoweredArmAngle);
   }
 
-  public void turnFeederOn() {
-    m_desiredFeederSpeed = 1;
-  }
-
-  public void turnFeederOff() {
-    m_desiredFeederSpeed = 0;
-  }
-
+  /** Runs the intake. */
   public void intake() {
-    m_desiredInputSpeed = IntakeConstants.kIntakeSpeed;
+    m_intakeMotor.set(IntakeConstants.kIntakeSpeed);
   }
 
-  public void outtake() {
-    m_desiredInputSpeed = -IntakeConstants.kIntakeSpeed;
+  /** Runs the intake in reverse. */
+  public void intakeReverse() {
+    m_intakeMotor.set(-IntakeConstants.kIntakeSpeed);
   }
 
-  public void stopIntake() {
-    m_desiredInputSpeed = 0;
+  /** Turns off the intake. */
+  public void IntakeOff() {
+    m_intakeMotor.set(0);
+  }
+
+  /** Runs the feeder. */
+  public void feed() {
+    m_feederMotor.set(IntakeConstants.kFeederSpeed);
+  }
+
+  /** Turns off the feeder. */
+  public void feedOff() {
+    m_feederMotor.set(0);
   }
 }

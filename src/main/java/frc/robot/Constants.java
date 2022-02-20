@@ -86,6 +86,7 @@ public final class Constants {
 		public static final double kLoweredArmAngle = 0;
 
 		public static final double kIntakeSpeed = 0.45;
+		public static final double kFeederSpeed = 0;
 
 		public static final int kWheelsPort = 25;
 		public static final int kArmPort = 24;
