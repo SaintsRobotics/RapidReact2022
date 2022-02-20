@@ -23,10 +23,10 @@ public class Utils {
 	 * Converts the speed of a TalonFX from the default units of ticks per
 	 * decisecond to RPM.
 	 * 
-	 * @param ticks The speed in ticks per decisecond.
+	 * @param ticksPerDecisecond The speed in ticks per decisecond.
 	 * @return The speed in RPM.
 	 */
-	public static double ticksToRPM(double ticks) {
-		return ticks * 600 / 2048;
+	public static double toRPM(double ticksPerDecisecond) {
+		return ticksPerDecisecond * 600 / 2048;
 	}
 }

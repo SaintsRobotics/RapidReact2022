@@ -31,13 +31,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		double pidOutput = m_PID.calculate(Utils.ticksToRPM(m_shooterMotor.getSelectedSensorVelocity()));
+		double pidOutput = m_PID.calculate(Utils.toRPM(m_shooterMotor.getSelectedSensorVelocity()));
 		m_shooterMotor.set(pidOutput + m_feedforward.calculate(m_PID.getSetpoint()));
 
 		SmartDashboard.putNumber("PID Output", pidOutput);
 		SmartDashboard.putNumber("Feedforward", m_feedforward.calculate(m_PID.getSetpoint()));
 		SmartDashboard.putNumber("Current Shooter Speed (-1 to 1)", m_shooterMotor.get());
-		SmartDashboard.putNumber("Current Shooter RPM", Utils.ticksToRPM(m_shooterMotor.getSelectedSensorVelocity()));
+		SmartDashboard.putNumber("Current Shooter RPM", Utils.toRPM(m_shooterMotor.getSelectedSensorVelocity()));
 	}
 
 	/**
