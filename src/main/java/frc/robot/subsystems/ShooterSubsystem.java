@@ -29,7 +29,6 @@ public class ShooterSubsystem extends SubsystemBase {
 		m_shooterMotor.setInverted(true);
 	}
 
-
 	@Override
 	public void periodic() {
 		double m_velocityInRPM = Utils.ticksToRPM(m_shooterMotor.getSelectedSensorVelocity());
