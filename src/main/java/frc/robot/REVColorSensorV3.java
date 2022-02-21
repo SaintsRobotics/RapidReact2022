@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.util.Color;
  */
 public class REVColorSensorV3 {
 	private final MUX m_mux;
-	private final MUX.Port m_muxPort;
+	private final MUX.Port m_port;
 	private final ColorSensorV3 m_sensor;
 
 	/**
@@ -30,11 +30,11 @@ public class REVColorSensorV3 {
 	 */
 	public REVColorSensorV3(MUX mux, MUX.Port port) {
 		m_mux = mux;
-		m_muxPort = port;
+		m_port = port;
 
 		// The sensor needs to be connected to the right port so it can construct
 		// properly.
-		m_mux.switchToPort(m_muxPort);
+		m_mux.switchToPort(m_port);
 		m_sensor = new ColorSensorV3(I2C.Port.kMXP);
 	}
 
@@ -53,7 +53,7 @@ public class REVColorSensorV3 {
 	 *               LED (0-255)
 	 */
 	public void configureProximitySensorLED(LEDPulseFrequency freq, LEDCurrent curr, int pulses) {
-		m_mux.switchToPort(m_muxPort);
+		m_mux.switchToPort(m_port);
 		m_sensor.configureProximitySensorLED(freq, curr, pulses);
 	}
 
@@ -70,7 +70,7 @@ public class REVColorSensorV3 {
 	 * @param rate Measurement rate of the proximity sensor
 	 */
 	public void configureProximitySensor(ProximitySensorResolution res, ProximitySensorMeasurementRate rate) {
-		m_mux.switchToPort(m_muxPort);
+		m_mux.switchToPort(m_port);
 		m_sensor.configureProximitySensor(res, rate);
 	}
 
@@ -87,7 +87,7 @@ public class REVColorSensorV3 {
 	 * @param gain Gain factor applied to light sensor (color) outputs
 	 */
 	public void configureColorSensor(ColorSensorResolution res, ColorSensorMeasurementRate rate, GainFactor gain) {
-		m_mux.switchToPort(m_muxPort);
+		m_mux.switchToPort(m_port);
 		m_sensor.configureColorSensor(res, rate, gain);
 	}
 
@@ -99,7 +99,7 @@ public class REVColorSensorV3 {
 	 *         threshold is not met
 	 */
 	public Color getColor() {
-		m_mux.switchToPort(m_muxPort);
+		m_mux.switchToPort(m_port);
 		return m_sensor.getColor();
 	}
 
@@ -110,7 +110,7 @@ public class REVColorSensorV3 {
 	 * @return Proximity measurement value, ranging from 0 to 2047
 	 */
 	public int getProximity() {
-		m_mux.switchToPort(m_muxPort);
+		m_mux.switchToPort(m_port);
 		return m_sensor.getProximity();
 	}
 
@@ -120,7 +120,7 @@ public class REVColorSensorV3 {
 	 * @return Red ADC value
 	 */
 	public int getRed() {
-		m_mux.switchToPort(m_muxPort);
+		m_mux.switchToPort(m_port);
 		return m_sensor.getRed();
 	}
 
@@ -130,7 +130,7 @@ public class REVColorSensorV3 {
 	 * @return Green ADC value
 	 */
 	public int getGreen() {
-		m_mux.switchToPort(m_muxPort);
+		m_mux.switchToPort(m_port);
 		return m_sensor.getGreen();
 	}
 
@@ -140,7 +140,7 @@ public class REVColorSensorV3 {
 	 * @return Blue ADC value
 	 */
 	public int getBlue() {
-		m_mux.switchToPort(m_muxPort);
+		m_mux.switchToPort(m_port);
 		return m_sensor.getBlue();
 	}
 
@@ -159,7 +159,7 @@ public class REVColorSensorV3 {
 	 * @return true if the device was reset
 	 */
 	public boolean hasReset() {
-		m_mux.switchToPort(m_muxPort);
+		m_mux.switchToPort(m_port);
 		return m_sensor.hasReset();
 	}
 
@@ -169,7 +169,7 @@ public class REVColorSensorV3 {
 	 * @return True if yes, false if no
 	 */
 	public boolean isConnected() {
-		m_mux.switchToPort(m_muxPort);
+		m_mux.switchToPort(m_port);
 		return m_sensor.isConnected();
 	}
 }
