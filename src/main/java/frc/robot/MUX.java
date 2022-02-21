@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.I2C;
  * should only be one instance
  */
 public class MUX {
-	private I2C m_i2cBus;
+	private I2C m_I2C;
 
 	public enum Port {
 		ONE(new byte[] { (byte) 1 }), // single byte array to configure mux for port 1 0b00000001
@@ -25,14 +25,14 @@ public class MUX {
 	 * Creates a new {@link MUX}. There should only be one instance.
 	 */
 	public MUX() {
-		m_i2cBus = new I2C(I2C.Port.kMXP, 0x70);
+		m_I2C = new I2C(I2C.Port.kMXP, 0x70);
 	}
 
 	public void switchToPort(MUX.Port port) {
-		m_i2cBus.writeBulk(port.value);
+		m_I2C.writeBulk(port.value);
 	}
 
 	public I2C getI2CBus() {
-		return m_i2cBus;
+		return m_I2C;
 	}
 }
