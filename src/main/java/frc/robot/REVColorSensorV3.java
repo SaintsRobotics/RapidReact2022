@@ -104,6 +104,17 @@ public class REVColorSensorV3 {
 	}
 
 	/**
+	 * 
+	 * Get the raw proximity value from the sensor ADC (11 bit)
+	 * 
+	 * @return Proximity measurement value, ranging from 0 to 2047
+	 */
+	public int getProximity() {
+		m_mux.switchToPort(m_muxPort);
+		return m_sensor.getProximity();
+	}
+
+	/**
 	 * Get the raw color value from the red ADC
 	 * 
 	 * @return Red ADC value
@@ -131,17 +142,6 @@ public class REVColorSensorV3 {
 	public int getBlue() {
 		m_mux.switchToPort(m_muxPort);
 		return m_sensor.getBlue();
-	}
-
-	/**
-	 * 
-	 * Get the raw proximity value from the sensor ADC (11 bit)
-	 * 
-	 * @return Proximity measurement value, ranging from 0 to 2047
-	 */
-	public int getProximity() {
-		m_mux.switchToPort(m_muxPort);
-		return m_sensor.getProximity();
 	}
 
 	/**
