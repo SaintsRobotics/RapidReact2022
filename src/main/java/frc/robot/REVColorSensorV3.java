@@ -15,16 +15,18 @@ public class REVColorSensorV3 {
 	private ColorSensorV3 m_sensor;
 
 	/**
+	 * Creates a new {@link REVColorSensorV3}.
 	 * 
-	 * @param mux  The MUX object on the I2C bus. There shold only be one instance
-	 *             of this object existing in the code.
-	 * @param port The port on the MUX that the color sensor is plugged into. Should
-	 *             be unique for each color sensor.
+	 * @param mux  The {@link MUX} that the color sensor is connected to.
+	 * @param port The port on the {@link MUX} that the color sensor is connected
+	 *             to.
 	 */
 	public REVColorSensorV3(MUX mux, MUX.Port port) {
 		m_mux = mux;
 		m_muxPort = port;
 
+		// The sensor needs to be connected to the right port so it can construct
+		// properly.
 		m_mux.switchToPort(m_muxPort);
 		m_sensor = new ColorSensorV3(I2C.Port.kMXP);
 	}
