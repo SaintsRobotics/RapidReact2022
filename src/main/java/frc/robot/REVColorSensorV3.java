@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 
 /**
- * Wrapper for the ColorSensorV3 object from RevLib. Most of the javadocs for
- * these methods are copypasta from Rev's javadocs.
+ * Wrapper for the {@link ColorSensorV3} object from RevLib. Most of the
+ * javadocs for these methods are the same.
  */
 public class REVColorSensorV3 {
 	private MUX m_mux;
