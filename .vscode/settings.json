@@ -30,6 +30,7 @@
   "java.test.defaultConfig": "WPIlibUnitTests",
   "cSpell.words": [
     "AHRS",
+    "APDS",
     "Deadband",
     "deadzone",
     "decisecond",
