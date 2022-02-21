@@ -57,7 +57,7 @@ public class REVColorSensorV3 {
 	 * @param res  Bit resolution output by the proximity sensor ADC.
 	 * @param rate Measurement rate of the proximity sensor.
 	 */
-	public void configureProximitySensor​(ColorSensorV3.ProximitySensorResolution res,
+	public void configureProximitySensor(ColorSensorV3.ProximitySensorResolution res,
 			ColorSensorV3.ProximitySensorMeasurementRate rate) {
 		m_mux.switchToPort(m_muxPort);
 		m_sensor.configureProximitySensor(res, rate);
@@ -76,7 +76,7 @@ public class REVColorSensorV3 {
 	 * @param pulses The number of pulses per measurement of the proximity sensor
 	 *               LED. I think the range is [0-255]
 	 */
-	public void configureProximitySensorLED​(ColorSensorV3.LEDPulseFrequency freq, ColorSensorV3.LEDCurrent curr,
+	public void configureProximitySensorLED(ColorSensorV3.LEDPulseFrequency freq, ColorSensorV3.LEDCurrent curr,
 			int pulses) {
 		m_mux.switchToPort(m_muxPort);
 		m_sensor.configureProximitySensorLED(freq, curr, pulses);
