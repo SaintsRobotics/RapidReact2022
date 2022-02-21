@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.util.Color;
  * these methods are copypasta from Rev's javadocs.
  */
 public class REVColorSensorV3 {
-
 	private MUX m_mux;
 	private MUX.Port m_muxPort;
 	private ColorSensorV3 m_sensor;
