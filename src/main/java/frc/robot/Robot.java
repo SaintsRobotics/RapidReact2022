@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 		CommandScheduler.getInstance().run();
 		time += 0.02;
 		SmartDashboard.putNumber("Time Since Enabled", time);
-		SmartDashboard.putNumber("Match Timer", 135 - time);
+		SmartDashboard.putNumber("Match Timer", (int)(135 - time));
 		SmartDashboard.putBoolean("Game In Progress", (135 - time) > 0);
 	}
 
