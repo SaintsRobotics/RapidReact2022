@@ -30,8 +30,4 @@ public class MUX {
 	public void switchToPort(MUX.Port port) {
 		m_I2C.writeBulk(port.value);
 	}
-
-	public I2C getI2CBus() {
-		return m_I2C;
-	}
 }
