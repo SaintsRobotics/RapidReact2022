@@ -39,36 +39,37 @@ public class REVColorSensorV3 {
 	}
 
 	/**
-	 * Configure the IR LED used by the proximity sensor.
+	 * Configure the the IR LED used by the proximity sensor.
+	 *
+	 * <p>
 	 * These settings are only needed for advanced users, the defaults will work
 	 * fine for most teams. Consult the APDS-9151 for more information on these
 	 * configuration settings and how they will affect proximity sensor
 	 * measurements.
-	 * 
-	 * @param freq   The pulse width modulation frequency for the proximity sensor
-	 *               LED
-	 * @param curr   The pulse current for the prximity sensor LED
+	 *
+	 * @param freq   The pulse modulation frequency for the proximity sensor LED
+	 * @param curr   The pulse current for the proximity sensor LED
 	 * @param pulses The number of pulses per measurement of the proximity sensor
-	 *               LED. I think the range is [0-255]
+	 *               LED (0-255)
 	 */
-	public void configureProximitySensorLED(
-			LEDPulseFrequency freq, LEDCurrent curr, int pulses) {
+	public void configureProximitySensorLED(LEDPulseFrequency freq, LEDCurrent curr, int pulses) {
 		m_mux.switchToPort(m_muxPort);
 		m_sensor.configureProximitySensorLED(freq, curr, pulses);
 	}
 
 	/**
 	 * Configure the proximity sensor.
+	 *
+	 * <p>
 	 * These settings are only needed for advanced users, the defaults will work
 	 * fine for most teams. Consult the APDS-9151 for more information on these
 	 * configuration settings and how they will affect proximity sensor
 	 * measurements.
-	 * 
+	 *
 	 * @param res  Bit resolution output by the proximity sensor ADC.
-	 * @param rate Measurement rate of the proximity sensor.
+	 * @param rate Measurement rate of the proximity sensor
 	 */
-	public void configureProximitySensor(
-			ProximitySensorResolution res, ProximitySensorMeasurementRate rate) {
+	public void configureProximitySensor(ProximitySensorResolution res, ProximitySensorMeasurementRate rate) {
 		m_mux.switchToPort(m_muxPort);
 		m_sensor.configureProximitySensor(res, rate);
 	}
@@ -85,8 +86,7 @@ public class REVColorSensorV3 {
 	 * @param rate Measurement rate of the light sensor
 	 * @param gain Gain factor applied to light sensor (color) outputs
 	 */
-	public void configureColorSensor(
-			ColorSensorResolution res, ColorSensorMeasurementRate rate, GainFactor gain) {
+	public void configureColorSensor(ColorSensorResolution res, ColorSensorMeasurementRate rate, GainFactor gain) {
 		m_mux.switchToPort(m_muxPort);
 		m_sensor.configureColorSensor(res, rate, gain);
 	}
@@ -147,12 +147,16 @@ public class REVColorSensorV3 {
 	/**
 	 * Indicates if the device reset. Based on the power on status flag in the
 	 * status register. Per the datasheet:
+	 *
+	 * <p>
 	 * Part went through a power-up event, either because the part was turned on or
 	 * because there was power supply voltage disturbance (default at first register
 	 * read).
-	 * This flag is self-clearing
-	 * 
-	 * @return True if the device was reset.
+	 *
+	 * <p>
+	 * This flag is self clearing
+	 *
+	 * @return true if the device was reset
 	 */
 	public boolean hasReset() {
 		m_mux.switchToPort(m_muxPort);
