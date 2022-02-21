@@ -10,9 +10,9 @@ public class MUX {
 	private final I2C m_I2C = new I2C(I2C.Port.kMXP, 0x70);
 
 	public enum Port {
-		ONE(new byte[] { (byte) 1 }), // single byte array to configure mux for port 1 0b00000001
-		TWO(new byte[] { (byte) 2 }), // single byte array to configure mux for port 2 0b00000010
-		THREE(new byte[] { (byte) 4 }); // single byte array to configure mux for port 3 0b00000100
+		kOne(new byte[] { (byte) 1 }), // single byte array to configure mux for port 1 0b00000001
+		kTwo(new byte[] { (byte) 2 }), // single byte array to configure mux for port 2 0b00000010
+		kThree(new byte[] { (byte) 4 }); // single byte array to configure mux for port 3 0b00000100
 
 		public final byte[] value;
 
