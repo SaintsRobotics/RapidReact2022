@@ -33,11 +33,12 @@ public class REVColorSensorV3 {
 
 	/**
 	 * Configure the color sensor.
+	 *
+	 * <p>
 	 * These settings are only needed for advanced users, the defaults will work
 	 * fine for most teams. Consult the APDS-9151 for more information on these
-	 * configuration settings
-	 * and how they will affect color sensor measurements.
-	 * 
+	 * configuration settings and how they will affect color sensor measurements.
+	 *
 	 * @param res  Bit resolution output by the respective light sensor ADCs
 	 * @param rate Measurement rate of the light sensor
 	 * @param gain Gain factor applied to light sensor (color) outputs
