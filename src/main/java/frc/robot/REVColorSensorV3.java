@@ -39,21 +39,22 @@ public class REVColorSensorV3 {
 	}
 
 	/**
-	 * Configure the color sensor.
-	 *
-	 * <p>
+	 * Configure the IR LED used by the proximity sensor.
 	 * These settings are only needed for advanced users, the defaults will work
 	 * fine for most teams. Consult the APDS-9151 for more information on these
-	 * configuration settings and how they will affect color sensor measurements.
-	 *
-	 * @param res  Bit resolution output by the respective light sensor ADCs
-	 * @param rate Measurement rate of the light sensor
-	 * @param gain Gain factor applied to light sensor (color) outputs
+	 * configuration settings and how they will affect proximity sensor
+	 * measurements.
+	 * 
+	 * @param freq   The pulse width modulation frequency for the proximity sensor
+	 *               LED
+	 * @param curr   The pulse current for the prximity sensor LED
+	 * @param pulses The number of pulses per measurement of the proximity sensor
+	 *               LED. I think the range is [0-255]
 	 */
-	public void configureColorSensor(
-			ColorSensorResolution res, ColorSensorMeasurementRate rate, GainFactor gain) {
+	public void configureProximitySensorLED(
+			LEDPulseFrequency freq, LEDCurrent curr, int pulses) {
 		m_mux.switchToPort(m_muxPort);
-		m_sensor.configureColorSensor(res, rate, gain);
+		m_sensor.configureProximitySensorLED(freq, curr, pulses);
 	}
 
 	/**
@@ -73,22 +74,21 @@ public class REVColorSensorV3 {
 	}
 
 	/**
-	 * Configure the IR LED used by the proximity sensor.
+	 * Configure the color sensor.
+	 *
+	 * <p>
 	 * These settings are only needed for advanced users, the defaults will work
 	 * fine for most teams. Consult the APDS-9151 for more information on these
-	 * configuration settings and how they will affect proximity sensor
-	 * measurements.
-	 * 
-	 * @param freq   The pulse width modulation frequency for the proximity sensor
-	 *               LED
-	 * @param curr   The pulse current for the prximity sensor LED
-	 * @param pulses The number of pulses per measurement of the proximity sensor
-	 *               LED. I think the range is [0-255]
+	 * configuration settings and how they will affect color sensor measurements.
+	 *
+	 * @param res  Bit resolution output by the respective light sensor ADCs
+	 * @param rate Measurement rate of the light sensor
+	 * @param gain Gain factor applied to light sensor (color) outputs
 	 */
-	public void configureProximitySensorLED(
-			LEDPulseFrequency freq, LEDCurrent curr, int pulses) {
+	public void configureColorSensor(
+			ColorSensorResolution res, ColorSensorMeasurementRate rate, GainFactor gain) {
 		m_mux.switchToPort(m_muxPort);
-		m_sensor.configureProximitySensorLED(freq, curr, pulses);
+		m_sensor.configureColorSensor(res, rate, gain);
 	}
 
 	/**
