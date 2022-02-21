@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.I2C;
  * should only be one instance
  */
 public class MUX {
-	private I2C m_I2C;
+	private final I2C m_I2C;
 
 	public enum Port {
 		ONE(new byte[] { (byte) 1 }), // single byte array to configure mux for port 1 0b00000001
