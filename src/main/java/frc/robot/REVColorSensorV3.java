@@ -1,6 +1,9 @@
 package frc.robot;
 
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.ColorSensorV3.ColorSensorMeasurementRate;
+import com.revrobotics.ColorSensorV3.ColorSensorResolution;
+import com.revrobotics.ColorSensorV3.GainFactor;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
@@ -43,8 +46,8 @@ public class REVColorSensorV3 {
 	 * @param rate Measurement rate of the light sensor
 	 * @param gain Gain factor applied to light sensor (color) outputs
 	 */
-	public void configureColorSensor(ColorSensorV3.ColorSensorResolution res,
-			ColorSensorV3.ColorSensorMeasurementRate rate, ColorSensorV3.GainFactor gain) {
+	public void configureColorSensor(
+			ColorSensorResolution res, ColorSensorMeasurementRate rate, GainFactor gain) {
 		m_mux.switchToPort(m_muxPort);
 		m_sensor.configureColorSensor(res, rate, gain);
 	}
