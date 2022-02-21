@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -17,8 +18,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
-
 	private RobotContainer m_robotContainer;
+	private double time = 0;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -41,6 +42,10 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotPeriodic() {
 		CommandScheduler.getInstance().run();
+		time += 0.02;
+		SmartDashboard.putNumber("Time Since Enabled", time);
+		SmartDashboard.putNumber("Match Timer", 135 - time);
+		SmartDashboard.putBoolean("Game In Progress", (135 - time) > 0);
 	}
 
 	/** This function is called once each time the robot enters Disabled mode. */

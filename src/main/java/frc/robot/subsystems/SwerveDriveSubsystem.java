@@ -89,9 +89,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
 
 		SmartDashboard.putNumber("Gyro Angle", MathUtil.inputModulus(m_gyro.getAngle(), 0, 360));
-
-		SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
-		SmartDashboard.putNumber("Heading Correction Timer", m_headingCorrectionTimer.get());
 	}
 
 	/**
@@ -167,6 +164,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Desired X", xSpeed);
 		SmartDashboard.putNumber("Desired Y", ySpeed);
 		SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
+		SmartDashboard.putBoolean("Is Turning", rot != 0);
+		SmartDashboard.putBoolean("Is Translating", xSpeed != 0 || ySpeed != 0);
+		SmartDashboard.putBoolean("Is Moving", xSpeed != 0 || ySpeed != 0 || rot != 0);
 	}
 
   /** Zeroes the heading of the robot. */
