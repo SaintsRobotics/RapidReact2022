@@ -4,6 +4,10 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorSensorV3.ColorSensorMeasurementRate;
 import com.revrobotics.ColorSensorV3.ColorSensorResolution;
 import com.revrobotics.ColorSensorV3.GainFactor;
+import com.revrobotics.ColorSensorV3.LEDCurrent;
+import com.revrobotics.ColorSensorV3.LEDPulseFrequency;
+import com.revrobotics.ColorSensorV3.ProximitySensorMeasurementRate;
+import com.revrobotics.ColorSensorV3.ProximitySensorResolution;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
@@ -62,8 +66,8 @@ public class REVColorSensorV3 {
 	 * @param res  Bit resolution output by the proximity sensor ADC.
 	 * @param rate Measurement rate of the proximity sensor.
 	 */
-	public void configureProximitySensor(ColorSensorV3.ProximitySensorResolution res,
-			ColorSensorV3.ProximitySensorMeasurementRate rate) {
+	public void configureProximitySensor(
+			ProximitySensorResolution res, ProximitySensorMeasurementRate rate) {
 		m_mux.switchToPort(m_muxPort);
 		m_sensor.configureProximitySensor(res, rate);
 	}
@@ -81,8 +85,8 @@ public class REVColorSensorV3 {
 	 * @param pulses The number of pulses per measurement of the proximity sensor
 	 *               LED. I think the range is [0-255]
 	 */
-	public void configureProximitySensorLED(ColorSensorV3.LEDPulseFrequency freq, ColorSensorV3.LEDCurrent curr,
-			int pulses) {
+	public void configureProximitySensorLED(
+			LEDPulseFrequency freq, LEDCurrent curr, int pulses) {
 		m_mux.switchToPort(m_muxPort);
 		m_sensor.configureProximitySensorLED(freq, curr, pulses);
 	}
