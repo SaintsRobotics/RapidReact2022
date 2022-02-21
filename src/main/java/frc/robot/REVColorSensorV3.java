@@ -159,5 +159,4 @@ public class REVColorSensorV3 {
 		m_mux.switchToPort(m_muxPort);
 		return m_sensor.isConnected();
 	}
-
 }
