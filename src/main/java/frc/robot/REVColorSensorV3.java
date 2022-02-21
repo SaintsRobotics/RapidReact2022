@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj.util.Color;
  * javadocs for these methods are the same.
  */
 public class REVColorSensorV3 {
-	private MUX m_mux;
-	private MUX.Port m_muxPort;
-	private ColorSensorV3 m_sensor;
+	private final MUX m_mux;
+	private final MUX.Port m_muxPort;
+	private final ColorSensorV3 m_sensor;
 
 	/**
 	 * Creates a new {@link REVColorSensorV3}.
