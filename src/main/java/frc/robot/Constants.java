@@ -93,6 +93,12 @@ public final class Constants {
 		public static final int kArmPort = 24;
 	}
 
+	public static final class ClimberConstants {
+		// TODO update with real ports
+		public static final int kLeftArmPort = 567890;
+		public static final int kRightArmPort = 590;
+	}
+
 	public static final class OIConstants {
 		public static final int kDriverControllerPort = 0;
 		public static final double kControllerDeadband = 0.11;
