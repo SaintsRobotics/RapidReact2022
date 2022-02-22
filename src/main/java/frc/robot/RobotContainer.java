@@ -4,24 +4,36 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -33,12 +45,14 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-	private SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
+	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
+	private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
 
-	private XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+	private final XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+	private final XboxController m_operatorController = new XboxController(OIConstants.kDriverControllerPort);
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -99,30 +113,81 @@ public class RobotContainer {
 		new JoystickButton(m_driveController, Button.kB.value)
 				.whenHeld(new LimelightAimingCommand(m_aimingMoveCommand,
 						DriverStation.getAlliance() == Alliance.Blue ? 1 : 2));
+
 		// Toggles the shooter when Y button is pressed.
 		new JoystickButton(m_driveController, Button.kY.value)
 				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
+
+		// Allows the bot to drift while left bumper is held
+		new JoystickButton(m_driveController, Button.kLeftBumper.value)
+				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
+				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
+
+		// runs intake forward while left trigger is held
+		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
+				.whenActive(new InstantCommand(() -> m_intakeSubsystem.intake()))
+				.whenInactive(new InstantCommand(() -> m_intakeSubsystem.intakeOff()));
+		// runs intake backwards while right trigger is held
+		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
+				.whenActive(new InstantCommand(() -> m_intakeSubsystem.intakeReverse()))
+				.whenInactive(new InstantCommand(() -> m_intakeSubsystem.intakeOff()));
+		// raises intake arm when A is pressed
+		new JoystickButton(m_operatorController, Button.kA.value)
+				.whenPressed(new InstantCommand(() -> m_intakeSubsystem.raiseArm()));
+		// lowers intake arm when B is pressed
+		new JoystickButton(m_operatorController, Button.kB.value)
+				.whenPressed(new InstantCommand(() -> m_intakeSubsystem.lowerArm()));
+
 	}
 
 	/**
 	 * Use this to pass the autonomous command to the main {@link Robot} class.
-	 *
+	 * 
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		/*
-		 * The plan for two ball autonomous mode:
-		 * Starting Position: facing towards the ball, at the corner parallel to the
-		 * line
-		 * 1. Go to ball (drive forwards 1 meter)
-		 * 2. Run intake for 1 second
-		 * 2. Turn around and get into position for shooting the ball (drive field
-		 * relative backwards 3 meters, turn 180-ish degrees)
-		 * 3. Shoot the ball
-		 */
-		// TODO ADD INTAKE COMMAND AND SHOOT COMMAND TO THE SEQUENCE
-		return new SequentialCommandGroup(new MoveCommand(m_swerveDriveSubsystem).withRobotRelativeX(1),
-				new MoveCommand(m_swerveDriveSubsystem).withChangeInHeading(180)
-						.withFieldRelativeX(-3));
+		// To use a PathWeaver path return pathFollowCommand instead of null
+		return null;
+	}
+
+	/**
+	 * Follows a path generated by PathWeaver.
+	 * 
+	 * @param trajectoryJSON The name of the json file containing the path. In the
+	 *                       format "paths/trajectory.wpilib.json". Should be stored
+	 *                       under deploy>paths.
+	 * @return {@link SwerveControllerCommand} that follows the given
+	 *         {@link Trajectory}.
+	 */
+	public SwerveControllerCommand pathFollowCommand(String trajectoryJSON) {
+		Trajectory trajectory = new Trajectory();
+
+		try {
+			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+			trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+		} catch (IOException ex) {
+			DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+		}
+
+		PIDController xPID = new PIDController(1, 0, 0);
+		PIDController yPID = new PIDController(1, 0, 0);
+		ProfiledPIDController rotPID = new ProfiledPIDController(1, 0, 0,
+				new TrapezoidProfile.Constraints(Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 2.6));
+		xPID.setTolerance(0.05);
+		yPID.setTolerance(0.05);
+		rotPID.setTolerance(Math.PI / 24);
+		rotPID.enableContinuousInput(-Math.PI, Math.PI);
+
+		m_swerveDriveSubsystem.resetOdometry(trajectory.getInitialPose());
+
+		return new SwerveControllerCommand(
+				trajectory,
+				m_swerveDriveSubsystem::getPose,
+				SwerveConstants.kDriveKinematics,
+				xPID,
+				yPID,
+				rotPID,
+				m_swerveDriveSubsystem::setModuleStates,
+				m_swerveDriveSubsystem);
 	}
 }
