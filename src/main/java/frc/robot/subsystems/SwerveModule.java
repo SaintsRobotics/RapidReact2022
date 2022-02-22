@@ -27,22 +27,20 @@ public class SwerveModule {
 	/**
 	 * Creates a new {@link SwerveModule}.
 	 * 
-	 * @param driveMotorChannel      ID for the drive motor.
-	 * @param turningMotorChannel    ID for the turning motor.
-	 * @param turningEncoderChannel  ID for the turning encoder.
-	 * @param turningEncoderReversed Whether the turning encoder is reversed.
-	 * @param turningEncoderOffset   Offset of the turning encoder.
+	 * @param driveMotorChannel     ID for the drive motor.
+	 * @param turningMotorChannel   ID for the turning motor.
+	 * @param turningEncoderChannel ID for the turning encoder.
+	 * @param turningEncoderOffset  Offset of the turning encoder.
 	 */
 	public SwerveModule(
 			int driveMotorChannel,
 			int turningMotorChannel,
 			int turningEncoderChannel,
-			Boolean turningEncoderReversed,
 			double turningEncoderOffset) {
 		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-		m_turningEncoder = new AbsoluteEncoder(turningEncoderChannel, turningEncoderReversed, turningEncoderOffset);
+		m_turningEncoder = new AbsoluteEncoder(turningEncoderChannel, turningEncoderOffset);
 
 		m_driveMotor.getEncoder().setVelocityConversionFactor(
 				ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio);
@@ -83,5 +81,13 @@ public class SwerveModule {
 
 		m_driveMotor.set(driveOutput);
 		m_turningMotor.set(turnOutput);
+	}
+
+	public void setIdle() {
+		m_driveMotor.setIdleMode(IdleMode.kCoast);
+	}
+
+	public void setBrake() {
+		m_driveMotor.setIdleMode(IdleMode.kBrake);
 	}
 }
