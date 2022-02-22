@@ -10,15 +10,17 @@ import frc.robot.subsystems.ClimberArmSubsystem;
 
 public class ClimberArmCommand extends CommandBase {
   private ClimberArmSubsystem m_climberSubsystem;
+  private XboxController m_operatorController;
 
   /** Creates a new ClimberArmCommand. */
   public ClimberArmCommand(ClimberArmSubsystem climberSubsystem, XboxController operatorController) {
     m_climberSubsystem = climberSubsystem;
+    m_operatorController = operatorController;
     addRequirements(m_climberSubsystem);
   }
 
   @Override
   public void execute() {
-    m_climberSubsystem.set(0.2);
+    m_climberSubsystem.set(-m_operatorController.getLeftY());
   }
 }
