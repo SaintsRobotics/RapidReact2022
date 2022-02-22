@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
@@ -125,7 +126,8 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		// To use a PathWeaver path return pathFollowCommand instead of null
-		return null;
+		m_swerveDriveSubsystem.resetOdometry();
+		return new SequentialCommandGroup(pathFollowCommand("paths/BlueHangar1.wpilib.json"), pathFollowCommand("paths/BlueHangar2.wpilib.json"));
 	}
 
 	/**

@@ -9,6 +9,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -109,6 +110,14 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	}
 
 	/**
+	 * Resets the odometry to 0, 0, 0.
+	 *
+	 */
+	public void resetOdometry() {
+		m_odometry.resetPosition(new Pose2d(), new Rotation2d());
+	}
+
+	/**
 	 * Method to drive the robot.
 	 *
 	 * @param xSpeed        Speed of the robot in the x direction in meters per
@@ -120,6 +129,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	 *                      field. Positive is counterclockwise.
 	 */
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+		xSpeed *= 0.5;
+		ySpeed *= 0.5;
+		rot *= 0.5;
 		double rotation = rot;
 
 		// resets the timer when the robot is turning, used to measure the time since
