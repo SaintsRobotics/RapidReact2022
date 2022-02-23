@@ -120,9 +120,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	 *                      field. Positive is counterclockwise.
 	 */
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-		xSpeed *= 0.5;
-		ySpeed *= 0.5;
-		rot *= 0.5;
 		double rotation = rot;
 
 		// resets the timer when the robot is turning, used to measure the time since
