@@ -9,7 +9,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -107,14 +106,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	 */
 	public void resetOdometry(Pose2d pose) {
 		m_odometry.resetPosition(pose, m_gyro.getRotation2d());
-	}
-
-	/**
-	 * Resets the odometry to 0, 0, 0.
-	 *
-	 */
-	public void resetOdometry() {
-		m_odometry.resetPosition(new Pose2d(), new Rotation2d());
 	}
 
 	/**
