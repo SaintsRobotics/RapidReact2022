@@ -62,9 +62,14 @@ public class GetBallCommand extends CommandBase {
 		m_moveCommand.cancel();
 	}
 
-	// Change
 	@Override
 	public boolean isFinished() {
-		return !Limelight.hasTarget();
+		boolean xIsGood = Math
+				.abs(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)) < 0.03;
+		boolean yIsGood = Math
+				.abs(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)) < 0.03;
+		boolean rotIsGood = Math.abs(Limelight.getX()) < 0.03;
+
+		return xIsGood && yIsGood && rotIsGood;
 	}
 }
