@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Limelight;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -39,9 +40,19 @@ public class GetBallCommand extends CommandBase {
 		Limelight.setLED(0);
 		Limelight.setCameraMode(0);
 
-		m_moveCommand.withXSpeedSupplier(() -> m_xPID.calculate(0, 0))
-				.withYSpeedSupplier(() -> m_yPID.calculate(0, 0))
+		m_moveCommand
+				.withXSpeedSupplier(() -> m_xPID.calculate(
+						NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0), 0))
+				.withYSpeedSupplier(() -> m_yPID.calculate(
+						NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), 0))
 				.withRotSpeedSupplier(() -> m_rotPid.calculate(Limelight.getX(), 0)).schedule();
+
+		/**
+		 * m_moveCommand .withXSpeedSupplier(() -> m_xPID.calculate(0, 0))
+		 * .withYSpeedSupplier(() -> m_yPID.calculate(0, 0)) .withRotSpeedSupplier(() ->
+		 * m_rotPid.calculate(Limelight.getX(), 0)).schedule();
+		 */
+
 	}
 
 	@Override
