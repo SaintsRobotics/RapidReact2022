@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Limelight;
-import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /** Uses the {@link Limelight} to intake a ball belonging to our alliance. */
 public class GetBallCommand extends CommandBase {
