@@ -22,11 +22,6 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 /** Follows a {@link Trajectory} created by PathWeaver. */
 public class PathWeaverCommand extends CommandBase {
 	private final SwerveDriveSubsystem m_subsystem;
-
-	private final PIDController m_xPID = new PIDController(1, 0, 0);
-	private final PIDController m_yPID = new PIDController(1, 0, 0);
-	private final ProfiledPIDController m_rotPID = new ProfiledPIDController(1, 0, 0,
-			new TrapezoidProfile.Constraints(Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 2.6));
 	private final Boolean m_resetOdometry;
 
 	// Defaults to an empty trajectory if PathWeaver file can not be found.
@@ -51,11 +46,6 @@ public class PathWeaverCommand extends CommandBase {
 
 		m_resetOdometry = resetOdometry;
 
-		m_xPID.setTolerance(0.05);
-		m_yPID.setTolerance(0.05);
-		m_rotPID.setTolerance(Math.PI / 24);
-		m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
-
 		try {
 			m_trajectory = TrajectoryUtil
 					.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON));
@@ -69,13 +59,17 @@ public class PathWeaverCommand extends CommandBase {
 		if (m_resetOdometry) {
 			m_subsystem.resetOdometry(m_trajectory.getInitialPose());
 		}
+		final ProfiledPIDController rotPID = new ProfiledPIDController(1, 0, 0,
+				new TrapezoidProfile.Constraints(Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 2.6));
+		rotPID.enableContinuousInput(-Math.PI, Math.PI);
+
 		m_command = new SwerveControllerCommand(
 				m_trajectory,
 				m_subsystem::getPose,
 				SwerveConstants.kDriveKinematics,
-				m_xPID,
-				m_yPID,
-				m_rotPID,
+				new PIDController(1, 0, 0),
+				new PIDController(1, 0, 0),
+				rotPID,
 				m_subsystem::setModuleStates,
 				m_subsystem);
 		m_command.schedule();
