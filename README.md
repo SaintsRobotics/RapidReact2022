@@ -38,6 +38,7 @@ All commit messages must start with one of the following prefixes.
 Remember to add your name at the end of a commit when not using your own account. This will help us know who to talk to about commits.
 
 ## Setting Swerve Module Offsets
+TODO update
 
 Instructions for how to set the offsets of the turning encoders of the swerve modules.
 
