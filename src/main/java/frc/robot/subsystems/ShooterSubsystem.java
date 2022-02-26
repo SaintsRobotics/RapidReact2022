@@ -39,7 +39,7 @@ public class ShooterSubsystem extends SubsystemBase {
     rightFeeder.setInverted(true);
     m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
   }
-
+//top feeder run for how long? 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -76,6 +76,16 @@ public class ShooterSubsystem extends SubsystemBase {
   public void intakeOff() {
     m_intake.set(0);
   }
+
+  public void setSideFeederSpeed(double speed){
+    m_intake.set(IntakeConstants.kFeederSpeed);
+  }
+
+  public void setTopFeederSpeed(){
+    m_intake.set(IntakeConstants.kFeederSpeed);
+  }
+
+
 
   /**
    * Sets the speed of the shooter.
