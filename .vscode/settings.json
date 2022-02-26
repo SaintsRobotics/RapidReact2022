@@ -30,8 +30,12 @@
   "java.test.defaultConfig": "WPIlibUnitTests",
   "cSpell.words": [
     "AHRS",
+    "APDS",
+    "datasheet",
     "Deadband",
     "deadzone",
+    "decisecond",
+    "javadocs",
     "kauailabs",
     "linuxaarch",
     "linuxathena",
@@ -41,9 +45,11 @@
     "Odometry",
     "osxx",
     "revrobotics",
+    "robo",
     "setpoint",
     "teleop",
     "teleoperated",
+    "Ungrouped",
     "windowsx",
     "wpilib"
   ]

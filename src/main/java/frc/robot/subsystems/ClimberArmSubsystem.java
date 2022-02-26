@@ -13,26 +13,26 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
 public class ClimberArmSubsystem extends SubsystemBase {
-  private MotorControllerGroup m_climberMotor = new MotorControllerGroup(
-      new CANSparkMax(ClimberConstants.kLeftArmPort, MotorType.kBrushless),
-      new CANSparkMax(ClimberConstants.kRightArmPort, MotorType.kBrushless));
+	private MotorControllerGroup m_climberMotor = new MotorControllerGroup(
+			new CANSparkMax(ClimberConstants.kLeftArmPort, MotorType.kBrushless),
+			new CANSparkMax(ClimberConstants.kRightArmPort, MotorType.kBrushless));
 
-  /** Creates a new {@link ClimberArmSubsystem}. */
-  public ClimberArmSubsystem() {
-  }
+	/** Creates a new {@link ClimberArmSubsystem}. */
+	public ClimberArmSubsystem() {
+	}
 
-  /**
-   * Sets the speed of the climber.
-   * 
-   * @param speed Speed of the climber from -1 to 1.
-   */
-  public void set(double speed) {
-    m_climberMotor.set(speed);
-    SmartDashboard.putNumber("Desired Climber Speed", speed);
-  }
+	/**
+	 * Sets the speed of the climber.
+	 * 
+	 * @param speed Speed of the climber from -1 to 1.
+	 */
+	public void set(double speed) {
+		m_climberMotor.set(speed);
+		SmartDashboard.putNumber("Desired Climber Speed", speed);
+	}
 
-  @Override
-  public void periodic() {
-    SmartDashboard.putNumber("Climber Speed", m_climberMotor.get());
-  }
+	@Override
+	public void periodic() {
+		SmartDashboard.putNumber("Climber Speed", m_climberMotor.get());
+	}
 }
