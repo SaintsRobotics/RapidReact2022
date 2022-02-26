@@ -20,6 +20,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
+import frc.robot.commands.PathWeaverCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -115,6 +116,6 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		return null;
+		return new PathWeaverCommand(m_swerveDriveSubsystem, "paths/BlueHangarTwoBall1.wpilib.json", true);
 	}
 }

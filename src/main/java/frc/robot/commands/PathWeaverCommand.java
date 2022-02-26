@@ -27,6 +27,7 @@ public class PathWeaverCommand extends CommandBase {
 	private final PIDController m_yPID = new PIDController(1, 0, 0);
 	private final ProfiledPIDController m_rotPID = new ProfiledPIDController(1, 0, 0,
 			new TrapezoidProfile.Constraints(Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 2.6));
+	private final Boolean m_resetOdometry;
 
 	// Defaults to an empty trajectory if PathWeaver file can not be found.
 	private Trajectory m_trajectory = new Trajectory();
@@ -40,10 +41,15 @@ public class PathWeaverCommand extends CommandBase {
 	 * @param trajectoryJSON The name of the json file containing the path. In the
 	 *                       format "paths/trajectory.wpilib.json". Should be stored
 	 *                       under deploy>paths.
+	 * @param resetOdometry  Whether to reset odometry to the starting position of
+	 *                       the path. Should be true if it is the first path in a
+	 *                       series of paths.
 	 */
-	public PathWeaverCommand(SwerveDriveSubsystem subsystem, String trajectoryJSON) {
+	public PathWeaverCommand(SwerveDriveSubsystem subsystem, String trajectoryJSON, Boolean resetOdometry) {
 		m_subsystem = subsystem;
 		addRequirements(m_subsystem);
+
+		m_resetOdometry = resetOdometry;
 
 		m_xPID.setTolerance(0.05);
 		m_yPID.setTolerance(0.05);
@@ -60,7 +66,9 @@ public class PathWeaverCommand extends CommandBase {
 
 	@Override
 	public void initialize() {
-		m_subsystem.resetOdometry(m_trajectory.getInitialPose());
+		if (m_resetOdometry) {
+			m_subsystem.resetOdometry(m_trajectory.getInitialPose());
+		}
 		m_command = new SwerveControllerCommand(
 				m_trajectory,
 				m_subsystem::getPose,
