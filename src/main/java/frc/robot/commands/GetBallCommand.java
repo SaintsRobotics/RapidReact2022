@@ -12,12 +12,12 @@ import frc.robot.Limelight;
 /** Uses the {@link Limelight} to intake a ball belonging to our alliance. */
 public class GetBallCommand extends CommandBase {
 
-	// TODO: tune pids
-	private final PIDController m_xPID = new PIDController(0.03, 0, 0);
-	private final PIDController m_yPID = new PIDController(0.03, 0, 0);
+	// TODO: tune pid
 	private final PIDController m_rotPid = new PIDController(0.03, 0, 0);
 	private MoveCommand m_moveCommand;
 	private final int m_pipeline;
+	private static double COLLECTION_TOLERANCE = 0.45;
+	private static double MOUNTING_ANGLE_DEGREES = -10;
 
 	/**
 	 * Creates a new {@link GetBallCommand}.
@@ -28,8 +28,6 @@ public class GetBallCommand extends CommandBase {
 	public GetBallCommand(MoveCommand moveCommand, int pipeline) {
 		m_moveCommand = moveCommand;
 		m_pipeline = pipeline;
-		m_xPID.setTolerance(0.1);
-		m_yPID.setTolerance(0.1);
 		m_rotPid.setTolerance(0.1);
 	}
 
@@ -39,19 +37,11 @@ public class GetBallCommand extends CommandBase {
 		Limelight.setLED(0);
 		Limelight.setCameraMode(0);
 
-		m_moveCommand
-				.withXSpeedSupplier(() -> m_xPID.calculate(
-						NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0), 0))
-				.withYSpeedSupplier(() -> m_yPID.calculate(
-						NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0), 0))
+		double distance = getDistance();
+
+		m_moveCommand		
+				.withRobotRelativeX(distance)		
 				.withRotSpeedSupplier(() -> m_rotPid.calculate(Limelight.getX(), 0)).schedule();
-
-		/**
-		 * m_moveCommand .withXSpeedSupplier(() -> m_xPID.calculate(0, 0))
-		 * .withYSpeedSupplier(() -> m_yPID.calculate(0, 0)) .withRotSpeedSupplier(() ->
-		 * m_rotPid.calculate(Limelight.getX(), 0)).schedule();
-		 */
-
 	}
 
 	@Override
@@ -63,12 +53,10 @@ public class GetBallCommand extends CommandBase {
 
 	@Override
 	public boolean isFinished() {
-		boolean xIsGood = Math
-				.abs(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)) < 0.03;
-		boolean yIsGood = Math
-				.abs(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)) < 0.03;
-		boolean rotIsGood = Math.abs(Limelight.getX()) < 0.03;
+		return Math.abs(getDistance()) < COLLECTION_TOLERANCE && Math.abs(m_rotPid.calculate(Limelight.getX(), 0)) < 0.03;
+	}
 
-		return xIsGood && yIsGood && rotIsGood;
+	public double getDistance() {
+		return (0.1-0.5)/(Math.tan((MOUNTING_ANGLE_DEGREES + Limelight.getY()) * Math.PI / 180)); //units in meters, converted from degrees to radians
 	}
 }

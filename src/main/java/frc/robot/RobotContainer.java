@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.GetBallCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.ShooterCommand;
@@ -116,6 +117,12 @@ public class RobotContainer {
 		new JoystickButton(m_driveController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
+
+		// Allows the bot to autonomously move towards a ball's location
+		new JoystickButton(m_driveController, Button.kX.value)
+				.whileHeld(new GetBallCommand(m_defaultMoveCommand, 1));
+				
+
 	}
 
 	/**
