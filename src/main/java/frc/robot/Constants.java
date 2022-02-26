@@ -37,6 +37,7 @@ public final class Constants {
 		public static final int kFrontRightTurningEncoderPort = 1;
 		public static final int kRearRightTurningEncoderPort = 2;
 
+		// TODO update offsets
 		public static final double kFrontLeftTurningEncoderOffset = 3.3;
 		public static final double kRearLeftTurningEncoderOffset = 4.7;
 		public static final double kFrontRightTurningEncoderOffset = 2.9;
