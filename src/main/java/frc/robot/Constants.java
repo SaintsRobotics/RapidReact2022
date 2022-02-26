@@ -81,9 +81,9 @@ public final class Constants {
 	}
 
 	public static final class IntakeConstants {
-		// TODO update desired angles
-		public static final double kRaisedArmAngle = Math.toRadians(30);
-		public static final double kLoweredArmAngle = Math.toRadians(-30);
+		// TODO: set these speeds
+		public static final double kRaiseArmSpeed = 0.6;
+		public static final double kLowerArmSpeed = -0.3;
 
 		public static final double kIntakeSpeed = 0.45;
 		public static final double kFeederSpeed = 0;

@@ -131,12 +131,12 @@ public class RobotContainer {
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
 				.whenActive(new InstantCommand(() -> m_intakeSubsystem.intakeReverse()))
 				.whenInactive(new InstantCommand(() -> m_intakeSubsystem.intakeOff()));
-		// raises intake arm when A is pressed
+		// raises intake arm while A is held
 		new JoystickButton(m_operatorController, Button.kA.value)
-				.whenPressed(new InstantCommand(() -> m_intakeSubsystem.raiseArm()));
-		// lowers intake arm when B is pressed
+				.whileHeld(new InstantCommand(() -> m_intakeSubsystem.raiseArm()));
+		// lowers intake arm while B is held
 		new JoystickButton(m_operatorController, Button.kB.value)
-				.whenPressed(new InstantCommand(() -> m_intakeSubsystem.lowerArm()));
+				.whileHeld(new InstantCommand(() -> m_intakeSubsystem.lowerArm()));
 
 	}
 

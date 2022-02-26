@@ -17,36 +17,29 @@ import frc.robot.Constants.IntakeConstants;
 public class IntakeSubsystem extends SubsystemBase {
   private final CANSparkMax m_armMotor = new CANSparkMax(24, MotorType.kBrushless);
   private final CANSparkMax m_intakeMotor = new CANSparkMax(25, MotorType.kBrushless);
-  private final RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
 
-  // TODO tune PID
-  private final PIDController m_armPID = new PIDController(0.3, 0, 0);
 
   /** Creates a new {@link IntakeSubsystem}. */
   public IntakeSubsystem() {
     m_armMotor.setIdleMode(IdleMode.kBrake);
-    m_armPID.setTolerance(0.05);
-    m_armEncoder.setPositionConversionFactor(2* Math.PI); // converts "rotations" to radians
   }
 
   @Override
   public void periodic() {
-    m_armMotor.set(m_armPID.calculate(m_armEncoder.getPosition()));
     SmartDashboard.putNumber("Intake Wheel Speed", m_intakeMotor.get());
     SmartDashboard.putNumber("Arm Motor Speed", m_armMotor.get());
-    SmartDashboard.putNumber("Arm Position", m_armEncoder.getPosition());
-
   }
 
   /** Raises the arm. */
   public void raiseArm() {
-    m_armPID.setSetpoint(IntakeConstants.kRaisedArmAngle);
+    m_armMotor.set(IntakeConstants.kRaiseArmSpeed);
   }
 
   /** Lowers the arm. */
   public void lowerArm() {
-    m_armPID.setSetpoint(IntakeConstants.kLoweredArmAngle);
+    m_armMotor.set(IntakeConstants.kLowerArmSpeed);
   }
+
 
   /** Runs the intake. */
   public void intake() {
