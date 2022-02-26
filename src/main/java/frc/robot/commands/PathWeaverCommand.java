@@ -34,8 +34,8 @@ public class PathWeaverCommand extends CommandBase {
 	 * 
 	 * @param subsystem      The required subsystem.
 	 * @param trajectoryJSON The name of the json file containing the path. In the
-	 *                       format "paths/trajectory.wpilib.json". Should be stored
-	 *                       under deploy>paths.
+	 *                       format "BlueHangar2Ball". Should be stored under
+	 *                       deploy>paths.
 	 * @param resetOdometry  Whether to reset odometry to the starting position of
 	 *                       the path. Should be true if it is the first path in a
 	 *                       series of paths.
@@ -47,8 +47,8 @@ public class PathWeaverCommand extends CommandBase {
 		m_resetOdometry = resetOdometry;
 
 		try {
-			m_trajectory = TrajectoryUtil
-					.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON));
+			m_trajectory = TrajectoryUtil.fromPathweaverJson(
+					Filesystem.getDeployDirectory().toPath().resolve("paths/" + trajectoryJSON + ".wpilib.json"));
 		} catch (IOException ex) {
 			DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
 		}
