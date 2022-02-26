@@ -24,32 +24,28 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			SwerveConstants.kFrontLeftDriveMotorPort,
 			SwerveConstants.kFrontLeftTurningMotorPort,
 			SwerveConstants.kFrontLeftTurningEncoderPort,
-			SwerveConstants.kFrontLeftTurningEncoderReversed,
 			SwerveConstants.kFrontLeftTurningEncoderOffset);
 	private final SwerveModule m_rearLeft = new SwerveModule(
 			SwerveConstants.kRearLeftDriveMotorPort,
 			SwerveConstants.kRearLeftTurningMotorPort,
 			SwerveConstants.kRearLeftTurningEncoderPort,
-			SwerveConstants.kRearLeftTurningEncoderReversed,
 			SwerveConstants.kRearLeftTurningEncoderOffset);
 	private final SwerveModule m_frontRight = new SwerveModule(
 			SwerveConstants.kFrontRightDriveMotorPort,
 			SwerveConstants.kFrontRightTurningMotorPort,
 			SwerveConstants.kFrontRightTurningEncoderPort,
-			SwerveConstants.kFrontRightTurningEncoderReversed,
 			SwerveConstants.kFrontRightTurningEncoderOffset);
 	private final SwerveModule m_rearRight = new SwerveModule(
 			SwerveConstants.kRearRightDriveMotorPort,
 			SwerveConstants.kRearRightTurningMotorPort,
 			SwerveConstants.kRearRightTurningEncoderPort,
-			SwerveConstants.kRearRightTurningEncoderReversed,
 			SwerveConstants.kRearRightTurningEncoderOffset);
 
 	private final AHRS m_gyro = new AHRS();
 	private final SwerveDriveOdometry m_odometry;
 
 	// TODO tune pid
-	private final PIDController m_headingCorrectionPID = new PIDController(1.5, 0, 0);
+	private final PIDController m_headingCorrectionPID = new PIDController(5, 0, 0);
 	private final Timer m_headingCorrectionTimer;
 
 	/** Creates a new {@link SwerveDriveSubsystem}. */
@@ -169,27 +165,30 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		SmartDashboard.putBoolean("Is Moving", xSpeed != 0 || ySpeed != 0 || rot != 0);
 	}
 
-  /** Zeroes the heading of the robot. */
-  public void zeroHeading() {
-    m_gyro.reset();
-  }
-  public void setMotorIdle() {
-    m_frontLeft.setIdle();
-    m_frontRight.setIdle();
-    m_rearLeft.setIdle();
-    m_rearRight.setIdle();
-  }
-  public void setMotorBrake() {
-    m_frontLeft.setBrake();
-    m_frontRight.setBrake();
-    m_rearLeft.setBrake();
-    m_rearRight.setBrake();
-  }
+	/** Zeroes the heading of the robot. */
+	public void zeroHeading() {
+		m_gyro.reset();
+	}
+
+	public void setMotorIdle() {
+		m_frontLeft.setIdle();
+		m_frontRight.setIdle();
+		m_rearLeft.setIdle();
+		m_rearRight.setIdle();
+	}
+
+	public void setMotorBrake() {
+		m_frontLeft.setBrake();
+		m_frontRight.setBrake();
+		m_rearLeft.setBrake();
+		m_rearRight.setBrake();
+	}
 
 	/**
 	 * Sets the {@link SwerveModuleState SwerveModuleStates}.
 	 *
-	 * @param desiredStates The desired {@link SwerveModuleState SwerveModuleStates}.
+	 * @param desiredStates The desired {@link SwerveModuleState
+	 *                      SwerveModuleStates}.
 	 */
 	public void setModuleStates(SwerveModuleState[] desiredStates) {
 		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxSpeedMetersPerSecond);
