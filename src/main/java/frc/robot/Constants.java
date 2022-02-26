@@ -37,11 +37,6 @@ public final class Constants {
 		public static final int kFrontRightTurningEncoderPort = 1;
 		public static final int kRearRightTurningEncoderPort = 2;
 
-		public static final boolean kFrontLeftTurningEncoderReversed = true;
-		public static final boolean kRearLeftTurningEncoderReversed = true;
-		public static final boolean kFrontRightTurningEncoderReversed = true;
-		public static final boolean kRearRightTurningEncoderReversed = true;
-
 		public static final double kFrontLeftTurningEncoderOffset = 3.3;
 		public static final double kRearLeftTurningEncoderOffset = 4.7;
 		public static final double kFrontRightTurningEncoderOffset = 2.9;
@@ -81,9 +76,9 @@ public final class Constants {
 	}
 
 	public static final class IntakeConstants {
-		// TODO: set these speeds
-		public static final double kRaiseArmSpeed = 0.6;
-		public static final double kLowerArmSpeed = -0.3;
+		// TODO update angles with intake
+		public static final double kRaisedArmAngle = 0;
+		public static final double kLoweredArmAngle = 0;
 
 		public static final double kIntakeSpeed = 0.45;
 		public static final double kFeederSpeed = 0;
