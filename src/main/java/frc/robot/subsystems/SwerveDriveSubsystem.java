@@ -49,7 +49,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	private final SwerveDriveOdometry m_odometry;
 
 	// TODO tune pid
-	private final PIDController m_headingCorrectionPID = new PIDController(1.5, 0, 0);
+	private final PIDController m_headingCorrectionPID = new PIDController(5, 0, 0);
 	private final Timer m_headingCorrectionTimer;
 
 	/** Creates a new {@link SwerveDriveSubsystem}. */
@@ -169,27 +169,30 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
 	}
 
-  /** Zeroes the heading of the robot. */
-  public void zeroHeading() {
-    m_gyro.reset();
-  }
-  public void setMotorIdle() {
-    m_frontLeft.setIdle();
-    m_frontRight.setIdle();
-    m_rearLeft.setIdle();
-    m_rearRight.setIdle();
-  }
-  public void setMotorBrake() {
-    m_frontLeft.setBrake();
-    m_frontRight.setBrake();
-    m_rearLeft.setBrake();
-    m_rearRight.setBrake();
-  }
+	/** Zeroes the heading of the robot. */
+	public void zeroHeading() {
+		m_gyro.reset();
+	}
+
+	public void setMotorIdle() {
+		m_frontLeft.setIdle();
+		m_frontRight.setIdle();
+		m_rearLeft.setIdle();
+		m_rearRight.setIdle();
+	}
+
+	public void setMotorBrake() {
+		m_frontLeft.setBrake();
+		m_frontRight.setBrake();
+		m_rearLeft.setBrake();
+		m_rearRight.setBrake();
+	}
 
 	/**
 	 * Sets the {@link SwerveModuleState SwerveModuleStates}.
 	 *
-	 * @param desiredStates The desired {@link SwerveModuleState SwerveModuleStates}.
+	 * @param desiredStates The desired {@link SwerveModuleState
+	 *                      SwerveModuleStates}.
 	 */
 	public void setModuleStates(SwerveModuleState[] desiredStates) {
 		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxSpeedMetersPerSecond);
