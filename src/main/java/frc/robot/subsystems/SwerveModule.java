@@ -40,8 +40,8 @@ public class SwerveModule {
 		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-		// TODO add offset when it gets implemented
 		m_turningEncoder = new AnalogEncoder(turningEncoderChannel);
+		m_turningEncoder.setPositionOffset(turningEncoderOffset);
 		m_turningEncoder.setDistancePerRotation(2 * Math.PI);
 
 		m_driveMotor.getEncoder().setVelocityConversionFactor(
