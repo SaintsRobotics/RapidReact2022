@@ -61,6 +61,8 @@ public class SwerveModule {
 		return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(), new Rotation2d(m_turningEncoder.get()));
 	}
 
+	// TODO add method that calls getAbsolutePosition so we can set the offsets
+
 	/**
 	 * Stops the module from driving and turning. Use this so the wheels don't reset
 	 * to straight.
