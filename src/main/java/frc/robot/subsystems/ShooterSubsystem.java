@@ -48,7 +48,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Current Shooter Speed", m_flywheel.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
     SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
-    SmartDashboard.putNumber("DutyCycle", m_armEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
   }
 
   /** Raises the arm. */
@@ -89,22 +89,6 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Turns off the intake. */
   public void intakeOff() {
     m_intake.set(0);
-  }
-
-  public void setSideFeederSpeed() {
-    m_sideFeeders.set(ShooterConstants.kFeederSpeed);
-  }
-
-  public void setTopFeederSpeed() {
-    m_topFeeder.set(ShooterConstants.kFeederSpeed);
-  }
-
-  public void setLowerArmSpeed() {
-    m_arm.set(ShooterConstants.kLowerArmSpeed);
-  }
-
-  public void setRaiseArmSpeed() {
-    m_arm.set(ShooterConstants.kRaiseArmSpeed);
   }
 
   /**
