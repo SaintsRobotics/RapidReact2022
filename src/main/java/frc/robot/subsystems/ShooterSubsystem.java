@@ -13,25 +13,24 @@ import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.DutyCycleAbsoluteEncoder;
 
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
 public class ShooterSubsystem extends SubsystemBase {
-  private final CANSparkMax m_arm = new CANSparkMax(24, MotorType.kBrushless);
+  private final CANSparkMax m_arm = new CANSparkMax(ShooterConstants.kArmPort, MotorType.kBrushless);
   private final DutyCycleAbsoluteEncoder m_armEncoder = new DutyCycleAbsoluteEncoder(0);
-  private final CANSparkMax m_intake = new CANSparkMax(25, MotorType.kBrushless);
+  private final CANSparkMax m_intake = new CANSparkMax(ShooterConstants.kIntakeWheelsPort, MotorType.kBrushless);
   private final MotorControllerGroup m_sideFeeders;
-  private final CANSparkMax m_topFeeder = new CANSparkMax(23, MotorType.kBrushless);
-  private final WPI_TalonFX m_shooter = new WPI_TalonFX(ShooterConstants.kShooterMotorPort);
+  private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
+  private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
   private final BangBangController m_shooterController = new BangBangController();
 
   /** Creates a new {@link ShooterSubsystem}. */
   public ShooterSubsystem() {
     m_arm.setIdleMode(IdleMode.kBrake);
-    CANSparkMax leftFeeder = new CANSparkMax(22, MotorType.kBrushless);
-    CANSparkMax rightFeeder = new CANSparkMax(21, MotorType.kBrushless);
+    CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
+    CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
     rightFeeder.setInverted(true);
     m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
   }
@@ -40,11 +39,11 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_shooter.set(m_shooterController.getSetpoint() == 0 ? 0
-        : m_shooterController.calculate(m_shooter.getSelectedSensorVelocity()));
+    m_flywheel.set(m_shooterController.getSetpoint() == 0 ? 0
+        : m_shooterController.calculate(m_flywheel.getSelectedSensorVelocity()));
 
-    SmartDashboard.putNumber("Current Shooter Power", m_shooter.get());
-    SmartDashboard.putNumber("Current Shooter Speed", m_shooter.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Current Shooter Power", m_flywheel.get());
+    SmartDashboard.putNumber("Current Shooter Speed", m_flywheel.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
     SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
     SmartDashboard.putNumber("DutyCycle", m_armEncoder.getAbsolutePosition());
@@ -52,22 +51,22 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Raises the arm. */
   public void raiseArm() {
-    m_arm.set(IntakeConstants.kRaiseArmSpeed);
+    m_arm.set(ShooterConstants.kRaiseArmSpeed);
   }
 
   /** Lowers the arm. */
   public void lowerArm() {
-    m_arm.set(IntakeConstants.kLowerArmSpeed);
+    m_arm.set(ShooterConstants.kLowerArmSpeed);
   }
 
   /** Runs the intake. */
   public void intake() {
-    m_intake.set(IntakeConstants.kIntakeSpeed);
+    m_intake.set(ShooterConstants.kIntakeSpeed);
   }
 
   /** Runs the intake in reverse. */
   public void intakeReverse() {
-    m_intake.set(-IntakeConstants.kIntakeSpeed);
+    m_intake.set(-ShooterConstants.kIntakeSpeed);
   }
 
   /** Turns off the intake. */
@@ -76,19 +75,19 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setSideFeederSpeed() {
-    m_sideFeeders.set(IntakeConstants.kFeederSpeed);
+    m_sideFeeders.set(ShooterConstants.kFeederSpeed);
   }
 
   public void setTopFeederSpeed() {
-    m_topFeeder.set(IntakeConstants.kFeederSpeed);
+    m_topFeeder.set(ShooterConstants.kFeederSpeed);
   }
 
   public void setLowerArmSpeed() {
-    m_arm.set(IntakeConstants.kLowerArmSpeed);
+    m_arm.set(ShooterConstants.kLowerArmSpeed);
   }
 
   public void setRaiseArmSpeed() {
-    m_arm.set(IntakeConstants.kRaiseArmSpeed);
+    m_arm.set(ShooterConstants.kRaiseArmSpeed);
   }
 
   /**
