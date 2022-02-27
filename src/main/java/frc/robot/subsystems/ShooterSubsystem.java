@@ -10,22 +10,19 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.AbsoluteEncoder;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
 
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
 public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax m_arm = new CANSparkMax(24, MotorType.kBrushless);
-  private final DutyCycle m_armEncoder = new DutyCycleEncoder(channel)
+  private final DutyCycle m_armEncoder = new DutyCycle(new DigitalInput(0));
   private final CANSparkMax m_intake = new CANSparkMax(25, MotorType.kBrushless);
-  private final AbsoluteEncoder m_armEncoder = new AbsoluteEncoder(channel, offset)
   private final MotorControllerGroup m_sideFeeders;
   private final CANSparkMax m_topFeeder = new CANSparkMax(23, MotorType.kBrushless);
   private final WPI_TalonFX m_shooter = new WPI_TalonFX(ShooterConstants.kShooterMotorPort);
@@ -39,7 +36,8 @@ public class ShooterSubsystem extends SubsystemBase {
     rightFeeder.setInverted(true);
     m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
   }
-//top feeder run for how long? 
+
+  // top feeder run for how long?
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -50,6 +48,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Current Shooter Speed", m_shooter.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
     SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
+    SmartDashboard.putNumber("DutyCycle", getAbsolutePosition());
   }
 
   /** Raises the arm. */
@@ -77,15 +76,36 @@ public class ShooterSubsystem extends SubsystemBase {
     m_intake.set(0);
   }
 
-  public void setSideFeederSpeed(double speed){
+  public void setSideFeederSpeed(double speed) {
     m_intake.set(IntakeConstants.kFeederSpeed);
   }
 
-  public void setTopFeederSpeed(){
+  public void setTopFeederSpeed() {
     m_intake.set(IntakeConstants.kFeederSpeed);
   }
 
 
+
+  /**
+   * Get the absolute position of the duty cycle encoder.
+   *
+   * <p>
+   * getAbsolutePosition() - getPositionOffset() will give an encoder absolute
+   * position relative
+   * to the last reset. 
+   *
+   * <p>
+   * This will not account for rollovers, and will always be just the raw absolute
+   * position.
+   * 
+   * <p>
+   * Ranges from 0 degrees to 360 degrees
+   *
+   * @return the absolute position
+   */
+  public double getAbsolutePosition() {
+    return m_armEncoder.getOutput() * 360;
+  }
 
   /**
    * Sets the speed of the shooter.
