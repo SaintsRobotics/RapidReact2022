@@ -70,12 +70,15 @@ public final class Constants {
 	}
 
 	public static final class ShooterConstants {
-		public static final int kShooterMotorPort = 9;
+		public static final int kFlywheelPort = 9;
+		public static final int kIntakeWheelsPort = 25;
+		public static final int kArmPort = 24;
+		public static final int kLeftFeederPort = 22;
+		public static final int kRightFeederPort = 21;
+		public static final int kTopFeederPort = 23;
+
 
 		public static final double kShooterSpeedTicksPerDecisecond = 12000;
-	}
-
-	public static final class IntakeConstants {
 		// TODO: update speeds
 		public static final double kRaiseArmSpeed = 0.6;
 		public static final double kLowerArmSpeed = -0.3;
@@ -83,8 +86,7 @@ public final class Constants {
 		public static final double kIntakeSpeed = 0.45;
 		public static final double kFeederSpeed = 0;
 
-		public static final int kWheelsPort = 25;
-		public static final int kArmPort = 24;
+		
 	}
 
 	public static final class OIConstants {
