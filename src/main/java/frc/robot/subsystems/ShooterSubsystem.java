@@ -84,7 +84,13 @@ public class ShooterSubsystem extends SubsystemBase {
     m_intake.set(IntakeConstants.kFeederSpeed);
   }
 
+  public void setLowerArmSpeed() {
+    m_arm.set(IntakeConstants.kLowerArmSpeed);
+  }
 
+  public void setRaiseArmSpeed() {
+    m_arm.set(IntakeConstants.kRaiseArmSpeed);
+  }
 
   /**
    * Get the absolute position of the duty cycle encoder.
