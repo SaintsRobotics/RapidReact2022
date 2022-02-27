@@ -108,4 +108,8 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Target Shooter Speed", speed);
   }
 
+  private boolean isShooterBall() {
+    // TODO: fill in with sensors
+    return true;
+  }
 }
