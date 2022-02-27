@@ -10,18 +10,17 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.BangBangController;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.DutyCycleAbsoluteEncoder;
 
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
 public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax m_arm = new CANSparkMax(24, MotorType.kBrushless);
-  private final DutyCycle m_armEncoder = new DutyCycle(new DigitalInput(0));
+  private final DutyCycleAbsoluteEncoder m_armEncoder = new DutyCycleAbsoluteEncoder(0);
   private final CANSparkMax m_intake = new CANSparkMax(25, MotorType.kBrushless);
   private final MotorControllerGroup m_sideFeeders;
   private final CANSparkMax m_topFeeder = new CANSparkMax(23, MotorType.kBrushless);
@@ -48,7 +47,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Current Shooter Speed", m_shooter.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
     SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
-    SmartDashboard.putNumber("DutyCycle", getAbsolutePosition());
+    SmartDashboard.putNumber("DutyCycle", m_armEncoder.getAbsolutePosition());
   }
 
   /** Raises the arm. */
@@ -90,27 +89,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setRaiseArmSpeed() {
     m_arm.set(IntakeConstants.kRaiseArmSpeed);
-  }
-
-  /**
-   * Get the absolute position of the duty cycle encoder.
-   *
-   * <p>
-   * getAbsolutePosition() - getPositionOffset() will give an encoder absolute
-   * position relative
-   * to the last reset. 
-   *
-   * <p>
-   * This will not account for rollovers, and will always be just the raw absolute
-   * position.
-   * 
-   * <p>
-   * Ranges from 0 degrees to 360 degrees
-   *
-   * @return the absolute position
-   */
-  public double getAbsolutePosition() {
-    return m_armEncoder.getOutput() * 360;
   }
 
   /**
