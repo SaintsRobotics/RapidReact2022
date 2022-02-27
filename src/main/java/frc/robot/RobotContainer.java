@@ -42,11 +42,13 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  */
 public class RobotContainer {
 	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
+	private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
 
 	private final XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+	private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -116,6 +118,14 @@ public class RobotContainer {
 		new JoystickButton(m_driveController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
+
+		new JoystickButton(m_operatorController, Button.kLeftBumper.value)
+				.whileHeld(() -> m_shooterSubsystem.raiseArm())
+				.whenReleased(() -> m_shooterSubsystem.stopArm());
+
+		new JoystickButton(m_operatorController, Button.kRightBumper.value)
+				.whileHeld(() -> m_shooterSubsystem.lowerArm())
+				.whenReleased(() -> m_shooterSubsystem.stopArm());
 	}
 
 	/**
