@@ -41,7 +41,7 @@ public class GetBallCommand extends CommandBase {
 
 		double distance = getDistance();
 
-		m_moveCommand.withRobotRelativeX(distance).withRotSpeedSupplier(() -> m_rotPid.calculate(Limelight.getX(), 0))
+		m_moveCommand.withRotSpeedSupplier(() -> m_rotPid.calculate(Limelight.getX(), 0)).withRobotRelativeX(distance)
 				.schedule();
 	}
 
@@ -59,10 +59,11 @@ public class GetBallCommand extends CommandBase {
 	}
 
 	public double getDistance() {
-		return (0.1 - 0.5) / (Math.tan((MOUNTING_ANGLE_DEGREES + Limelight.getY()) * Math.PI / 180)); // units in
-																										// meters,
-																										// converted
-																										// from degrees
-																										// to radians
+		return (BALL_CENTER_HEIGHT - LIMELIGHT_HEIGHT)
+				/ (Math.tan((MOUNTING_ANGLE_DEGREES + Limelight.getY()) * Math.PI / 180)); // units in
+		// meters,
+		// converted
+		// from degrees
+		// to radians
 	}
 }
