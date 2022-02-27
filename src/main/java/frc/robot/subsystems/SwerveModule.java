@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -61,7 +62,8 @@ public class SwerveModule {
 	 * @return The current state of the module.
 	 */
 	public SwerveModuleState getState() {
-		return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(), new Rotation2d(m_turningEncoder.getDistance()));
+		return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(),
+				new Rotation2d(MathUtil.angleModulus(m_turningEncoder.getDistance())));
 	}
 
 	/**
@@ -89,10 +91,12 @@ public class SwerveModule {
 	 * @param desiredState Desired state with speed and angle.
 	 */
 	public void setDesiredState(SwerveModuleState desiredState) {
-		SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getDistance()));
+		SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+				new Rotation2d(m_turningEncoder.getDistance()));
 
 		final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
-		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getDistance(), state.angle.getRadians());
+		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getDistance(),
+				state.angle.getRadians());
 
 		m_driveMotor.set(driveOutput);
 		m_turningMotor.set(turnOutput);
