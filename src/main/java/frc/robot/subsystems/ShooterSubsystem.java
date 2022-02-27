@@ -53,12 +53,18 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Raises the arm. */
   public void raiseArm() {
-    m_arm.set(ShooterConstants.kRaiseArmSpeed);
+    m_PID.setSetpoint(ShooterConstants.kUpperArmAngle);
+    m_arm.set(m_PID.calculate(m_armEncoder.getAbsolutePosition()));
   }
 
   /** Lowers the arm. */
   public void lowerArm() {
-    m_arm.set(ShooterConstants.kLowerArmSpeed);
+    m_PID.setSetpoint(ShooterConstants.kLowerArmAngle);
+    m_arm.set(m_PID.calculate(m_armEncoder.getAbsolutePosition()));
+  }
+
+  public void stopArm() {
+    m_arm.set(0);
   }
 
   /** Runs the intake. */
