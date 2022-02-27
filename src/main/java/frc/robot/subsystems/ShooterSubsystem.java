@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,6 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
   private final BangBangController m_shooterController = new BangBangController();
 
+  private final PIDController m_PID = new PIDController(0.3, 0, 0);
   /** Creates a new {@link ShooterSubsystem}. */
   public ShooterSubsystem() {
     m_arm.setIdleMode(IdleMode.kBrake);
