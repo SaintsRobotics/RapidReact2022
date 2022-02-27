@@ -42,7 +42,10 @@ public class SwerveModule {
 
 		m_turningEncoder = new AnalogEncoder(turningEncoderChannel);
 		m_turningEncoder.setPositionOffset(turningEncoderOffset);
-		m_turningEncoder.setDistancePerRotation(2 * Math.PI);
+
+		// We want the encoder value to increase as the wheel is turned
+		// counter-clockwise so we need to negate the distance per rotation
+		m_turningEncoder.setDistancePerRotation(-2 * Math.PI);
 
 		m_driveMotor.getEncoder().setVelocityConversionFactor(
 				ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio);
