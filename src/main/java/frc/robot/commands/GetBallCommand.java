@@ -18,6 +18,8 @@ public class GetBallCommand extends CommandBase {
 	private final int m_pipeline;
 	private static double COLLECTION_TOLERANCE = 0.45;
 	private static double MOUNTING_ANGLE_DEGREES = -10;
+	private static double LIMELIGHT_HEIGHT = 0.5;
+	private static double BALL_CENTER_HEIGHT = 0.1;
 
 	/**
 	 * Creates a new {@link GetBallCommand}.
@@ -39,9 +41,8 @@ public class GetBallCommand extends CommandBase {
 
 		double distance = getDistance();
 
-		m_moveCommand		
-				.withRobotRelativeX(distance)		
-				.withRotSpeedSupplier(() -> m_rotPid.calculate(Limelight.getX(), 0)).schedule();
+		m_moveCommand.withRobotRelativeX(distance).withRotSpeedSupplier(() -> m_rotPid.calculate(Limelight.getX(), 0))
+				.schedule();
 	}
 
 	@Override
@@ -53,10 +54,15 @@ public class GetBallCommand extends CommandBase {
 
 	@Override
 	public boolean isFinished() {
-		return Math.abs(getDistance()) < COLLECTION_TOLERANCE && Math.abs(m_rotPid.calculate(Limelight.getX(), 0)) < 0.03;
+		return Math.abs(getDistance()) < COLLECTION_TOLERANCE
+				&& Math.abs(m_rotPid.calculate(Limelight.getX(), 0)) < 0.03;
 	}
 
 	public double getDistance() {
-		return (0.1-0.5)/(Math.tan((MOUNTING_ANGLE_DEGREES + Limelight.getY()) * Math.PI / 180)); //units in meters, converted from degrees to radians
+		return (0.1 - 0.5) / (Math.tan((MOUNTING_ANGLE_DEGREES + Limelight.getY()) * Math.PI / 180)); // units in
+																										// meters,
+																										// converted
+																										// from degrees
+																										// to radians
 	}
 }
