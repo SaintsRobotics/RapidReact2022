@@ -76,11 +76,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setSideFeederSpeed(double speed) {
-    m_intake.set(IntakeConstants.kFeederSpeed);
+    m_sideFeeders.set(IntakeConstants.kFeederSpeed);
   }
 
   public void setTopFeederSpeed() {
-    m_intake.set(IntakeConstants.kFeederSpeed);
+    m_topFeeder.set(IntakeConstants.kFeederSpeed);
   }
 
   public void setLowerArmSpeed() {
