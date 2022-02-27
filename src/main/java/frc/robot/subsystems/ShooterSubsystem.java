@@ -69,6 +69,15 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Runs the intake. */
   public void intake() {
+    // if there is a ball at the top: don't run top feeder
+    // run the intake wheels and side feeders
+    if (!isShooterBall()) {
+      m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
+    } else {
+      m_topFeeder.set(0);
+    }
+
+    m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
     m_intake.set(ShooterConstants.kIntakeSpeed);
   }
 
