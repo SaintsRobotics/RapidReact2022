@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
@@ -116,6 +117,6 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		return new PathWeaverCommand(m_swerveDriveSubsystem, "paths/BlueHangarTwoBall1.wpilib.json", true);
+		return new SequentialCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall1", true), new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall2", true));
 	}
 }
