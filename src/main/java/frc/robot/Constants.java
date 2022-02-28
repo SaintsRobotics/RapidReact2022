@@ -94,7 +94,7 @@ public final class Constants {
 
 	public static final class OIConstants {
 		public static final short kDriverControllerPort = 0;
-		public static final short kOperatorControllerPort = 12;
+		public static final short kOperatorControllerPort = 1;
 		
 		public static final double kControllerDeadband = 0.11;
 	}
