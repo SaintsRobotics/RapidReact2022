@@ -4,12 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,12 +25,15 @@ public class ShooterSubsystem extends SubsystemBase {
   private final MotorControllerGroup m_sideFeeders;
   private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
   private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
-  private final BangBangController m_shooterController = new BangBangController();
-
+  //TODO fix
+  private final PIDController m_shooterController = new PIDController(0.199999, 22, 78);
   private final PIDController m_PID = new PIDController(0.3, 0, 0);
+
+
   /** Creates a new {@link ShooterSubsystem}. */
   public ShooterSubsystem() {
     m_arm.setIdleMode(IdleMode.kBrake);
+    m_flywheel.setNeutralMode(NeutralMode.Coast);
     CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
     CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
     rightFeeder.setInverted(true);
@@ -84,20 +87,40 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Runs the intake in reverse. */
   public void intakeReverse() {
     m_intake.set(-ShooterConstants.kIntakeSpeed);
+    m_sideFeeders.set(-ShooterConstants.kSideFeederSpeed);
+    m_topFeeder.set(-ShooterConstants.kTopFeederSpeedSlow);
   }
 
   /** Turns off the intake. */
   public void intakeOff() {
     m_intake.set(0);
+    m_sideFeeders.set(0);
+    m_topFeeder.set(0);
   }
 
   /**
-   * Sets the speed of the shooter.
+   * Shoots the ball(s)
    * 
    * @param speed Speed of the shooter in ticks per decisecond.
    */
   public void setShooterSpeed(double speed) {
-    m_shooterController.setSetpoint(speed);
+    // set flywheel with control loop
+    // if flywheel is fast enough
+    // turn top feeder on (fast)
+    /*
+     * if (flywhel.sped > 42) {
+     * run moter
+     * }
+     */
+    // m_shooterController.setSetpoint(speed);
+    m_flywheel.set(speed);
+
+    if (m_flywheel.get() > 0.42) {
+      m_topFeeder.set(1);
+    } else {
+      m_topFeeder.set(0);
+    }
+
     SmartDashboard.putNumber("Target Shooter Speed", speed);
   }
 
@@ -106,3 +129,13 @@ public class ShooterSubsystem extends SubsystemBase {
     return true;
   }
 }
+
+/*
+ * Hello i like ice cream
+ * ice cream is good
+ * i want ice cream
+ * I also like pizza
+ * Pizza is good
+ * now i also want pizza
+ * i blame you
+ */
