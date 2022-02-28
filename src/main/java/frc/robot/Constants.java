@@ -82,8 +82,8 @@ public final class Constants {
 		// TODO: update speeds
 		public static final double kRaiseArmSpeed = 0.6;
 		public static final double kLowerArmSpeed = -0.3;
-		public static final short kLowerArmAngle = 567;
-		public static final short kUpperArmAngle = 123;
+		public static final int kLowerArmAngle = 567;
+		public static final int kUpperArmAngle = 123;
 		public static final double kIntakeSpeed = 0.45;
 		public static final double kTopFeederSpeedSlow = 0.02;
 		public static final double kTopFeederSpeedFast = 0.75;
@@ -93,12 +93,12 @@ public final class Constants {
 	}
 
 	public static final class OIConstants {
-		public static final short kDriverControllerPort = 0;
-		public static final short kOperatorControllerPort = 1;
+		public static final int kDriverControllerPort = 0;
+		public static final int kOperatorControllerPort = 1;
 		
 		public static final double kControllerDeadband = 0.11;
 	}
 	public static final class ConversionConstants {
-		public static final short kDegreesInARotation = 360;
+		public static final int kDegreesInARotation = 360;
 	}
 }
