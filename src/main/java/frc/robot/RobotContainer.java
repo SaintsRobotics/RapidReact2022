@@ -125,7 +125,7 @@ public class RobotContainer {
 				
 		// Toggles the shooter when Y button is pressed.
 		new JoystickButton(m_operatorController, Button.kY.value)
-				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
+				.toggleWhenPressed(new ShooterCommand(m_shooterSubsystem));
 
 	}
 
