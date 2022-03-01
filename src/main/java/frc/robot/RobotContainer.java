@@ -21,10 +21,13 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.LimelightAimingCommand;
@@ -115,18 +118,29 @@ public class RobotContainer {
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
 
+		// raises the arm while left bumper held
 		new JoystickButton(m_operatorController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_shooterSubsystem.raiseArm())
 				.whenReleased(() -> m_shooterSubsystem.stopArm());
 
+		// lowers arm while right bumper held
 		new JoystickButton(m_operatorController, Button.kRightBumper.value)
 				.whileHeld(() -> m_shooterSubsystem.lowerArm())
 				.whenReleased(() -> m_shooterSubsystem.stopArm());
-				
+
 		// Toggles the shooter when Y button is pressed.
 		new JoystickButton(m_operatorController, Button.kY.value)
 				.toggleWhenPressed(new ShooterCommand(m_shooterSubsystem));
 
+		// runs intake forward while left trigger is held
+		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
+				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intake()))
+				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
+				
+		// runs intake backwards while right trigger is held
+		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
+				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intakeReverse()))
+				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
 	}
 
 	/**

@@ -25,10 +25,9 @@ public class ShooterSubsystem extends SubsystemBase {
   private final MotorControllerGroup m_sideFeeders;
   private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
   private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
-  //TODO fix
+  // TODO fix
   private final PIDController m_shooterController = new PIDController(0.199999, 22, 78);
   private final PIDController m_PID = new PIDController(0.3, 0, 0);
-
 
   /** Creates a new {@link ShooterSubsystem}. */
   public ShooterSubsystem() {
@@ -44,8 +43,16 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_flywheel.set(m_shooterController.getSetpoint() == 0 ? 0
-        : m_shooterController.calculate(m_flywheel.getSelectedSensorVelocity()));
+    if (m_shooterController.getSetpoint() == 0) {
+      m_flywheel.set(0);
+    } else {
+      m_flywheel.set(m_shooterController.calculate(m_flywheel.getSelectedSensorVelocity()));
+      if (m_flywheel.get() > 0.5) {
+        m_topFeeder.set(1);
+      } else {
+        m_topFeeder.set(0);
+      }  
+    }
 
     SmartDashboard.putNumber("Current Shooter Power", m_flywheel.get());
     SmartDashboard.putNumber("Current Shooter Speed", m_flywheel.getSelectedSensorVelocity());
@@ -104,24 +111,9 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param speed Speed of the shooter in ticks per decisecond.
    */
   public void setShooterSpeed(double speed) {
-    // set flywheel with control loop
-    // if flywheel is fast enough
-    // turn top feeder on (fast)
-    /*
-     * if (flywhel.sped > 42) {
-     * run moter
-     * }
-     */
-    // m_shooterController.setSetpoint(speed);
-    m_flywheel.set(speed);
-
-    if (m_flywheel.get() > 0.42) {
-      m_topFeeder.set(1);
-    } else {
-      m_topFeeder.set(0);
-    }
-
+    m_shooterController.setSetpoint(speed);
     SmartDashboard.putNumber("Target Shooter Speed", speed);
+    
   }
 
   private boolean isShooterBall() {
@@ -129,13 +121,3 @@ public class ShooterSubsystem extends SubsystemBase {
     return true;
   }
 }
-
-/*
- * Hello i like ice cream
- * ice cream is good
- * i want ice cream
- * I also like pizza
- * Pizza is good
- * now i also want pizza
- * i blame you
- */
