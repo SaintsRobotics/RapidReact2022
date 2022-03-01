@@ -8,11 +8,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogEncoder;
-import edu.wpi.first.wpilibj.simulation.AnalogEncoderSim;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Robot;
@@ -23,7 +23,6 @@ public class SwerveModule {
 	private final CANSparkMax m_turningMotor;
 
 	private final AnalogEncoder m_turningEncoder;
-	private final AnalogEncoderSim m_turningEncoderSim;
 
 	private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
 
@@ -45,10 +44,12 @@ public class SwerveModule {
 		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-		// TODO remove offsets and adjust hardware to compensate
 		m_turningEncoder = new AnalogEncoder(turningEncoderChannel);
-		m_turningEncoder.setDistancePerRotation(2 * Math.PI);
-		m_turningEncoderSim = new AnalogEncoderSim(m_turningEncoder);
+		m_turningEncoder.setPositionOffset(turningEncoderOffset);
+
+		// We want the encoder value to increase as the wheel is turned
+		// counter-clockwise so we need to negate the distance per rotation
+		m_turningEncoder.setDistancePerRotation(-2 * Math.PI);
 
 		m_driveMotor.getEncoder().setVelocityConversionFactor(
 				ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio);
@@ -64,15 +65,20 @@ public class SwerveModule {
 	 * @return The current state of the module.
 	 */
 	public SwerveModuleState getState() {
-		return new SwerveModuleState(
-				Robot.isReal() ? m_driveMotor.getEncoder().getVelocity() : m_state.speedMetersPerSecond,
-				new Rotation2d(m_turningEncoder.get()));
+		return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(),
+				new Rotation2d(MathUtil.angleModulus(m_turningEncoder.getDistance())));
 	}
 
 	/**
-	 * Stops the module from driving and turning. Use this so the wheels don't reset
-	 * to straight.
+	 * Returns the absolute angle of the module. Use this to set the offset of the
+	 * modules.
+	 * 
+	 * @return Absolute angle of the module from 0-1.
 	 */
+	public double getAbsoluteAngle() {
+		return m_turningEncoder.getAbsolutePosition();
+	}
+
 	public void setDesiredState() {
 		m_turningMotor.set(0);
 		m_driveMotor.set(0);
@@ -84,14 +90,15 @@ public class SwerveModule {
 	 * @param desiredState Desired state with speed and angle.
 	 */
 	public void setDesiredState(SwerveModuleState desiredState) {
-		m_state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.get()));
+		SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+				new Rotation2d(m_turningEncoder.getDistance()));
 
-		final double driveOutput = m_state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
-		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get(), m_state.angle.getRadians());
+		final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
+		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getDistance(),
+				state.angle.getRadians());
 
 		m_driveMotor.set(driveOutput);
 		m_turningMotor.set(turnOutput);
-		m_turningEncoderSim.setTurns(m_state.angle.getRadians());
 	}
 
 	public void setIdle() {
