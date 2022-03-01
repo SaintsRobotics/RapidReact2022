@@ -19,15 +19,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  */
 public final class Constants {
 	public static final class SwerveConstants {
-		public static final int kFrontLeftDriveMotorPort = 16;
-		public static final int kRearLeftDriveMotorPort = 15;
-		public static final int kFrontRightDriveMotorPort = 13;
-		public static final int kRearRightDriveMotorPort = 10;
+		public static final int kFrontLeftDriveMotorPort = 9;
+		public static final int kRearLeftDriveMotorPort = 12;
+		public static final int kFrontRightDriveMotorPort = 5;
+		public static final int kRearRightDriveMotorPort = 2;
 
-		public static final int kFrontLeftTurningMotorPort = 14;
+		public static final int kFrontLeftTurningMotorPort = 7;
 		public static final int kRearLeftTurningMotorPort = 11;
-		public static final int kFrontRightTurningMotorPort = 12;
-		public static final int kRearRightTurningMotorPort = 3;
+		public static final int kFrontRightTurningMotorPort = 4;
+		public static final int kRearRightTurningMotorPort = 1;
 
 		public static final int kFrontLeftTurningEncoderPort = 17;
 		public static final int kRearLeftTurningEncoderPort = 19;
