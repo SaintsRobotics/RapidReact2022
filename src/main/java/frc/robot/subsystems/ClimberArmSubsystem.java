@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,29 +29,38 @@ public class ClimberArmSubsystem extends SubsystemBase {
 	private Servo m_leftServo = new Servo(345);
 	private Servo m_rightServo = new Servo(789);
 
+	private double m_leftSpeed;
+	private double m_rightSpeed;
+	
+
+
 	/** Creates a new {@link ClimberArmSubsystem}. */
 	public ClimberArmSubsystem() {
 	}
 
-	/**
-	 * Sets the speed of the climber.
-	 * 
-	 * @param speed Speed of the climber from -1 to 1.
-	 */
-	public void setSpeed(double speed) {
-		m_leftClimberArm.set(speed);
-		m_rightClimberArm.set(speed);
-		SmartDashboard.putNumber("Desired Climber Speed", speed);
+	public void realignArms() {
+		if (m_leftEncoder.getPosition() < m_rightEncoder.getPosition()) {
+			m_leftPID.setSetpoint(m_rightEncoder.getPosition());
+			m_leftSpeed = m_leftPID.calculate(m_leftEncoder.getPosition());
+		} else {
+			m_rightPID.setSetpoint(m_leftEncoder.getPosition());
+			m_rightSpeed = m_rightPID.calculate(m_rightEncoder.getPosition());
+		}
 	}
 
-	public void setPosition(double position) {
-		m_leftPID.setSetpoint(position);
-		m_rightPID.setSetpoint(position);
-		m_leftClimberArm.set(m_leftPID.calculate(m_leftEncoder.getPosition()));
+	public void setSpeed(double speed){
+		m_leftSpeed = speed;
+		m_rightSpeed = speed;
+
 	}
 
 	@Override
 	public void periodic() {
-		SmartDashboard.putNumber("Climber Speed", m_climberMotor.get());
+		SmartDashboard.putNumber("Climber Speed", m_leftClimberArm.get()); //Same as right arm
+
+		
+		m_leftClimberArm.set(m_leftSpeed);
+		m_rightClimberArm.set(m_rightSpeed);
+		SmartDashboard.putNumber("Desired Climber Speed", m_leftSpeed);
 	}
 }

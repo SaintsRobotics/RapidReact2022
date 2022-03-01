@@ -17,10 +17,11 @@ public class ClimberArmCommand extends CommandBase {
 		m_climberSubsystem = climberSubsystem;
 		m_operatorController = operatorController;
 		addRequirements(m_climberSubsystem);
+		
 	}
 
 	@Override
 	public void execute() {
-		m_climberSubsystem.set(-m_operatorController.getLeftY());
+		m_climberSubsystem.setSpeed(-m_operatorController.getLeftY());
 	}
 }
