@@ -27,7 +27,7 @@ public final class Constants {
 		public static final int kFrontLeftTurningMotorPort = 7;
 		public static final int kRearLeftTurningMotorPort = 11;
 		public static final int kFrontRightTurningMotorPort = 4;
-		public static final int kRearRightTurningMotorPort = 1;
+		public static final int kRearRightTurningMotorPort = 16;
 
 		public static final int kFrontLeftTurningEncoderPort = 19;
 		public static final int kRearLeftTurningEncoderPort = 20;
@@ -43,7 +43,6 @@ public final class Constants {
 		public static final boolean kRearLeftDriveMotorReversed = false;
 		public static final boolean kFrontRightDriveMotorReversed = true;
 		public static final boolean kRearRightDriveMotorReversed = true;
-		
 
 		/** Distance between centers of right and left wheels on robot. */
 		public static final double kTrackWidth = 0.57;
@@ -109,4 +108,3 @@ public final class Constants {
 		public static final double kControllerDeadband = 0.11;
 	}
 }
-
