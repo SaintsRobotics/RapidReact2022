@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -54,7 +55,7 @@ public class SwerveModule {
 
 		// converts default units to radians
 		m_turningEncoder.configFeedbackCoefficient(Math.toRadians(0.087890625), "radians", SensorTimeBase.PerSecond);
-		m_turningEncoder.configMagnetOffset(turningEncoderOffset);
+		m_turningEncoder.configMagnetOffset(-turningEncoderOffset);
 
 		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 	}
@@ -74,10 +75,12 @@ public class SwerveModule {
 	 * Returns the absolute angle of the module. Use this to set the offset of the
 	 * modules.
 	 * 
-	 * @return Absolute angle of the module from 0 to 2pi
+	 * @return Absolute angle of the module from 0 to 360.
 	 */
 	public double getAbsoluteAngle() {
-		return m_turningEncoder.getAbsolutePosition();
+		return MathUtil.inputModulus(
+				Math.toDegrees(m_turningEncoder.getAbsolutePosition()) - m_turningEncoder.configGetMagnetOffset(), 0,
+				360);
 	}
 
 	/**

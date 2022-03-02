@@ -34,10 +34,10 @@ public final class Constants {
 		public static final int kFrontRightTurningEncoderPort = 18;
 		public static final int kRearRightTurningEncoderPort = 17;
 
-		public static final double kFrontLeftTurningEncoderOffset = 3.3;
-		public static final double kRearLeftTurningEncoderOffset = 4.7;
-		public static final double kFrontRightTurningEncoderOffset = 2.9;
-		public static final double kRearRightTurningEncoderOffset = 1.9;
+		public static final double kFrontLeftTurningEncoderOffset = 356;
+		public static final double kRearLeftTurningEncoderOffset = 122;
+		public static final double kFrontRightTurningEncoderOffset = 256;
+		public static final double kRearRightTurningEncoderOffset = 328;
 
 		public static final boolean kFrontLeftDriveMotorReversed = false;
 		public static final boolean kRearLeftDriveMotorReversed = false;
