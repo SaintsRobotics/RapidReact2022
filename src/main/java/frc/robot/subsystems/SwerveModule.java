@@ -45,10 +45,13 @@ public class SwerveModule {
 		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-		// TODO remove offsets and adjust hardware to compensate
 		m_turningEncoder = new AnalogEncoder(turningEncoderChannel);
-		m_turningEncoder.setDistancePerRotation(2 * Math.PI);
 		m_turningEncoderSim = new AnalogEncoderSim(m_turningEncoder);
+		m_turningEncoder.setPositionOffset(turningEncoderOffset);
+
+		// We want the encoder value to increase as the wheel is turned
+		// counter-clockwise so we need to negate the distance per rotation
+		m_turningEncoder.setDistancePerRotation(-2 * Math.PI);
 
 		m_driveMotor.getEncoder().setVelocityConversionFactor(
 				ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio);
@@ -67,6 +70,16 @@ public class SwerveModule {
 		return new SwerveModuleState(
 				Robot.isReal() ? m_driveMotor.getEncoder().getVelocity() : m_state.speedMetersPerSecond,
 				new Rotation2d(m_turningEncoder.get()));
+	}
+
+	/**
+	 * Returns the absolute angle of the module. Use this to set the offset of the
+	 * modules.
+	 * 
+	 * @return Absolute angle of the module from 0-1.
+	 */
+	public double getAbsoluteAngle() {
+		return m_turningEncoder.getAbsolutePosition();
 	}
 
 	/**
