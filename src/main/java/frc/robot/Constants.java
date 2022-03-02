@@ -29,10 +29,10 @@ public final class Constants {
 		public static final int kFrontRightTurningMotorPort = 4;
 		public static final int kRearRightTurningMotorPort = 1;
 
-		public static final int kFrontLeftTurningEncoderPort = 17;
-		public static final int kRearLeftTurningEncoderPort = 19;
+		public static final int kFrontLeftTurningEncoderPort = 19;
+		public static final int kRearLeftTurningEncoderPort = 20;
 		public static final int kFrontRightTurningEncoderPort = 18;
-		public static final int kRearRightTurningEncoderPort = 20;
+		public static final int kRearRightTurningEncoderPort = 17;
 
 		public static final double kFrontLeftTurningEncoderOffset = 3.3;
 		public static final double kRearLeftTurningEncoderOffset = 4.7;
