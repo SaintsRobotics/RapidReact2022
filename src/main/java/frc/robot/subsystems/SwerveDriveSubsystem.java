@@ -46,6 +46,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			SwerveConstants.kRearRightTurningEncoderOffset);
 
 	private final AHRS m_gyro = new AHRS();
+	private final SimDouble m_simulatedYaw = new SimDouble(
+			SimDeviceDataJNI.getSimValueHandle(SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]"), "Yaw"));
 
 	private final SwerveDriveOdometry m_odometry;
 	private final Field2d m_field2d = new Field2d();
@@ -180,7 +182,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Desired Rot", Math.toDegrees(rotation));
 
 		// Adds the change in angle to the current angle.
-		printSimulatedGyro(m_gyro.getAngle() + Math.toDegrees(rotation) * Robot.kDefaultPeriod);
+		m_simulatedYaw.set(m_gyro.getAngle() + Math.toDegrees(rotation) * Robot.kDefaultPeriod);
 	}
 
 	/** Zeroes the heading of the robot. */
@@ -188,7 +190,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		if (Robot.isReal()) {
 			m_gyro.reset();
 		} else {
-			printSimulatedGyro(0);
+			m_simulatedYaw.set(0);
 		}
 	}
 
@@ -218,16 +220,5 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		m_rearLeft.setDesiredState(desiredStates[1]);
 		m_frontRight.setDesiredState(desiredStates[2]);
 		m_rearRight.setDesiredState(desiredStates[3]);
-	}
-
-	/**
-	 * Prints the estimated gyro value to the simulator.
-	 * 
-	 * @param printHeading The estimated gyro value.
-	 */
-	private void printSimulatedGyro(double printHeading) {
-		int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
-		SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
-		angle.set(printHeading);
 	}
 }
