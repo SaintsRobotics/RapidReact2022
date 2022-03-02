@@ -40,13 +40,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	/** Raises the arm. */
 	public void raiseArm() {
-		// m_armPID.setSetpoint(IntakeConstants.kRaisedArmAngle);
+		m_armPID.setSetpoint(IntakeConstants.kRaisedArmAngle);
 		m_armMotor.set(0.5);
 	}
 
 	/** Lowers the arm. */
 	public void lowerArm() {
-		// m_armPID.setSetpoint(IntakeConstants.kLoweredArmAngle);
+		m_armPID.setSetpoint(IntakeConstants.kLoweredArmAngle);
 		m_armMotor.set(-0.3);
 	}
 
