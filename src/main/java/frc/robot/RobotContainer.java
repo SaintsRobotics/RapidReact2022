@@ -119,10 +119,6 @@ public class RobotContainer {
 				.whenHeld(new LimelightAimingCommand(m_aimingMoveCommand,
 						DriverStation.getAlliance() == Alliance.Blue ? 1 : 2));
 
-		// Toggles the shooter when Y button is pressed.
-		new JoystickButton(m_driveController, Button.kY.value)
-				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
-
 		// Allows the bot to drift while left bumper is held
 		new JoystickButton(m_driveController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
@@ -142,6 +138,17 @@ public class RobotContainer {
 		// lowers intake arm when B is pressed
 		new JoystickButton(m_operatorController, Button.kB.value)
 				.whenPressed(new InstantCommand(() -> m_intakeSubsystem.lowerArm()));
+		// Toggles the shooter when Y button is pressed.
+		new JoystickButton(m_operatorController, Button.kY.value)
+				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
+		// Runs side feeder while left bumper is held
+		new JoystickButton(m_operatorController, Button.kLeftBumper.value)
+				.whileHeld(new InstantCommand(() -> m_intakeSubsystem.sideFeed()))
+				.whenReleased(new InstantCommand(() -> m_intakeSubsystem.sideFeedOff()));
+		// Runs top feeder while right bumper is held
+		new JoystickButton(m_operatorController, Button.kRightBumper.value)
+				.whileHeld(() -> m_intakeSubsystem.topFeed())
+				.whenReleased(() -> m_intakeSubsystem.topFeedOff());
 
 	}
 

@@ -10,14 +10,17 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-	private final CANSparkMax m_armMotor = new CANSparkMax(24, MotorType.kBrushless);
-	private final CANSparkMax m_intakeMotor = new CANSparkMax(25, MotorType.kBrushless);
+	private final CANSparkMax m_armMotor = new CANSparkMax(IntakeConstants.kArmPort, MotorType.kBrushless);
+	private final CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.kWheelsPort, MotorType.kBrushless);
 	private final RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
+	private final CANSparkMax m_topFeederMotor = new CANSparkMax(IntakeConstants.kTopFeederPort, MotorType.kBrushless);
+	private final MotorControllerGroup m_sideFeeders;
 
 	// TODO tune PID
 	private final PIDController m_armPID = new PIDController(0.3, 0, 0);
@@ -27,6 +30,9 @@ public class IntakeSubsystem extends SubsystemBase {
 		m_armMotor.setIdleMode(IdleMode.kBrake);
 		m_armPID.setTolerance(0.05);
 		m_armEncoder.setPositionConversionFactor(2 * Math.PI); // converts "rotations" to radians
+		CANSparkMax leftFeeder = new CANSparkMax(IntakeConstants.kLeftFeederPort, MotorType.kBrushless);
+		CANSparkMax rightFeeder = new CANSparkMax(IntakeConstants.kRightFeederPort, MotorType.kBrushless);
+		m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
 	}
 
 	@Override
@@ -40,12 +46,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	/** Raises the arm. */
 	public void raiseArm() {
-		m_armPID.setSetpoint(IntakeConstants.kRaisedArmAngle);
+		// m_armPID.setSetpoint(IntakeConstants.kRaisedArmAngle);
+		m_armMotor.set(0.5);
 	}
 
 	/** Lowers the arm. */
 	public void lowerArm() {
-		m_armPID.setSetpoint(IntakeConstants.kLoweredArmAngle);
+		// m_armPID.setSetpoint(IntakeConstants.kLoweredArmAngle);
+		m_armMotor.set(-0.3);
 	}
 
 	/** Runs the intake. */
@@ -63,4 +71,23 @@ public class IntakeSubsystem extends SubsystemBase {
 		m_intakeMotor.set(0);
 	}
 
+	/** Runs the side feeders. */
+	public void sideFeed() {
+		m_sideFeeders.set(IntakeConstants.kFeederSpeed);
+	}
+
+	/** Turns off the side feeders. */
+	public void sideFeedOff() {
+		m_sideFeeders.set(0);
+	}
+
+	/** Runs the top feeder. */
+	public void topFeed() {
+		m_topFeederMotor.set(IntakeConstants.kFeederSpeed);
+	}
+
+	/** Turns off the top feeder. */
+	public void topFeedOff() {
+		m_topFeederMotor.set(0);
+	}
 }

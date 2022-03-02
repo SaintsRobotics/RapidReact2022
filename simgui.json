@@ -26,9 +26,12 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/ClimberArmSubsystem": "Subsystem",
       "/LiveWindow/IntakeSubsystem": "Subsystem",
       "/LiveWindow/ShooterSubsystem": "Subsystem",
       "/LiveWindow/SwerveDriveSubsystem": "Subsystem",
+      "/LiveWindow/Ungrouped/MotorControllerGroup[1]": "Motor Controller",
+      "/LiveWindow/Ungrouped/MotorControllerGroup[2]": "Motor Controller",
       "/LiveWindow/Ungrouped/PIDController[10]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[11]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[12]": "PIDController",

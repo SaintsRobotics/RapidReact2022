@@ -34,15 +34,16 @@ public final class Constants {
 		public static final int kFrontRightTurningEncoderPort = 18;
 		public static final int kRearRightTurningEncoderPort = 20;
 
+		public static final double kFrontLeftTurningEncoderOffset = 3.3;
+		public static final double kRearLeftTurningEncoderOffset = 4.7;
+		public static final double kFrontRightTurningEncoderOffset = 2.9;
+		public static final double kRearRightTurningEncoderOffset = 1.9;
+
 		public static final boolean kFrontLeftDriveMotorReversed = false;
 		public static final boolean kRearLeftDriveMotorReversed = false;
 		public static final boolean kFrontRightDriveMotorReversed = true;
 		public static final boolean kRearRightDriveMotorReversed = true;
-
-		public static final double kFrontLeftTurningEncoderOffset = -327;
-		public static final double kRearLeftTurningEncoderOffset = -261;
-		public static final double kFrontRightTurningEncoderOffset = -253;
-		public static final double kRearRightTurningEncoderOffset = -207;
+		
 
 		/** Distance between centers of right and left wheels on robot. */
 		public static final double kTrackWidth = 0.57;
@@ -78,19 +79,22 @@ public final class Constants {
 	public static final class ShooterConstants {
 		public static final int kShooterMotorPort = 9;
 
-		public static final double kShooterSpeedTicksPerDecisecond = 12000;
+		public static final double kShooterSpeedTicksPerDecisecond = 4000;
 	}
 
 	public static final class IntakeConstants {
-		// TODO update desired angles
-		public static final double kRaisedArmAngle = Math.toRadians(30);
-		public static final double kLoweredArmAngle = Math.toRadians(-30);
+		// TODO update angles with intake
+		public static final double kRaisedArmAngle = 0;
+		public static final double kLoweredArmAngle = 0;
 
 		public static final double kIntakeSpeed = 0.45;
 		public static final double kFeederSpeed = 0;
 
 		public static final int kWheelsPort = 25;
-		public static final int kArmPort = 24;
+		public static final int kArmPort = 8;
+		public static final int kLeftFeederPort = 10;
+		public static final int kRightFeederPort = 6;
+		public static final int kTopFeederPort = 14;
 	}
 
 	public static final class ClimberConstants {
@@ -101,6 +105,8 @@ public final class Constants {
 
 	public static final class OIConstants {
 		public static final int kDriverControllerPort = 0;
+		public static final int kOperatorControllerPort = 1;
 		public static final double kControllerDeadband = 0.11;
 	}
 }
+
