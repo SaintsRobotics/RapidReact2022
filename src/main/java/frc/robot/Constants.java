@@ -16,9 +16,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * <p>
  * It is advised to statically import this class (or one of its inner classes)
  * wherever the constants are needed, to reduce verbosity.
- * 
- * <p>
- * TODO update these values when the new robot is built
  */
 public final class Constants {
 	public static final class SwerveConstants {
@@ -42,6 +39,11 @@ public final class Constants {
 		public static final double kFrontRightTurningEncoderOffset = 2.9;
 		public static final double kRearRightTurningEncoderOffset = 1.9;
 
+		public static final boolean kFrontLeftDriveMotorReversed = false;
+		public static final boolean kRearLeftDriveMotorReversed = false;
+		public static final boolean kFrontRightDriveMotorReversed = true;
+		public static final boolean kRearRightDriveMotorReversed = true;
+
 		/** Distance between centers of right and left wheels on robot. */
 		public static final double kTrackWidth = 0.5;
 
@@ -56,9 +58,13 @@ public final class Constants {
 
 		public static final double kMaxSpeedMetersPerSecond = 3.6;
 
+		// TODO update value with new robot
 		public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
 
-		/** Time in seconds for the robot to stop turning from max speed. */
+		/**
+		 * Time in seconds for the robot to stop turning from max speed.
+		 * TODO update value with new robot.
+		 */
 		public static final double kTurningStopTime = 0.2;
 	}
 
@@ -72,7 +78,7 @@ public final class Constants {
 	public static final class ShooterConstants {
 		public static final int kShooterMotorPort = 9;
 
-		public static final double kShooterSpeedTicksPerDecisecond = 12000;
+		public static final double kShooterSpeedTicksPerDecisecond = 4000;
 	}
 
 	public static final class IntakeConstants {
@@ -81,10 +87,13 @@ public final class Constants {
 		public static final double kLoweredArmAngle = 0;
 
 		public static final double kIntakeSpeed = 0.45;
-		public static final double kFeederSpeed = 0;
+		public static final double kFeederSpeed = 0.7;
 
 		public static final int kWheelsPort = 25;
 		public static final int kArmPort = 24;
+		public static final int kTopFeederPort = 14;
+		public static final int kLeftFeederPort = 10;
+		public static final int kRightFeederPort = 11;
 	}
 
 	public static final class OIConstants {

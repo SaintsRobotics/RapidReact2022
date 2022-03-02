@@ -30,6 +30,7 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -42,7 +43,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  */
 public class RobotContainer {
 	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
-
+	private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
 
@@ -116,6 +117,11 @@ public class RobotContainer {
 		new JoystickButton(m_driveController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
+
+		// Allows the bot to drift while left bumper is held
+		new JoystickButton(m_driveController, Button.kX.value)
+				.whileHeld(() -> m_intakeSubsystem.topFeed())
+				.whenReleased(() -> m_intakeSubsystem.topFeedOff());
 	}
 
 	/**
