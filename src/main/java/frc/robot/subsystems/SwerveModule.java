@@ -71,6 +71,16 @@ public class SwerveModule {
 	}
 
 	/**
+	 * Returns the absolute angle of the module. Use this to set the offset of the
+	 * modules.
+	 * 
+	 * @return Absolute angle of the module from 0 to 2pi
+	 */
+	public double getAbsoluteAngle() {
+		return m_turningEncoder.getAbsolutePosition();
+	}
+
+	/**
 	 * Stops the module from driving and turning. Use this so the wheels don't reset
 	 * to straight.
 	 */
