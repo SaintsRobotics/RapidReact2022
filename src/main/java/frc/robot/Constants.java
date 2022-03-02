@@ -87,10 +87,10 @@ public final class Constants {
 		public static final double kLoweredArmAngle = 0;
 
 		public static final double kIntakeSpeed = 0.45;
-		public static final double kFeederSpeed = 0;
+		public static final double kFeederSpeed = 0.25;
 
-		public static final int kWheelsPort = 25;
-		public static final int kArmPort = 8;
+		public static final int kIntakeWheelsPort = 8;
+		public static final int kArmPort = 13;
 		public static final int kLeftFeederPort = 10;
 		public static final int kRightFeederPort = 6;
 		public static final int kTopFeederPort = 14;
@@ -98,8 +98,8 @@ public final class Constants {
 
 	public static final class ClimberConstants {
 		// TODO update with real ports
-		public static final int kLeftArmPort = 567890;
-		public static final int kRightArmPort = 590;
+		public static final int kLeftArmPort = 60;
+		public static final int kRightArmPort = 61;
 	}
 
 	public static final class OIConstants {
