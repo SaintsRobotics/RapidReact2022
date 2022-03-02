@@ -225,7 +225,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	 * 
 	 * @param printHeading The estimated gyro value.
 	 */
-	public void printSimulatedGyro(double printHeading) {
+	private void printSimulatedGyro(double printHeading) {
 		int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
 		SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
 		angle.set(printHeading);
