@@ -185,7 +185,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
 	/** Zeroes the heading of the robot. */
 	public void zeroHeading() {
-		m_gyro.reset();
+		if (Robot.isReal()) {
+			m_gyro.reset();
+		} else {
+			printSimulatedGyro(0);
+		}
 	}
 
 	public void setMotorIdle() {
