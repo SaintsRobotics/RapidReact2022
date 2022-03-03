@@ -89,11 +89,15 @@ public final class Constants {
 		public static final double kIntakeSpeed = 0.45;
 		public static final double kFeederSpeed = 1;
 
-		public static final int kIntakeWheelsPort = 8;
 		public static final int kArmPort = 13;
+		public static final int kIntakeWheelsPort = 8;
 		public static final int kLeftFeederPort = 10;
 		public static final int kRightFeederPort = 6;
 		public static final int kTopFeederPort = 14;
+
+		public static final boolean kIntakeReversed = true;
+		public static final boolean kLeftFeederReversed = true;
+		public static final boolean kRightFeederReversed = false;
 	}
 
 	public static final class ClimberConstants {

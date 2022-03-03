@@ -27,8 +27,12 @@ public class IntakeSubsystem extends SubsystemBase {
 	public IntakeSubsystem() {
 		m_armMotor.setIdleMode(IdleMode.kBrake);
 		m_armPID.setTolerance(0.05);
+		m_intakeMotor.setInverted(IntakeConstants.kIntakeReversed);
+
 		CANSparkMax leftFeeder = new CANSparkMax(IntakeConstants.kLeftFeederPort, MotorType.kBrushless);
 		CANSparkMax rightFeeder = new CANSparkMax(IntakeConstants.kRightFeederPort, MotorType.kBrushless);
+		leftFeeder.setInverted(IntakeConstants.kLeftFeederReversed);
+		rightFeeder.setInverted(IntakeConstants.kRightFeederReversed);
 		m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
 	}
 
