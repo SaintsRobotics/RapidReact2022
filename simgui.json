@@ -33,7 +33,6 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\admin\\Desktop\\2022-field.png",
         "window": {
           "visible": true
         }
