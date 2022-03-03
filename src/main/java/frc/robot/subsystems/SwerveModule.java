@@ -82,6 +82,10 @@ public class SwerveModule {
 		return m_turningEncoder.getAbsolutePosition();
 	}
 
+	/**
+	 * Stops the module from driving and turning. Use this so the wheels don't reset
+	 * to straight.
+	 */
 	public void setDesiredState() {
 		m_turningMotor.set(0);
 		m_driveMotor.set(0);
