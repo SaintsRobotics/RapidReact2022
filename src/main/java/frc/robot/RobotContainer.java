@@ -47,15 +47,17 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
-	private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
-	private final ClimberArmSubsystem m_climberSubsystem = new ClimberArmSubsystem();
-
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
 
 	private final XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
 	private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+	private final OperatorBoard m_operatorBoard = new OperatorBoard(OIConstants.kOperatorControllerPort);
+
+	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
+	private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem(m_operatorBoard);
+	private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(m_operatorBoard);
+	private final ClimberArmSubsystem m_climberSubsystem = new ClimberArmSubsystem();
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -124,32 +126,16 @@ public class RobotContainer {
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
 
-		// runs intake forward while left trigger is held
-		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
-				.whenActive(new InstantCommand(() -> m_intakeSubsystem.intake()))
+		m_operatorBoard.intake.whileHeld(new InstantCommand(() -> m_intakeSubsystem.intake()))
 				.whenInactive(new InstantCommand(() -> m_intakeSubsystem.intakeOff()));
-		// runs intake backwards while right trigger is held
-		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
-				.whenActive(new InstantCommand(() -> m_intakeSubsystem.intakeReverse()))
-				.whenInactive(new InstantCommand(() -> m_intakeSubsystem.intakeOff()));
-		// raises intake arm when A is pressed
-		new JoystickButton(m_operatorController, Button.kA.value)
-				.whenPressed(new InstantCommand(() -> m_intakeSubsystem.raiseArm()));
-		// lowers intake arm when B is pressed
-		new JoystickButton(m_operatorController, Button.kB.value)
-				.whenPressed(new InstantCommand(() -> m_intakeSubsystem.lowerArm()));
-		// Toggles the shooter when Y button is pressed.
-		new JoystickButton(m_operatorController, Button.kY.value)
-				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
-		// Runs side feeder while left bumper is held
-		new JoystickButton(m_operatorController, Button.kLeftBumper.value)
-				.whileHeld(new InstantCommand(() -> m_intakeSubsystem.sideFeed()))
-				.whenReleased(new InstantCommand(() -> m_intakeSubsystem.sideFeedOff()));
-		// Runs top feeder while right bumper is held
-		new JoystickButton(m_operatorController, Button.kRightBumper.value)
-				.whileHeld(() -> m_intakeSubsystem.topFeed())
-				.whenReleased(() -> m_intakeSubsystem.topFeedOff());
 
+		m_operatorBoard.outtake.whileHeld(new InstantCommand(() -> m_intakeSubsystem.intakeReverse()))
+				.whenInactive(new InstantCommand(() -> m_intakeSubsystem.intakeOff()));
+
+		m_operatorBoard.armUp.whenPressed(new InstantCommand(() -> m_intakeSubsystem.raiseArm()));
+		m_operatorBoard.armDown.whenPressed(new InstantCommand(() -> m_intakeSubsystem.lowerArm()));
+		
+		m_operatorBoard.shoot.toggleWhenPressed(new ShooterCommand(m_shooterSubsystem));
 	}
 
 	/**

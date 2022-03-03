@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.OperatorBoard;
 import frc.robot.Constants.ShooterConstants;
 
 /**
@@ -17,11 +18,13 @@ import frc.robot.Constants.ShooterConstants;
  */
 public class ShooterSubsystem extends SubsystemBase {
 	private final WPI_TalonFX m_shooterMotor = new WPI_TalonFX(ShooterConstants.kShooterMotorPort);
+	public final OperatorBoard m_operatorBoard;
 
 	private final BangBangController m_bangBangController = new BangBangController();
 
 	/** Creates a new {@link ShooterSubsystem}. */
-	public ShooterSubsystem() {
+	public ShooterSubsystem(OperatorBoard operatorBoard) {
+		m_operatorBoard = operatorBoard;
 	}
 
 	@Override
@@ -42,4 +45,5 @@ public class ShooterSubsystem extends SubsystemBase {
 		m_bangBangController.setSetpoint(speed);
 		SmartDashboard.putNumber("Target Shooter Speed", speed);
 	}
+
 }

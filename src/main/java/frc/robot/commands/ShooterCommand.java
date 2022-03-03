@@ -20,15 +20,18 @@ public class ShooterCommand extends CommandBase {
 	public ShooterCommand(ShooterSubsystem subsystem) {
 		m_shooterSubsystem = subsystem;
 		addRequirements(m_shooterSubsystem);
+
 	}
 
 	@Override
 	public void initialize() {
 		m_shooterSubsystem.set(ShooterConstants.kShooterSpeedTicksPerDecisecond);
+		m_shooterSubsystem.m_operatorBoard.shoot.turnLightOn();
 	}
 
 	@Override
 	public void end(boolean interrupted) {
 		m_shooterSubsystem.set(0);
+		m_shooterSubsystem.m_operatorBoard.shoot.turnLightOff();
 	}
 }

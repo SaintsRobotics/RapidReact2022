@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.OperatorBoard;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -22,9 +23,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	// TODO tune PID
 	private final PIDController m_armPID = new PIDController(0.3, 0, 0);
+	private final OperatorBoard m_operatorBoard;
 
 	/** Creates a new {@link IntakeSubsystem}. */
-	public IntakeSubsystem() {
+	public IntakeSubsystem(OperatorBoard operatorBoard) {
+		m_operatorBoard = operatorBoard;
 		m_armMotor.setIdleMode(IdleMode.kBrake);
 		m_armPID.setTolerance(0.05);
 		CANSparkMax leftFeeder = new CANSparkMax(IntakeConstants.kLeftFeederPort, MotorType.kBrushless);
@@ -42,27 +45,33 @@ public class IntakeSubsystem extends SubsystemBase {
 	public void raiseArm() {
 		m_armPID.setSetpoint(IntakeConstants.kRaisedArmAngle);
 		m_armMotor.set(0.5);
+		m_operatorBoard.armUp.turnLightOn();
 	}
 
 	/** Lowers the arm. */
 	public void lowerArm() {
 		m_armPID.setSetpoint(IntakeConstants.kLoweredArmAngle);
 		m_armMotor.set(-0.3);
+		m_operatorBoard.armDown.turnLightOn();
 	}
 
 	/** Runs the intake. */
 	public void intake() {
 		m_intakeMotor.set(IntakeConstants.kIntakeSpeed);
+		m_operatorBoard.intake.turnLightOn();
 	}
 
 	/** Runs the intake in reverse. */
 	public void intakeReverse() {
 		m_intakeMotor.set(-IntakeConstants.kIntakeSpeed);
+		m_operatorBoard.outtake.turnLightOn();
 	}
 
 	/** Turns off the intake. */
 	public void intakeOff() {
 		m_intakeMotor.set(0);
+		m_operatorBoard.intake.turnLightOff();
+		m_operatorBoard.outtake.turnLightOff();
 	}
 
 	/** Runs the side feeders. */
