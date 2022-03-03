@@ -72,10 +72,7 @@ public final class Constants {
 	public static final class ShooterConstants {
 		public static final int kShooterMotorPort = 9;
 
-		public static final double kSpeedRPM = 500;
-
-		public static final double kP = 0.0007;
-		public static final double kS = 0.6;
+		public static final double kSpeedRPM = 500; //6380 is max RPM
 	}
 
 	public static final class IntakeConstants {
@@ -92,6 +89,7 @@ public final class Constants {
 
 	public static final class OIConstants {
 		public static final int kDriverControllerPort = 0;
+		public static final int kOperatorControllerPort = 1;
 		public static final double kControllerDeadband = 0.11;
 	}
 }

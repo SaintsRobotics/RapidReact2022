@@ -50,7 +50,7 @@ public class RobotContainer {
 	private final MoveCommand m_aimingMoveCommand;
 
 	private final XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
-	private final XboxController m_operatorController = new XboxController(OIConstants.kDriverControllerPort);
+	private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -112,14 +112,14 @@ public class RobotContainer {
 				.whenHeld(new LimelightAimingCommand(m_aimingMoveCommand,
 						DriverStation.getAlliance() == Alliance.Blue ? 1 : 2));
 
-		// Toggles the shooter when Y button is pressed.
-		new JoystickButton(m_driveController, Button.kY.value)
-				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
-
 		// Allows the bot to drift while left bumper is held
 		new JoystickButton(m_driveController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
+
+		// Toggles the shooter when Y button is pressed.
+		new JoystickButton(m_operatorController, Button.kY.value)
+				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
 
 		// Runs the intake while left trigger is held.
 		new Trigger(() -> m_operatorController.getLeftTriggerAxis() > 0.5)
