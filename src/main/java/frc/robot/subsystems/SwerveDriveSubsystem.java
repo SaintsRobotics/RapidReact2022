@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,9 +16,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Robot;
 
 /** Controls the drivetrain of the robot using swerve. */
 public class SwerveDriveSubsystem extends SubsystemBase {
@@ -42,7 +46,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			SwerveConstants.kRearRightTurningEncoderOffset);
 
 	private final AHRS m_gyro = new AHRS();
+	private final SimDouble m_simulatedYaw = new SimDouble(
+			SimDeviceDataJNI.getSimValueHandle(SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]"), "Yaw"));
+
 	private final SwerveDriveOdometry m_odometry;
+	private final Field2d m_field2d = new Field2d();
 
 	// TODO tune pid
 	private final PIDController m_headingCorrectionPID = new PIDController(5, 0, 0);
@@ -69,11 +77,18 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 				m_rearLeft.getState(),
 				m_frontRight.getState(),
 				m_rearRight.getState());
+		m_field2d.setRobotPose(m_odometry.getPoseMeters());
 
 		SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
 		SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
 		SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
 		SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
+
+		// For setting offsets.
+		SmartDashboard.putNumber("Module Angle Absolute Front Left", m_frontLeft.getAbsoluteAngle());
+		SmartDashboard.putNumber("Module Angle Absolute Rear Left", m_rearLeft.getAbsoluteAngle());
+		SmartDashboard.putNumber("Module Angle Absolute Front Right", m_frontRight.getAbsoluteAngle());
+		SmartDashboard.putNumber("Module Angle Absolute Rear Right", m_rearRight.getAbsoluteAngle());
 
 		SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
 		SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
@@ -163,11 +178,18 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		SmartDashboard.putBoolean("Is Turning", rot != 0);
 		SmartDashboard.putBoolean("Is Translating", xSpeed != 0 || ySpeed != 0);
 		SmartDashboard.putBoolean("Is Moving", xSpeed != 0 || ySpeed != 0 || rot != 0);
+
+		// Adds the change in angle to the current angle.
+		m_simulatedYaw.set(m_gyro.getAngle() + Math.toDegrees(rotation) * Robot.kDefaultPeriod);
 	}
 
 	/** Zeroes the heading of the robot. */
 	public void zeroHeading() {
-		m_gyro.reset();
+		if (Robot.isReal()) {
+			m_gyro.reset();
+		} else {
+			m_simulatedYaw.set(0);
+		}
 	}
 
 	public void setMotorIdle() {
@@ -197,5 +219,4 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		m_frontRight.setDesiredState(desiredStates[2]);
 		m_rearRight.setDesiredState(desiredStates[3]);
 	}
-
 }
