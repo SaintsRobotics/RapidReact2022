@@ -78,7 +78,7 @@ public final class Constants {
 		public static final int kTopFeederPort = 23;
 
 
-		public static final double kShooterSpeedTicksPerDecisecond = 12000;
+		public static final double kShooterSpeedRPM = 500;
 		// TODO: update speeds
 		public static final double kRaiseArmSpeed = 0.6;
 		public static final double kLowerArmSpeed = -0.3;
@@ -86,7 +86,7 @@ public final class Constants {
 		public static final int kUpperArmAngle = 123;
 		public static final double kIntakeSpeed = 0.45;
 		public static final double kTopFeederSpeedSlow = 0.02;
-		public static final double kTopFeederSpeedFast = 0.75;
+		public static final double kTopFeederSpeedFast = 0.9;
 		public static final double kSideFeederSpeed = 0.4;
 
 		

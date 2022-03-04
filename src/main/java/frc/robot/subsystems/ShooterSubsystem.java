@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -21,6 +22,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.DutyCycleAbsoluteEncoder;
 import frc.robot.MUX;
 import frc.robot.REVColorSensorV3;
+import frc.robot.Utils;
 
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
 public class ShooterSubsystem extends SubsystemBase {
@@ -31,10 +33,12 @@ public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
   private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
   // TODO fix
-  private final PIDController m_shooterController = new PIDController(0.199999, 22, 78);
-  private final PIDController m_PID = new PIDController(0.3, 0, 0);
+  private final PIDController m_armPID = new PIDController(0.3, 0, 0);
   private final MUX m_MUX = new MUX();
-  private final REVColorSensorV3 m_colorSensor = new REVColorSensorV3(m_MUX, m_MUX.Port);
+  private final REVColorSensorV3 m_colorSensor = new REVColorSensorV3(m_MUX, MUX.Port.kOne);
+
+  private final PIDController m_shooterPID = new PIDController(0.0007, 0, 0);
+	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.6, 0);
 
 
   /** Creates a new {@link ShooterSubsystem}. */
@@ -45,41 +49,44 @@ public class ShooterSubsystem extends SubsystemBase {
     CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
     rightFeeder.setInverted(true);
     m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
+    m_shooterPID.setTolerance(50);
   }
 
   // top feeder run for how long?
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    if (m_shooterController.getSetpoint() == 0) {
-      m_flywheel.set(0);
+    double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
+		m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
+
+    if (m_shooterPID.atSetpoint()) {
+      m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
     } else {
-      m_flywheel.set(m_shooterController.calculate(m_flywheel.getSelectedSensorVelocity()));
-      if (m_flywheel.get() > 0.5) {
-        m_topFeeder.set(1);
-      } else {
-        m_topFeeder.set(0);
-      }  
+      m_topFeeder.set(0);
     }
 
+		SmartDashboard.putNumber("shooter PID Output", pidOutput);
+		SmartDashboard.putNumber("Feedforward", m_feedforward.calculate(m_shooterPID.getSetpoint()));
     SmartDashboard.putNumber("Current Shooter Power", m_flywheel.get());
-    SmartDashboard.putNumber("Current Shooter Speed", m_flywheel.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Current Shooter RPM", Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
+    SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
+    SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
     SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
     SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
     SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
     SmartDashboard.putString("RGB", m_colorSensor.getColor().toString());
+    SmartDashboard.putBoolean("is shooter ball", isShooterBall());
   }
 
   /** Raises the arm. */
   public void raiseArm() {
-    m_PID.setSetpoint(ShooterConstants.kUpperArmAngle);
-    m_arm.set(m_PID.calculate(m_armEncoder.getAbsolutePosition()));
+    m_armPID.setSetpoint(ShooterConstants.kUpperArmAngle);
+    m_arm.set(m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
   }
 
   /** Lowers the arm. */
   public void lowerArm() {
-    m_PID.setSetpoint(ShooterConstants.kLowerArmAngle);
-    m_arm.set(m_PID.calculate(m_armEncoder.getAbsolutePosition()));
+    m_armPID.setSetpoint(ShooterConstants.kLowerArmAngle);
+    m_arm.set(m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
   }
 
   public void stopArm() {
@@ -119,14 +126,15 @@ public class ShooterSubsystem extends SubsystemBase {
    * 
    * @param speed Speed of the shooter in ticks per decisecond.
    */
-  public void setShooterSpeed(double speed) {
-    m_shooterController.setSetpoint(speed);
-    SmartDashboard.putNumber("Target Shooter Speed", speed);
-    
+  public void setShooterSpeed(double RPM) {
+    m_shooterPID.setSetpoint(RPM);
+    SmartDashboard.putNumber("Target Shooter Speed", RPM);
   }
   
   private boolean isShooterBall() {
-    return m_colorSensor.getProximity() >= 500;
+    SmartDashboard.putNumber("proximity", m_colorSensor.getProximity());
+
+    return m_colorSensor.getProximity() >= 300;
     //return true;
   }
 }
