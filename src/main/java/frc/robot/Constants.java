@@ -16,9 +16,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * <p>
  * It is advised to statically import this class (or one of its inner classes)
  * wherever the constants are needed, to reduce verbosity.
- * 
- * <p>
- * TODO update these values when the new robot is built
  */
 public final class Constants {
 	public static final class SwerveConstants {
@@ -47,10 +44,10 @@ public final class Constants {
 		public static final boolean kFrontRightDriveMotorReversed = true;
 		public static final boolean kRearRightDriveMotorReversed = true;
 		/** Distance between centers of right and left wheels on robot. */
-		public static final double kTrackWidth = 0.5;
+		public static final double kTrackWidth = 0.57;
 
 		/** Distance between front and back wheels on robot. */
-		public static final double kWheelBase = 0.67;
+		public static final double kWheelBase = 0.6;
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 				new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -58,19 +55,23 @@ public final class Constants {
 				new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
 				new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-		public static final double kMaxSpeedMetersPerSecond = 3.6;
+		public static final double kMaxSpeedMetersPerSecond = 3.66;
 
+		// TODO update value with new robot
 		public static final double kMaxAngularSpeedRadiansPerSecond = 8.76;
 
-		/** Time in seconds for the robot to stop turning from max speed. */
+		/**
+		 * Time in seconds for the robot to stop turning from max speed.
+		 * TODO update value with new robot.
+		 */
 		public static final double kTurningStopTime = 0.2;
 	}
 
 	public static final class ModuleConstants {
-		public static final double kWheelCircumferenceMeters = 0.3;
+		public static final double kWheelDiameterMeters = 0.1;
 
 		/** Gear ratio between the motor and the wheel. */
-		public static final double kDrivingGearRatio = 8.33;
+		public static final double kDrivingGearRatio = 8.14;
 	}
 
 	public static final class ShooterConstants {
@@ -80,7 +81,6 @@ public final class Constants {
 		public static final int kLeftFeederPort = 10;
 		public static final int kRightFeederPort = 6;
 		public static final int kTopFeederPort = 14;
-
 
 		public static final double kShooterSpeedRPM = 1000;
 		// TODO: update speeds
@@ -92,16 +92,26 @@ public final class Constants {
 		public static final double kTopFeederSpeedSlow = 0.02;
 		public static final double kTopFeederSpeedFast = 0.9;
 		public static final double kSideFeederSpeed = 0.4;
+	
 
 		
 
 		
+
+		public static final boolean kIntakeReversed = true;
+		public static final boolean kLeftFeederReversed = true;
+		public static final boolean kRightFeederReversed = false;
+	}
+
+	public static final class ClimberConstants {
+		// TODO update with real ports
+		public static final int kLeftArmPort = 60;
+		public static final int kRightArmPort = 61;
 	}
 
 	public static final class OIConstants {
 		public static final int kDriverControllerPort = 0;
 		public static final int kOperatorControllerPort = 1;
-		
 		public static final double kControllerDeadband = 0.11;
 	}
 	public static final class ConversionConstants {

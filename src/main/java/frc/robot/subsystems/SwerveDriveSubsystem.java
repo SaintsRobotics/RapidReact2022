@@ -24,21 +24,25 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			SwerveConstants.kFrontLeftDriveMotorPort,
 			SwerveConstants.kFrontLeftTurningMotorPort,
 			SwerveConstants.kFrontLeftTurningEncoderPort,
+			SwerveConstants.kFrontLeftDriveMotorReversed,
 			SwerveConstants.kFrontLeftTurningEncoderOffset);
 	private final SwerveModule m_rearLeft = new SwerveModule(
 			SwerveConstants.kRearLeftDriveMotorPort,
 			SwerveConstants.kRearLeftTurningMotorPort,
 			SwerveConstants.kRearLeftTurningEncoderPort,
+			SwerveConstants.kRearLeftDriveMotorReversed,
 			SwerveConstants.kRearLeftTurningEncoderOffset);
 	private final SwerveModule m_frontRight = new SwerveModule(
 			SwerveConstants.kFrontRightDriveMotorPort,
 			SwerveConstants.kFrontRightTurningMotorPort,
 			SwerveConstants.kFrontRightTurningEncoderPort,
+			SwerveConstants.kFrontRightDriveMotorReversed,
 			SwerveConstants.kFrontRightTurningEncoderOffset);
 	private final SwerveModule m_rearRight = new SwerveModule(
 			SwerveConstants.kRearRightDriveMotorPort,
 			SwerveConstants.kRearRightTurningMotorPort,
 			SwerveConstants.kRearRightTurningEncoderPort,
+			SwerveConstants.kRearRightDriveMotorReversed,
 			SwerveConstants.kRearRightTurningEncoderOffset);
 
 	private final AHRS m_gyro = new AHRS();
@@ -74,6 +78,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
 		SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
 		SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
+
+		// For setting offsets.
+		SmartDashboard.putNumber("Module Angle Absolute Front Left", m_frontLeft.getAbsoluteAngle());
+		SmartDashboard.putNumber("Module Angle Absolute Rear Left", m_rearLeft.getAbsoluteAngle());
+		SmartDashboard.putNumber("Module Angle Absolute Front Right", m_frontRight.getAbsoluteAngle());
+		SmartDashboard.putNumber("Module Angle Absolute Rear Right", m_rearRight.getAbsoluteAngle());
 
 		SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
 		SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);

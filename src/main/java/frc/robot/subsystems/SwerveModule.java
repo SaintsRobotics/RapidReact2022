@@ -4,14 +4,16 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.SensorTimeBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.AbsoluteEncoder;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveConstants;
 
@@ -20,7 +22,7 @@ public class SwerveModule {
 	private final CANSparkMax m_driveMotor;
 	private final CANSparkMax m_turningMotor;
 
-	private final AbsoluteEncoder m_turningEncoder;
+	private final CANCoder m_turningEncoder;
 
 	private final PIDController m_turningPIDController = new PIDController(0.3, 0, 0);
 
@@ -30,24 +32,32 @@ public class SwerveModule {
 	 * @param driveMotorChannel     ID for the drive motor.
 	 * @param turningMotorChannel   ID for the turning motor.
 	 * @param turningEncoderChannel ID for the turning encoder.
+	 * @param driveMotorReversed    Whether the drive motor is reversed.
 	 * @param turningEncoderOffset  Offset of the turning encoder.
 	 */
 	public SwerveModule(
 			int driveMotorChannel,
 			int turningMotorChannel,
 			int turningEncoderChannel,
+			Boolean driveMotorReversed,
 			double turningEncoderOffset) {
 		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+		m_turningEncoder = new CANCoder(turningEncoderChannel);
 
-		m_turningEncoder = new AbsoluteEncoder(turningEncoderChannel, turningEncoderOffset);
-
+		// converts default units to meters per second
 		m_driveMotor.getEncoder().setVelocityConversionFactor(
-				ModuleConstants.kWheelCircumferenceMeters / 60 / ModuleConstants.kDrivingGearRatio);
+				ModuleConstants.kWheelDiameterMeters * Math.PI / 60 / ModuleConstants.kDrivingGearRatio);
+		m_driveMotor.setIdleMode(IdleMode.kBrake);
+		m_driveMotor.setInverted(driveMotorReversed);
+
+		m_turningMotor.setIdleMode(IdleMode.kBrake);
+
+		// converts default units to radians
+		m_turningEncoder.configFeedbackCoefficient(Math.toRadians(0.087890625), "radians", SensorTimeBase.PerSecond);
+		m_turningEncoder.configMagnetOffset(-turningEncoderOffset);
 
 		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-		m_driveMotor.setIdleMode(IdleMode.kBrake);
-		m_turningMotor.setIdleMode(IdleMode.kBrake);
 	}
 
 	/**
@@ -56,7 +66,21 @@ public class SwerveModule {
 	 * @return The current state of the module.
 	 */
 	public SwerveModuleState getState() {
-		return new SwerveModuleState(m_driveMotor.getEncoder().getVelocity(), new Rotation2d(m_turningEncoder.get()));
+		return new SwerveModuleState(
+				m_driveMotor.getEncoder().getVelocity(),
+				new Rotation2d(m_turningEncoder.getAbsolutePosition()));
+	}
+
+	/**
+	 * Returns the absolute angle of the module. Use this to set the offset of the
+	 * modules.
+	 * 
+	 * @return Absolute angle of the module from 0 to 360.
+	 */
+	public double getAbsoluteAngle() {
+		return MathUtil.inputModulus(
+				Math.toDegrees(m_turningEncoder.getAbsolutePosition()) - m_turningEncoder.configGetMagnetOffset(), 0,
+				360);
 	}
 
 	/**
@@ -74,10 +98,12 @@ public class SwerveModule {
 	 * @param desiredState Desired state with speed and angle.
 	 */
 	public void setDesiredState(SwerveModuleState desiredState) {
-		SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.get()));
+		SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+				new Rotation2d(m_turningEncoder.getAbsolutePosition()));
 
 		final double driveOutput = state.speedMetersPerSecond / SwerveConstants.kMaxSpeedMetersPerSecond;
-		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get(), state.angle.getRadians());
+		final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getAbsolutePosition(),
+				state.angle.getRadians());
 
 		m_driveMotor.set(driveOutput);
 		m_turningMotor.set(turnOutput);
