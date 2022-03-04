@@ -11,11 +11,16 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.DutyCycleAbsoluteEncoder;
+import frc.robot.MUX;
+import frc.robot.REVColorSensorV3;
 
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
 public class ShooterSubsystem extends SubsystemBase {
@@ -28,6 +33,9 @@ public class ShooterSubsystem extends SubsystemBase {
   // TODO fix
   private final PIDController m_shooterController = new PIDController(0.199999, 22, 78);
   private final PIDController m_PID = new PIDController(0.3, 0, 0);
+  private final MUX m_MUX = new MUX();
+  private final REVColorSensorV3 m_colorSensor = new REVColorSensorV3(m_MUX, m_MUX.Port);
+
 
   /** Creates a new {@link ShooterSubsystem}. */
   public ShooterSubsystem() {
@@ -59,6 +67,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
     SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
     SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
+    SmartDashboard.putString("RGB", m_colorSensor.getColor().toString());
   }
 
   /** Raises the arm. */
@@ -115,9 +124,9 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Target Shooter Speed", speed);
     
   }
-
+  
   private boolean isShooterBall() {
-    // TODO: fill in with sensors
-    return true;
+    return m_colorSensor.getProximity() >= 500;
+    //return true;
   }
 }
