@@ -27,23 +27,22 @@ import frc.robot.Utils;
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
 public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax m_arm = new CANSparkMax(ShooterConstants.kArmPort, MotorType.kBrushless);
-  private final DutyCycleAbsoluteEncoder m_armEncoder = new DutyCycleAbsoluteEncoder(0);
- 
+  private final DutyCycleAbsoluteEncoder m_armEncoder = new DutyCycleAbsoluteEncoder(9);
+
   private final CANSparkMax m_intake = new CANSparkMax(ShooterConstants.kIntakeWheelsPort, MotorType.kBrushless);
   private final MotorControllerGroup m_sideFeeders;
   private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
-  
+
   private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
 
   private final MUX m_MUX = new MUX();
   private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, MUX.Port.kTwo);
-  private final REVColorSensorV3 m_colorSensor = new REVColorSensorV3(m_MUX, MUX.Port.kOne);
-  
+  //private final REVColorSensorV3 m_colorSensor = new REVColorSensorV3(m_MUX, MUX.Port.kOne);
+
   // TODO tune
   private final PIDController m_armPID = new PIDController(0.3, 0, 0);
   private final PIDController m_shooterPID = new PIDController(0.0007, 0, 0);
-	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.6, 0);
-
+  private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.2, 0);
 
   /** Creates a new {@link ShooterSubsystem}. */
   public ShooterSubsystem() {
@@ -51,7 +50,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_flywheel.setNeutralMode(NeutralMode.Coast);
     CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
     CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
-    rightFeeder.setInverted(true);
+    m_intake.setInverted(true);
+    leftFeeder.setInverted(true);
+    rightFeeder.setInverted(false);
     m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
     m_shooterPID.setTolerance(50);
   }
@@ -60,7 +61,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
-		m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
+    m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
 
     if (m_shooterPID.atSetpoint()) {
       m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
@@ -68,8 +69,8 @@ public class ShooterSubsystem extends SubsystemBase {
       m_topFeeder.set(0);
     }
 
-		SmartDashboard.putNumber("shooter PID Output", pidOutput);
-		SmartDashboard.putNumber("Feedforward", m_feedforward.calculate(m_shooterPID.getSetpoint()));
+    SmartDashboard.putNumber("shooter PID Output", pidOutput);
+    SmartDashboard.putNumber("Feedforward", m_feedforward.calculate(m_shooterPID.getSetpoint()));
     SmartDashboard.putNumber("Current Shooter Power", m_flywheel.get());
     SmartDashboard.putNumber("Current Shooter RPM", Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
     SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
@@ -77,14 +78,19 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
     SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
     SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
-    SmartDashboard.putString("RGB", m_proximitySensor.getColor().toString());
+    //SmartDashboard.putString("RGB",
+      //  m_colorSensor.getRed() + ", " + m_colorSensor.getGreen() + ", " + m_colorSensor.getBlue());
+    SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
+
+    //SmartDashboard.putBoolean("is correct color", isCorrectColor());
     SmartDashboard.putBoolean("is shooter ball", isShooterBall());
+    // printColor();
   }
 
   /** Raises the arm. */
   public void raiseArm() {
     m_armPID.setSetpoint(ShooterConstants.kUpperArmAngle);
-    m_arm.set(m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
+     m_arm.set(m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
   }
 
   /** Lowers the arm. */
@@ -134,18 +140,30 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterPID.setSetpoint(RPM);
     SmartDashboard.putNumber("Target Shooter Speed", RPM);
   }
-  
-  private boolean isShooterBall() {
-    SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
 
-    return m_proximitySensor.getProximity() >= 300;
-    //return true;
+  private boolean isShooterBall() {
+    return m_proximitySensor.getProximity() >= 160;
+    // return true;
   }
 
+  /*
   private boolean isCorrectColor() {
-    if (DriverStation.getAlliance() == Alliance.Red && m_colorSensor.getRed() > 12000) return true;
-    if (DriverStation.getAlliance() == Alliance.Blue && m_colorSensor.getBlue() > 12000) return true;
+    if (DriverStation.getAlliance() == Alliance.Red && m_colorSensor.getRed() > 300)
+      return true;
+    if (DriverStation.getAlliance() == Alliance.Blue && m_colorSensor.getBlue() > 300)
+      return true;
+
     return false;
   }
- 
+
+  private void printColor() {
+    if (m_colorSensor.getRed() > 300)
+      SmartDashboard.putString("color sensed", "red");
+    if (m_colorSensor.getBlue() > 300)
+      SmartDashboard.putString("color sensed", "blue");
+
+    SmartDashboard.putString("color sensed", "none");
+  }
+  */
+
 }
