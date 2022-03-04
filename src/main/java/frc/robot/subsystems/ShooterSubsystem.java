@@ -10,9 +10,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,13 +42,17 @@ public class ShooterSubsystem extends SubsystemBase {
   //private final REVColorSensorV3 m_colorSensor = new REVColorSensorV3(m_MUX, MUX.Port.kOne);
 
   // TODO tune
-  private final PIDController m_armPID = new PIDController(0.3, 0, 0);
+  private final PIDController m_armPID = new PIDController(0.002, 0, 0);
   private final PIDController m_shooterPID = new PIDController(0.0007, 0, 0);
   private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.2, 0);
+
+  private boolean m_runningIntake = false;
+  private Timer m_shootingTimer = new Timer();
 
   /** Creates a new {@link ShooterSubsystem}. */
   public ShooterSubsystem() {
     m_arm.setIdleMode(IdleMode.kBrake);
+    m_arm.setInverted(true);
     m_flywheel.setNeutralMode(NeutralMode.Coast);
     CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
     CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
@@ -55,17 +61,32 @@ public class ShooterSubsystem extends SubsystemBase {
     rightFeeder.setInverted(false);
     m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
     m_shooterPID.setTolerance(50);
+    m_armPID.setTolerance(2);
+
+    m_shootingTimer.start();
   }
 
   // top feeder run for how long?
   @Override
   public void periodic() {
     double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
-    m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
-
-    if (m_shooterPID.atSetpoint()) {
-      m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
+    //m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
+    if(m_shooterPID.getSetpoint()>0){
+      m_flywheel.set(0.5);
     } else {
+      m_flywheel.set(0);
+    }
+
+    if((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0) { //add back && atSetpoint
+      m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
+      if (isShooterPrimed()) {
+        m_shootingTimer.reset();
+      }
+    }
+    else if (!isShooterPrimed() && m_runningIntake) {
+      m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
+    }
+    else {
       m_topFeeder.set(0);
     }
 
@@ -83,20 +104,29 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
 
     //SmartDashboard.putBoolean("is correct color", isCorrectColor());
-    SmartDashboard.putBoolean("is shooter ball", isShooterBall());
+    SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
     // printColor();
   }
 
   /** Raises the arm. */
   public void raiseArm() {
     m_armPID.setSetpoint(ShooterConstants.kUpperArmAngle);
-     m_arm.set(m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
+    if (m_armPID.atSetpoint()) m_arm.set(0);
+    else m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), -0.2, -0.05));
+ 
+    //SmartDashboard.putNumber("arm PID", m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
+
+    //m_arm.set(-0.05);
   }
 
   /** Lowers the arm. */
   public void lowerArm() {
     m_armPID.setSetpoint(ShooterConstants.kLowerArmAngle);
-    m_arm.set(m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
+    if (m_armPID.atSetpoint()) m_arm.set(0);
+    else m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), 0.05, 0.2));
+    //SmartDashboard.putNumber("arm PID", m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
+
+    //m_arm.set(0.05);
   }
 
   public void stopArm() {
@@ -107,12 +137,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void intake() {
     // if there is a ball at the top: don't run top feeder
     // run the intake wheels and side feeders
-    if (!isShooterBall()) {
-      m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
-    } else {
-      m_topFeeder.set(0);
-    }
-
+    m_runningIntake = true;
     m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
     m_intake.set(ShooterConstants.kIntakeSpeed);
   }
@@ -126,9 +151,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Turns off the intake. */
   public void intakeOff() {
+    m_runningIntake = false;
     m_intake.set(0);
     m_sideFeeders.set(0);
-    m_topFeeder.set(0);
+
   }
 
   /**
@@ -141,8 +167,8 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Target Shooter Speed", RPM);
   }
 
-  private boolean isShooterBall() {
-    return m_proximitySensor.getProximity() >= 160;
+  private boolean isShooterPrimed() {
+    return m_proximitySensor.getProximity() >= 180;
     // return true;
   }
 
