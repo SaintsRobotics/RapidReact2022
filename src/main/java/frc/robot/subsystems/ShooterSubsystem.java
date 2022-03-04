@@ -28,15 +28,19 @@ import frc.robot.Utils;
 public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax m_arm = new CANSparkMax(ShooterConstants.kArmPort, MotorType.kBrushless);
   private final DutyCycleAbsoluteEncoder m_armEncoder = new DutyCycleAbsoluteEncoder(0);
+ 
   private final CANSparkMax m_intake = new CANSparkMax(ShooterConstants.kIntakeWheelsPort, MotorType.kBrushless);
   private final MotorControllerGroup m_sideFeeders;
   private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
+  
   private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
-  // TODO fix
-  private final PIDController m_armPID = new PIDController(0.3, 0, 0);
-  private final MUX m_MUX = new MUX();
-  private final REVColorSensorV3 m_colorSensor = new REVColorSensorV3(m_MUX, MUX.Port.kOne);
 
+  private final MUX m_MUX = new MUX();
+  private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, MUX.Port.kTwo);
+  private final REVColorSensorV3 m_colorSensor = new REVColorSensorV3(m_MUX, MUX.Port.kOne);
+  
+  // TODO tune
+  private final PIDController m_armPID = new PIDController(0.3, 0, 0);
   private final PIDController m_shooterPID = new PIDController(0.0007, 0, 0);
 	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.6, 0);
 
@@ -73,7 +77,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
     SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
     SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
-    SmartDashboard.putString("RGB", m_colorSensor.getColor().toString());
+    SmartDashboard.putString("RGB", m_proximitySensor.getColor().toString());
     SmartDashboard.putBoolean("is shooter ball", isShooterBall());
   }
 
@@ -132,9 +136,16 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   
   private boolean isShooterBall() {
-    SmartDashboard.putNumber("proximity", m_colorSensor.getProximity());
+    SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
 
-    return m_colorSensor.getProximity() >= 300;
+    return m_proximitySensor.getProximity() >= 300;
     //return true;
   }
+
+  private boolean isCorrectColor() {
+    if (DriverStation.getAlliance() == Alliance.Red && m_colorSensor.getRed() > 12000) return true;
+    if (DriverStation.getAlliance() == Alliance.Blue && m_colorSensor.getBlue() > 12000) return true;
+    return false;
+  }
+ 
 }
