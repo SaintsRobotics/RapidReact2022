@@ -92,6 +92,8 @@ public final class Constants {
 		public static final int kLeftArmPort = 567890;
 		public static final int kRightArmPort = 590;
 		public static final int kClimberControllerPort = 100;
+		public static final int kServoLockedPos = 0;
+		public static final int kServoReleasedPos = 0;
 	}
 
 	public static final class OIConstants {
