@@ -83,7 +83,6 @@ public class ClimberArmSubsystem extends SubsystemBase {
 
 		if (should_lock) {
 			lockServos();
-<<<<<<< HEAD
 			m_leftClimberArm.set(0);
 			m_rightClimberArm.set(0);	
 		} else {
@@ -91,13 +90,6 @@ public class ClimberArmSubsystem extends SubsystemBase {
 			m_leftClimberArm.set(m_leftSpeed);
 			m_rightClimberArm.set(m_rightSpeed);
 		}
-=======
-		} else {
-			releaseServos();
-		}
-		m_leftClimberArm.set(m_leftSpeed);
-		m_rightClimberArm.set(m_rightSpeed);
->>>>>>> 10bbf273957993f2fe59b67d242f732664ed7e01
 		SmartDashboard.putNumber("Desired Climber Speed", m_leftSpeed);
 	}
 }
