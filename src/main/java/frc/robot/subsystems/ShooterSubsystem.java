@@ -43,10 +43,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
   // TODO tune
   private final PIDController m_armPID = new PIDController(0.002, 0, 0);
-  private final PIDController m_shooterPID = new PIDController(0.0007, 0, 0);
-  private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.2, 0);
+  private final PIDController m_shooterPID = new PIDController(0.0005, 0, 0);
+  private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.65, 0);
 
   private boolean m_runningIntake = false;
+  private boolean m_reversingIntake = false;
   private Timer m_shootingTimer = new Timer();
 
   /** Creates a new {@link ShooterSubsystem}. */
@@ -70,14 +71,16 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
-    //m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
-    if(m_shooterPID.getSetpoint()>0){
-      m_flywheel.set(0.5);
-    } else {
-      m_flywheel.set(0);
-    }
+    // if(m_shooterPID.getSetpoint()>0){
+    //   // m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
+    //   m_flywheel.set(0.76);
+    // } else {
+    //   m_flywheel.set(0);
+    // }
+    m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
 
-    if((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0) { //add back && atSetpoint
+
+    if((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0 && Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 3800) {
       m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
       if (isShooterPrimed()) {
         m_shootingTimer.reset();
@@ -86,14 +89,16 @@ public class ShooterSubsystem extends SubsystemBase {
     else if (!isShooterPrimed() && m_runningIntake) {
       m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
     }
-    else {
+    else if (!m_reversingIntake) {
       m_topFeeder.set(0);
     }
 
-    SmartDashboard.putNumber("shooter PID Output", pidOutput);
-    SmartDashboard.putNumber("Feedforward", m_feedforward.calculate(m_shooterPID.getSetpoint()));
-    SmartDashboard.putNumber("Current Shooter Power", m_flywheel.get());
-    SmartDashboard.putNumber("Current Shooter RPM", Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
+    SmartDashboard.putNumber("Shooter PID Output", pidOutput);
+    SmartDashboard.putNumber("Shooter PID velocity error", m_shooterPID.getVelocityError());
+    SmartDashboard.putNumber("Shooter PID position error", m_shooterPID.getPositionError());
+    SmartDashboard.putNumber("Shooter Feedforward output", m_feedforward.calculate(m_shooterPID.getSetpoint()));
+    SmartDashboard.putNumber("Shooter Power", m_flywheel.get());
+    SmartDashboard.putNumber("Shooter RPM", Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
     SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
     SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
     SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
@@ -144,14 +149,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Runs the intake in reverse. */
   public void intakeReverse() {
+    m_reversingIntake = true;
     m_intake.set(-ShooterConstants.kIntakeSpeed);
     m_sideFeeders.set(-ShooterConstants.kSideFeederSpeed);
-    m_topFeeder.set(-ShooterConstants.kTopFeederSpeedSlow);
+    m_topFeeder.set(-ShooterConstants.kTopFeederSpeedFast);
   }
 
   /** Turns off the intake. */
   public void intakeOff() {
     m_runningIntake = false;
+    m_reversingIntake = false;
     m_intake.set(0);
     m_sideFeeders.set(0);
 
@@ -164,12 +171,13 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public void setShooterSpeed(double RPM) {
     m_shooterPID.setSetpoint(RPM);
+    m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
     SmartDashboard.putNumber("Target Shooter Speed", RPM);
   }
 
   private boolean isShooterPrimed() {
-    return m_proximitySensor.getProximity() >= 180;
-    // return true;
+    // return m_proximitySensor.getProximity() >= 180;
+    return true;
   }
 
   /*
