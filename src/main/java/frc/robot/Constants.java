@@ -109,12 +109,12 @@ public final class Constants {
 	}
 
 	public static final class OperatorButtonConstants {
-		public static final int intakeButton = 1;
-		public static final int outtakeButton = 2;
-		public static final int shootButton = 3;
+		public static final int intakeButton = 2;
+		public static final int outtakeButton = 1;
+		public static final int shootButton = 9;
 		public static final int armUpButton = 4;
-		public static final int armDownButton = 5;
-		public static final int realignClimberButton = 6;
+		public static final int armDownButton = 3;
+		public static final int realignClimberButton = 12;
 
 	}
 }

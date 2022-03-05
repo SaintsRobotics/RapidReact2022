@@ -57,6 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	/** Runs the intake. */
 	public void intake() {
+		SmartDashboard.putBoolean("intake-pressed", true);
 		m_intakeMotor.set(IntakeConstants.kIntakeSpeed);
 		m_operatorBoard.intake.turnLightOn();
 	}
@@ -69,6 +70,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
 	/** Turns off the intake. */
 	public void intakeOff() {
+		SmartDashboard.putBoolean("intake-pressed", false);
 		m_intakeMotor.set(0);
 		m_operatorBoard.intake.turnLightOff();
 		m_operatorBoard.outtake.turnLightOff();
