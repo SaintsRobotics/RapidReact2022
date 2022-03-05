@@ -71,16 +71,14 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
-    // if(m_shooterPID.getSetpoint()>0){
-    //   // m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
-    //   m_flywheel.set(0.76);
-    // } else {
-    //   m_flywheel.set(0);
-    // }
-    m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
+    if(m_shooterPID.getSetpoint() > 0){
+      m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
+    } else {
+      m_flywheel.set(0);
+    }
 
 
-    if((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0 && Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 3800) {
+    if((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0 && Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 4150) {
       m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
       if (isShooterPrimed()) {
         m_shootingTimer.reset();
@@ -181,8 +179,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private boolean isShooterPrimed() {
-    // return m_proximitySensor.getProximity() >= 180;
-    return true;
+    return m_proximitySensor.getProximity() >= 180;
+    //return true;
   }
 
   /*
