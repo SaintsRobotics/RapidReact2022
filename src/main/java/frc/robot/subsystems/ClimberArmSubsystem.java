@@ -21,14 +21,14 @@ public class ClimberArmSubsystem extends SubsystemBase {
 	private CANSparkMax m_leftClimberArm = new CANSparkMax(ClimberConstants.kLeftArmPort, MotorType.kBrushless);
 	private CANSparkMax m_rightClimberArm = new CANSparkMax(ClimberConstants.kRightArmPort, MotorType.kBrushless);
 
-	private CANCoder m_leftEncoder = new CANCoder(456);
-	private CANCoder m_rightEncoder = new CANCoder(123);
+	private CANCoder m_leftEncoder = new CANCoder(6);
+	private CANCoder m_rightEncoder = new CANCoder(1);
 
 	private PIDController m_leftPID = new PIDController(0.3, 0, 0);
 	private PIDController m_rightPID = new PIDController(0.3, 0, 0);
 	
-	private Servo m_leftServo = new Servo(345);
-	private Servo m_rightServo = new Servo(789);
+	private Servo m_leftServo = new Servo(5);
+	private Servo m_rightServo = new Servo(7);
 
 	private double m_leftSpeed;
 	private double m_rightSpeed;
@@ -57,39 +57,30 @@ public class ClimberArmSubsystem extends SubsystemBase {
 
 	}
 
-	private void releaseServos(){
+	public void releaseServos(){
 		m_leftServo.set(ClimberConstants.kServoReleasedPos);
 		m_rightServo.set(ClimberConstants.kServoReleasedPos);
-		
+		should_lock = false;		
 	}
 
-	private void lockServos(){
+	public void lockServos(){
 		m_leftServo.set(ClimberConstants.kServoLockedPos);
 		m_rightServo.set(ClimberConstants.kServoLockedPos);
-		
-	}
-
-	public void toggleLock(){
 		should_lock = true;
-	}
-
-	public void toggleRelease(){
-		should_lock = false;
 	}
 
 	@Override
 	public void periodic() {
 		SmartDashboard.putNumber("Climber Speed", m_leftClimberArm.get()); //Same as right arm
-
 		if (should_lock) {
-			lockServos();
 			m_leftClimberArm.set(0);
 			m_rightClimberArm.set(0);	
 		} else {
-			releaseServos();
 			m_leftClimberArm.set(m_leftSpeed);
 			m_rightClimberArm.set(m_rightSpeed);
 		}
+		SmartDashboard.putString("test", "asdfasdf");
+		SmartDashboard.putBoolean("should_lock", should_lock);
 		SmartDashboard.putNumber("Desired Climber Speed", m_leftSpeed);
 	}
 }

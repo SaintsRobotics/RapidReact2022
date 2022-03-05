@@ -127,8 +127,8 @@ public class RobotContainer {
 				.whenPressed(new InstantCommand(() -> m_climberSubsystem.realignArms()));
 
 		new JoystickButton(m_operatorController, Button.kB.value)
-				.whileHeld(new InstantCommand(() -> m_climberSubsystem.toggleRelease()))
-				.whenReleased(new InstantCommand(() -> m_climberSubsystem.toggleLock()));
+				.whileHeld(new InstantCommand(() -> m_climberSubsystem.releaseServos()))
+				.whenReleased(new InstantCommand(() -> m_climberSubsystem.lockServos()));
 
 	}
 
