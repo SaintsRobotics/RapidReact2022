@@ -127,10 +127,10 @@ public class RobotContainer {
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
 
 		m_operatorBoard.intake.whileHeld(new InstantCommand(() -> m_intakeSubsystem.intake()))
-				.whenInactive(new InstantCommand(() -> m_intakeSubsystem.intakeOff()));
+				.whenReleased(new InstantCommand(() -> m_intakeSubsystem.intakeOff()));
 
 		m_operatorBoard.outtake.whileHeld(new InstantCommand(() -> m_intakeSubsystem.intakeReverse()))
-				.whenInactive(new InstantCommand(() -> m_intakeSubsystem.intakeOff()));
+				.whenReleased(new InstantCommand(() -> m_intakeSubsystem.intakeOff()));
 
 		m_operatorBoard.armUp.whenPressed(new InstantCommand(() -> m_intakeSubsystem.raiseArm()));
 		m_operatorBoard.armDown.whenPressed(new InstantCommand(() -> m_intakeSubsystem.lowerArm()));
