@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -31,6 +32,8 @@ public class ClimberArmSubsystem extends SubsystemBase {
 
 	private double m_leftSpeed;
 	private double m_rightSpeed;
+
+	public boolean should_lock;
 	
 
 
@@ -54,11 +57,35 @@ public class ClimberArmSubsystem extends SubsystemBase {
 
 	}
 
+	private void releaseServos(){
+		m_leftServo.set(ClimberConstants.kServoReleasedPos);
+		m_rightServo.set(ClimberConstants.kServoReleasedPos);
+		
+	}
+
+	private void lockServos(){
+		m_leftServo.set(ClimberConstants.kServoLockedPos);
+		m_rightServo.set(ClimberConstants.kServoLockedPos);
+		
+	}
+
+	public void toggleLock(){
+		should_lock = true;
+	}
+
+	public void toggleRelease(){
+		should_lock = false;
+	}
+
 	@Override
 	public void periodic() {
 		SmartDashboard.putNumber("Climber Speed", m_leftClimberArm.get()); //Same as right arm
 
-		
+		if (should_lock) {
+			lockServos();
+		} else {
+			releaseServos();
+		}
 		m_leftClimberArm.set(m_leftSpeed);
 		m_rightClimberArm.set(m_rightSpeed);
 		SmartDashboard.putNumber("Desired Climber Speed", m_leftSpeed);
