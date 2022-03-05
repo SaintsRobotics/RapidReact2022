@@ -124,11 +124,22 @@ public class RobotContainer {
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
 
 		new JoystickButton(m_operatorController, Button.kY.value)
+<<<<<<< HEAD
 				.whenPressed(new InstantCommand(() -> m_climberSubsystem.realignArms()));
 
 		new JoystickButton(m_operatorController, Button.kB.value)
 				.whileHeld(new InstantCommand(() -> m_climberSubsystem.toggleRelease()))
 				.whenReleased(new InstantCommand(() -> m_climberSubsystem.toggleLock()));
+=======
+		.whenPressed(new InstantCommand(()-> m_climberSubsystem.realignArms()));
+
+		new JoystickButton(m_operatorController, Button.kB.value)
+		.whileHeld(new InstantCommand(()-> m_climberSubsystem.toggleRelease()));
+
+		new JoystickButton(m_operatorController, Button.kB.value)
+		.whenReleased(new InstantCommand(()-> m_climberSubsystem.toggleLock()));
+
+>>>>>>> 10bbf273957993f2fe59b67d242f732664ed7e01
 
 	}
 
