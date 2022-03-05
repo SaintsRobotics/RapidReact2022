@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.Constants.OperatorButtonConstants;;
 
@@ -8,7 +9,15 @@ import frc.robot.Constants.OperatorButtonConstants;;
 /**
  * A wrapper class for our custom-made operator board. Does not have a
  * constructor. Access statically. Access Buttons via public static state.
- * Access axis values via methods. Use methods to make buttons light up.
+ * Access axis values via methods. Use methods to make buttons light up.\
+ * Operator Board Buttons:
+ * - Run Feeder - Button 8.
+ * - Shooter On/Off - Button 9
+ * - Arm down - Button 3
+ * - Arm up - Button 4
+ * - Intake - Button 2
+ * - Intake Reverse - 1
+ * - Climber Reset - 12
  */
 public class OperatorBoard {
 
@@ -27,6 +36,8 @@ public class OperatorBoard {
      * @param port The USB port number for the controller
      */
     public OperatorBoard(int port) {
+        SmartDashboard.putNumber("constructor.called()", 1);
+
         joystick = new Joystick(port);
         
         intake = new OperatorBoardButton(OperatorButtonConstants.intakeButton);
@@ -44,6 +55,7 @@ public class OperatorBoard {
      */
     public double getLeftJoystickX() {
         return joystick.getRawAxis(0);
+
     }
 
     /**
@@ -103,6 +115,7 @@ public class OperatorBoard {
          */
         public void turnLightOn() {
             joystick.setOutput(m_buttonNumber, true);
+            SmartDashboard.putNumber("light.on", 1);
         }
 
         /**
