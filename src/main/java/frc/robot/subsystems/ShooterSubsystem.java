@@ -171,7 +171,12 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public void setShooterSpeed(double RPM) {
     m_shooterPID.setSetpoint(RPM);
-    m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
+    if (RPM == 0) {
+      m_sideFeeders.set(0);
+    }
+    else {
+      m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
+    }
     SmartDashboard.putNumber("Target Shooter Speed", RPM);
   }
 
