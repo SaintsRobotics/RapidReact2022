@@ -99,10 +99,13 @@ public final class Constants {
 		// TODO update with real ports
 		public static final int kLeftArmPort = 15;
 		public static final int kRightArmPort = 3;
-		public static final int kLeftServoPort = 2;
+		public static final int kLeftServoPort = 1; 
 		public static final int kRightServoPort = 0;
-		public static final int kServoLockedPos = 0;
-		public static final int kServoReleasedPos = 0;
+
+		public static final double kLeftServoLockedPos = 1;
+		public static final double kLeftServoReleasedPos = 0.4;
+		public static final double kRightServoLockedPos = 0;
+		public static final double kRightServoReleasedPos = 1;
 
 		// public static final int kLeftEncoderPort = 4;
 		// public static final int kRightEncoderPort = 6;

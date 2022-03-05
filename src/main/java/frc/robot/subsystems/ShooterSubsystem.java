@@ -13,12 +13,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.DutyCycleAbsoluteEncoder;
@@ -39,7 +36,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final MUX m_MUX = new MUX();
   private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, MUX.Port.kTwo);
-  //private final REVColorSensorV3 m_colorSensor = new REVColorSensorV3(m_MUX, MUX.Port.kOne);
+  // private final REVColorSensorV3 m_colorSensor = new REVColorSensorV3(m_MUX,
+  // MUX.Port.kOne);
 
   // TODO tune
   private final PIDController m_armPID = new PIDController(0.002, 0, 0);
@@ -71,23 +69,21 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
-    if(m_shooterPID.getSetpoint() > 0){
+    if (m_shooterPID.getSetpoint() > 0) {
       m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
     } else {
       m_flywheel.set(0);
     }
 
-
-    if((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0 && Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 4150) {
+    if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0
+        && Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 4150) {
       m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
       if (isShooterPrimed()) {
         m_shootingTimer.reset();
       }
-    }
-    else if (!isShooterPrimed() && m_runningIntake) {
+    } else if (!isShooterPrimed() && m_runningIntake) {
       m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
-    }
-    else if (!m_reversingIntake) {
+    } else if (!m_reversingIntake) {
       m_topFeeder.set(0);
     }
 
@@ -102,11 +98,12 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
     SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
     SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
-    //SmartDashboard.putString("RGB",
-      //  m_colorSensor.getRed() + ", " + m_colorSensor.getGreen() + ", " + m_colorSensor.getBlue());
+    // SmartDashboard.putString("RGB",
+    // m_colorSensor.getRed() + ", " + m_colorSensor.getGreen() + ", " +
+    // m_colorSensor.getBlue());
     SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
 
-    //SmartDashboard.putBoolean("is correct color", isCorrectColor());
+    // SmartDashboard.putBoolean("is correct color", isCorrectColor());
     SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
     // printColor();
   }
@@ -114,22 +111,28 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Raises the arm. */
   public void raiseArm() {
     m_armPID.setSetpoint(ShooterConstants.kUpperArmAngle);
-    if (m_armPID.atSetpoint()) m_arm.set(0);
-    else m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), -0.2, -0.05));
- 
-    //SmartDashboard.putNumber("arm PID", m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
+    if (m_armPID.atSetpoint())
+      m_arm.set(0);
+    else
+      m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), -0.2, -0.05));
 
-    //m_arm.set(-0.05);
+    // SmartDashboard.putNumber("arm PID",
+    // m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
+
+    // m_arm.set(-0.05);
   }
 
   /** Lowers the arm. */
   public void lowerArm() {
     m_armPID.setSetpoint(ShooterConstants.kLowerArmAngle);
-    if (m_armPID.atSetpoint()) m_arm.set(0);
-    else m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), 0.05, 0.2));
-    //SmartDashboard.putNumber("arm PID", m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
+    if (m_armPID.atSetpoint())
+      m_arm.set(0);
+    else
+      m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), 0.05, 0.2));
+    // SmartDashboard.putNumber("arm PID",
+    // m_armPID.calculate(m_armEncoder.getAbsolutePosition()));
 
-    //m_arm.set(0.05);
+    // m_arm.set(0.05);
   }
 
   public void stopArm() {
@@ -171,8 +174,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterPID.setSetpoint(RPM);
     if (RPM == 0) {
       m_sideFeeders.set(0);
-    }
-    else {
+    } else {
       m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
     }
     SmartDashboard.putNumber("Target Shooter Speed", RPM);
@@ -180,27 +182,29 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private boolean isShooterPrimed() {
     return m_proximitySensor.getProximity() >= 180;
-    //return true;
+    // return true;
   }
 
   /*
-  private boolean isCorrectColor() {
-    if (DriverStation.getAlliance() == Alliance.Red && m_colorSensor.getRed() > 300)
-      return true;
-    if (DriverStation.getAlliance() == Alliance.Blue && m_colorSensor.getBlue() > 300)
-      return true;
-
-    return false;
-  }
-
-  private void printColor() {
-    if (m_colorSensor.getRed() > 300)
-      SmartDashboard.putString("color sensed", "red");
-    if (m_colorSensor.getBlue() > 300)
-      SmartDashboard.putString("color sensed", "blue");
-
-    SmartDashboard.putString("color sensed", "none");
-  }
-  */
+   * private boolean isCorrectColor() {
+   * if (DriverStation.getAlliance() == Alliance.Red && m_colorSensor.getRed() >
+   * 300)
+   * return true;
+   * if (DriverStation.getAlliance() == Alliance.Blue && m_colorSensor.getBlue() >
+   * 300)
+   * return true;
+   * 
+   * return false;
+   * }
+   * 
+   * private void printColor() {
+   * if (m_colorSensor.getRed() > 300)
+   * SmartDashboard.putString("color sensed", "red");
+   * if (m_colorSensor.getBlue() > 300)
+   * SmartDashboard.putString("color sensed", "blue");
+   * 
+   * SmartDashboard.putString("color sensed", "none");
+   * }
+   */
 
 }

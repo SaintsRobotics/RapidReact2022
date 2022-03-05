@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -23,7 +24,14 @@ public class ClimberArmCommand extends CommandBase {
 
 	@Override
 	public void execute() {
-		m_climberSubsystem.setSpeed(-m_operatorController.getLeftY());
-		SmartDashboard.putNumber("First desired climber speed", -m_operatorController.getLeftY());
+		if (m_operatorController.getLeftY() > .5) {
+			m_climberSubsystem.setSpeed(-.5);
+		}
+		else if (m_operatorController.getLeftY() < -.5) {
+			m_climberSubsystem.setSpeed(.5);
+		}
+		else {
+			m_climberSubsystem.setSpeed(0);
+		}
 	}
 }

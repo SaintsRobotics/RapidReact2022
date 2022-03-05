@@ -147,11 +147,9 @@ public class RobotContainer {
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
 				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intakeReverse()))
 				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
-		new JoystickButton(m_operatorController, Button.kY.value)
-				.whenPressed(new InstantCommand(() -> m_climberSubsystem.realignArms()));
-
+		// releases servos when held and locks servos when released
 		new JoystickButton(m_operatorController, Button.kB.value)
-				.whileHeld(() -> m_climberSubsystem.releaseServos())
+				.whenPressed(() -> m_climberSubsystem.releaseServos())
 				.whenReleased(() -> m_climberSubsystem.lockServos());
 	}
 
