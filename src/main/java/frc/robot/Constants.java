@@ -94,10 +94,18 @@ public final class Constants {
 		public static final boolean kRightFeederReversed = false;
 	}
 
+	
 	public static final class ClimberConstants {
 		// TODO update with real ports
-		public static final int kLeftArmPort = 60;
-		public static final int kRightArmPort = 61;
+		public static final int kLeftArmPort = 15;
+		public static final int kRightArmPort = 3;
+		public static final int kLeftServoPort = 2;
+		public static final int kRightServoPort = 0;
+		public static final int kServoLockedPos = 0;
+		public static final int kServoReleasedPos = 0;
+
+		// public static final int kLeftEncoderPort = 4;
+		// public static final int kRightEncoderPort = 6;
 	}
 
 	public static final class OIConstants {

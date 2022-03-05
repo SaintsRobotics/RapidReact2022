@@ -5,22 +5,25 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimberArmSubsystem;
 
 public class ClimberArmCommand extends CommandBase {
-  private ClimberArmSubsystem m_climberSubsystem;
-  private XboxController m_operatorController;
+	private ClimberArmSubsystem m_climberSubsystem;
+	private XboxController m_operatorController;
 
-  /** Creates a new ClimberArmCommand. */
-  public ClimberArmCommand(ClimberArmSubsystem climberSubsystem, XboxController operatorController) {
-    m_climberSubsystem = climberSubsystem;
-    m_operatorController = operatorController;
-    addRequirements(m_climberSubsystem);
-  }
+	/** Creates a new ClimberArmCommand. */
+	public ClimberArmCommand(ClimberArmSubsystem climberSubsystem, XboxController operatorController) {
+		m_climberSubsystem = climberSubsystem;
+		m_operatorController = operatorController;
+		addRequirements(m_climberSubsystem);
+		
+	}
 
-  @Override
-  public void execute() {
-    m_climberSubsystem.set(-m_operatorController.getLeftY());
-  }
+	@Override
+	public void execute() {
+		m_climberSubsystem.setSpeed(-m_operatorController.getLeftY());
+		SmartDashboard.putNumber("First desired climber speed", -m_operatorController.getLeftY());
+	}
 }

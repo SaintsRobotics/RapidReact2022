@@ -34,6 +34,7 @@ import frc.robot.commands.ClimberArmCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.ClimberArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ClimberArmSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -90,7 +91,6 @@ public class RobotContainer {
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
 		m_climberSubsystem.setDefaultCommand(new ClimberArmCommand(m_climberSubsystem, m_operatorController));
-
 	}
 
 	/**
@@ -147,6 +147,12 @@ public class RobotContainer {
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
 				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intakeReverse()))
 				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
+		new JoystickButton(m_operatorController, Button.kY.value)
+				.whenPressed(new InstantCommand(() -> m_climberSubsystem.realignArms()));
+
+		new JoystickButton(m_operatorController, Button.kB.value)
+				.whileHeld(() -> m_climberSubsystem.releaseServos())
+				.whenReleased(() -> m_climberSubsystem.lockServos());
 	}
 
 	/**
