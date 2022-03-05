@@ -89,9 +89,13 @@ public final class Constants {
 
 	public static final class ClimberConstants {
 		// TODO update with real ports
-		public static final int kLeftArmPort = 567890;
-		public static final int kRightArmPort = 590;
-		public static final int kClimberControllerPort = 100;
+		public static final int kLeftArmPort = 5;
+		public static final int kRightArmPort = 9;
+		public static final int kLeftServoPort = 2;
+		public static final int kRightServoPort = 3;
+		public static final int kLeftEncoderPort = 4;
+		public static final int kRightEncoderPort = 6;
+		public static final int kClimberControllerPort = 1;
 		public static final int kServoLockedPos = 0;
 		public static final int kServoReleasedPos = 0;
 	}
