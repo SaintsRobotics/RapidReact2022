@@ -49,7 +49,9 @@ public class ClimberSubsystem extends SubsystemBase {
 			m_leftServo.set(ClimberConstants.kLeftServoReleasedPos);
 			m_rightServo.set(ClimberConstants.kRightServoReleasedPos);
 
-			// Checks that the servo is released before running the motor.
+			// Checks that the servo is released before running the motor by checking if the
+			// position error of the servo is within acceptable bounds of the unlocked
+			// position.
 			m_leftClimber.set(
 					MathUtil.applyDeadband(leftServoPosition - ClimberConstants.kLeftServoReleasedPos,
 							ClimberConstants.kServoDeadband) == 0
