@@ -59,7 +59,7 @@ public class ClimberSubsystem extends SubsystemBase {
 			m_leftServo.set(ClimberConstants.kLeftServoLockedPos);
 			m_rightServo.set(ClimberConstants.kRightServoLockedPos);
 			m_leftClimber.set(m_climbSpeed);
-			m_leftClimber.set(m_climbSpeed);
+			m_rightClimber.set(m_climbSpeed);
 		}
 
 		if (OIConstants.kTelemetry) {
