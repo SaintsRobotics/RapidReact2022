@@ -46,25 +46,25 @@ public class ClimberSubsystem extends SubsystemBase {
 
 		// Unlocks the servos when raising the arm.
 		if (m_speed > 0) {
-			m_leftServo.set(ClimberConstants.kLeftServoReleasedPos);
-			m_rightServo.set(ClimberConstants.kRightServoReleasedPos);
+			m_leftServo.set(ClimberConstants.kLeftServoUnlockedPosition);
+			m_rightServo.set(ClimberConstants.kRightServoUnlockedPosition);
 
 			// Checks that the servo is released before running the motor by checking if the
 			// position error of the servo is within acceptable bounds of the unlocked
 			// position.
 			m_leftClimber.set(
-					MathUtil.applyDeadband(leftServoPosition - ClimberConstants.kLeftServoReleasedPos,
+					MathUtil.applyDeadband(leftServoPosition - ClimberConstants.kLeftServoUnlockedPosition,
 							ClimberConstants.kServoDeadband) == 0
 									? m_speed
 									: 0);
 			m_rightClimber.set(
-					MathUtil.applyDeadband(rightServoPosition - ClimberConstants.kRightServoReleasedPos,
+					MathUtil.applyDeadband(rightServoPosition - ClimberConstants.kRightServoUnlockedPosition,
 							ClimberConstants.kServoDeadband) == 0
 									? m_speed
 									: 0);
 		} else {
-			m_leftServo.set(ClimberConstants.kLeftServoLockedPos);
-			m_rightServo.set(ClimberConstants.kRightServoLockedPos);
+			m_leftServo.set(ClimberConstants.kLeftServoLockedPosition);
+			m_rightServo.set(ClimberConstants.kRightServoLockedPosition);
 			m_leftClimber.set(m_speed);
 			m_rightClimber.set(m_speed);
 		}

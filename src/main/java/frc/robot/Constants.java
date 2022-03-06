@@ -104,10 +104,10 @@ public final class Constants {
 		public static final boolean kLeftArmReversed = true;
 		public static final boolean kRightArmReversed = false;
 
-		public static final double kLeftServoLockedPos = 1;
-		public static final double kLeftServoReleasedPos = 0.5;
-		public static final double kRightServoLockedPos = 0.6;
-		public static final double kRightServoReleasedPos = 1;
+		public static final double kLeftServoLockedPosition = 1;
+		public static final double kLeftServoUnlockedPosition = 0.5;
+		public static final double kRightServoLockedPosition = 0.6;
+		public static final double kRightServoUnlockedPosition = 1;
 
 		public static final double kServoDeadband = 0.05;
 	}
