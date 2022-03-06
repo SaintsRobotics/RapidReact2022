@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,43 +24,45 @@ public class ClimberSubsystem extends SubsystemBase {
 
 	private double m_climbSpeed;
 
-	public boolean m_isLocked = true;
-
 	/** Creates a new {@link ClimberSubsystem}. */
 	public ClimberSubsystem() {
 		m_leftClimber.setInverted(ClimberConstants.kLeftArmReversed);
 		m_rightClimber.setInverted(ClimberConstants.kRightArmReversed);
 	}
 
+	/**
+	 * Sets the speed of the climber.
+	 * 
+	 * @param speed Speed from -1 to 1.
+	 */
 	public void setSpeed(double speed) {
 		m_climbSpeed = speed;
 	}
 
-	public void unlock() {
-		m_leftServo.set(ClimberConstants.kLeftServoReleasedPos);
-		m_rightServo.set(ClimberConstants.kRightServoReleasedPos);
-		m_isLocked = false;
-	}
-
-	public void lock() {
-		m_leftServo.set(ClimberConstants.kLeftServoLockedPos);
-		m_rightServo.set(ClimberConstants.kRightServoLockedPos);
-		m_isLocked = true;
-	}
-
 	@Override
 	public void periodic() {
-		if (!m_isLocked || m_climbSpeed < 0) {
-			m_leftClimber.set(m_climbSpeed);
-			m_rightClimber.set(m_climbSpeed);
+		// Unlocks the servos when raising the arm.
+		if (m_climbSpeed > 0) {
+			m_leftServo.set(ClimberConstants.kLeftServoReleasedPos);
+			m_rightServo.set(ClimberConstants.kRightServoReleasedPos);
+			m_leftClimber.set(
+					MathUtil.applyDeadband(m_leftServo.get() - ClimberConstants.kLeftServoReleasedPos,
+							ClimberConstants.kServoDeadband) == 0
+									? m_climbSpeed
+									: 0);
+			m_rightClimber.set(
+					MathUtil.applyDeadband(m_rightServo.get() - ClimberConstants.kRightServoReleasedPos,
+							ClimberConstants.kServoDeadband) == 0
+									? m_climbSpeed
+									: 0);
 		} else {
-			m_leftClimber.set(0);
-			m_rightClimber.set(0);
-			m_climbSpeed = 0;
+			m_leftServo.set(ClimberConstants.kLeftServoLockedPos);
+			m_rightServo.set(ClimberConstants.kRightServoLockedPos);
+			m_leftClimber.set(m_climbSpeed);
+			m_leftClimber.set(m_climbSpeed);
 		}
 
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putBoolean("Climber Locked", m_isLocked);
 			SmartDashboard.putNumber("Climber Speed Desired", m_climbSpeed);
 			SmartDashboard.putNumber("Climber Speed Left", m_leftClimber.get());
 			SmartDashboard.putNumber("Climber Speed Right", m_rightClimber.get());
