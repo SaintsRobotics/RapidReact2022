@@ -41,17 +41,20 @@ public class ClimberSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+		final double leftServoPosition = m_leftServo.get();
+		final double rightServoPosition = m_rightServo.get();
+
 		// Unlocks the servos when raising the arm.
 		if (m_climbSpeed > 0) {
 			m_leftServo.set(ClimberConstants.kLeftServoReleasedPos);
 			m_rightServo.set(ClimberConstants.kRightServoReleasedPos);
 			m_leftClimber.set(
-					MathUtil.applyDeadband(m_leftServo.get() - ClimberConstants.kLeftServoReleasedPos,
+					MathUtil.applyDeadband(leftServoPosition - ClimberConstants.kLeftServoReleasedPos,
 							ClimberConstants.kServoDeadband) == 0
 									? m_climbSpeed
 									: 0);
 			m_rightClimber.set(
-					MathUtil.applyDeadband(m_rightServo.get() - ClimberConstants.kRightServoReleasedPos,
+					MathUtil.applyDeadband(rightServoPosition - ClimberConstants.kRightServoReleasedPos,
 							ClimberConstants.kServoDeadband) == 0
 									? m_climbSpeed
 									: 0);
@@ -66,8 +69,8 @@ public class ClimberSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Climber Speed Desired", m_climbSpeed);
 			SmartDashboard.putNumber("Climber Speed Left", m_leftClimber.get());
 			SmartDashboard.putNumber("Climber Speed Right", m_rightClimber.get());
-			SmartDashboard.putNumber("Climber Servo Position Left", m_leftServo.get());
-			SmartDashboard.putNumber("Climber Servo Position Right", m_rightServo.get());
+			SmartDashboard.putNumber("Climber Servo Position Left", leftServoPosition);
+			SmartDashboard.putNumber("Climber Servo Position Right", rightServoPosition);
 		}
 	}
 }
