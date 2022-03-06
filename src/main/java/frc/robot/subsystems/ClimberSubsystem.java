@@ -22,7 +22,7 @@ public class ClimberSubsystem extends SubsystemBase {
 	private final Servo m_leftServo = new Servo(ClimberConstants.kLeftServoPort);
 	private final Servo m_rightServo = new Servo(ClimberConstants.kRightServoPort);
 
-	private double m_climbSpeed;
+	private double m_speed;
 
 	/** Creates a new {@link ClimberSubsystem}. */
 	public ClimberSubsystem() {
@@ -36,7 +36,7 @@ public class ClimberSubsystem extends SubsystemBase {
 	 * @param speed Speed from -1 to 1.
 	 */
 	public void setSpeed(double speed) {
-		m_climbSpeed = speed;
+		m_speed = speed;
 	}
 
 	@Override
@@ -45,28 +45,28 @@ public class ClimberSubsystem extends SubsystemBase {
 		final double rightServoPosition = m_rightServo.get();
 
 		// Unlocks the servos when raising the arm.
-		if (m_climbSpeed > 0) {
+		if (m_speed > 0) {
 			m_leftServo.set(ClimberConstants.kLeftServoReleasedPos);
 			m_rightServo.set(ClimberConstants.kRightServoReleasedPos);
 			m_leftClimber.set(
 					MathUtil.applyDeadband(leftServoPosition - ClimberConstants.kLeftServoReleasedPos,
 							ClimberConstants.kServoDeadband) == 0
-									? m_climbSpeed
+									? m_speed
 									: 0);
 			m_rightClimber.set(
 					MathUtil.applyDeadband(rightServoPosition - ClimberConstants.kRightServoReleasedPos,
 							ClimberConstants.kServoDeadband) == 0
-									? m_climbSpeed
+									? m_speed
 									: 0);
 		} else {
 			m_leftServo.set(ClimberConstants.kLeftServoLockedPos);
 			m_rightServo.set(ClimberConstants.kRightServoLockedPos);
-			m_leftClimber.set(m_climbSpeed);
-			m_rightClimber.set(m_climbSpeed);
+			m_leftClimber.set(m_speed);
+			m_rightClimber.set(m_speed);
 		}
 
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Climber Speed Desired", m_climbSpeed);
+			SmartDashboard.putNumber("Climber Speed Desired", m_speed);
 			SmartDashboard.putNumber("Climber Speed Left", m_leftClimber.get());
 			SmartDashboard.putNumber("Climber Speed Right", m_rightClimber.get());
 			SmartDashboard.putNumber("Climber Servo Position Left", leftServoPosition);
