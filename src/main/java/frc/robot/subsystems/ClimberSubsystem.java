@@ -44,7 +44,7 @@ public class ClimberSubsystem extends SubsystemBase {
 		final double leftServoPosition = m_leftServo.get();
 		final double rightServoPosition = m_rightServo.get();
 
-		// Unlocks the servos when raising the arm.
+		// Unlocks the servos before raising the arm.
 		if (m_speed > 0) {
 			m_leftServo.set(ClimberConstants.kLeftServoUnlockedPosition);
 			m_rightServo.set(ClimberConstants.kRightServoUnlockedPosition);
