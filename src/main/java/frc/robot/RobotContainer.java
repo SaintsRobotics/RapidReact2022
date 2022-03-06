@@ -158,12 +158,22 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
+
 		return new SequentialCommandGroup(
-				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall1", true),
+				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall0", true),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-				new AutonIntake(m_shooterSubsystem),
-				new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall2", false),
+				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationTwoBall1", false),
+						new AutonIntake(m_shooterSubsystem)),
+				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationTwoBall2", false),
 				new AutonShoot(m_shooterSubsystem));
+
+		// WORKING ONE BALL AUTO
+		// return new SequentialCommandGroup(
+		// new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall1", true),
+		// new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+		// new AutonIntake(m_shooterSubsystem),
+		// new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
+		// new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall2", false),
+		// new AutonShoot(m_shooterSubsystem));
 	}
 }
