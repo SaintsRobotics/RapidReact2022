@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants;
 import frc.robot.DutyCycleAbsoluteEncoder;
 import frc.robot.MUX;
 import frc.robot.MUX.Port;
@@ -75,7 +76,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0
-				&& Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 4150) {
+				&& Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 0.95 * ShooterConstants.kShooterSpeedRPM) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
 			if (isShooterPrimed()) {
 				m_shootingTimer.reset();
@@ -86,19 +87,19 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_topFeeder.set(0);
 		}
 
-		SmartDashboard.putNumber("Shooter PID Output", pidOutput);
-		SmartDashboard.putNumber("Shooter PID velocity error", m_shooterPID.getVelocityError());
-		SmartDashboard.putNumber("Shooter PID position error", m_shooterPID.getPositionError());
-		SmartDashboard.putNumber("Shooter Feedforward output", m_feedforward.calculate(m_shooterPID.getSetpoint()));
-		SmartDashboard.putNumber("Shooter Power", m_flywheel.get());
-		SmartDashboard.putNumber("Shooter RPM", Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
-		SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
-		SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
-		SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
-		SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
-		SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
-		SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
-		SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
+		// SmartDashboard.putNumber("Shooter PID Output", pidOutput);
+		// SmartDashboard.putNumber("Shooter PID velocity error", m_shooterPID.getVelocityError());
+		// SmartDashboard.putNumber("Shooter PID position error", m_shooterPID.getPositionError());
+		// SmartDashboard.putNumber("Shooter Feedforward output", m_feedforward.calculate(m_shooterPID.getSetpoint()));
+		// SmartDashboard.putNumber("Shooter Power", m_flywheel.get());
+		// SmartDashboard.putNumber("Shooter RPM", Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
+		// SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
+		// SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
+		// SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
+		// SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
+		// SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
+		// SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
+		// SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 	}
 
 	/** Raises the arm. */

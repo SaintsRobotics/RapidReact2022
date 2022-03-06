@@ -83,32 +83,32 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 				m_rearRight.getState());
 		m_field2d.setRobotPose(m_odometry.getPoseMeters());
 
-		SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
-		SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
-		SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
-		SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
+		// SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
+		// SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
+		// SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
+		// SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
 
-		// For setting offsets.
-		SmartDashboard.putNumber("Module Angle Absolute Front Left", m_frontLeft.getAbsoluteAngle());
-		SmartDashboard.putNumber("Module Angle Absolute Rear Left", m_rearLeft.getAbsoluteAngle());
-		SmartDashboard.putNumber("Module Angle Absolute Front Right", m_frontRight.getAbsoluteAngle());
-		SmartDashboard.putNumber("Module Angle Absolute Rear Right", m_rearRight.getAbsoluteAngle());
+		// // For setting offsets.
+		// SmartDashboard.putNumber("Module Angle Absolute Front Left", m_frontLeft.getAbsoluteAngle());
+		// SmartDashboard.putNumber("Module Angle Absolute Rear Left", m_rearLeft.getAbsoluteAngle());
+		// SmartDashboard.putNumber("Module Angle Absolute Front Right", m_frontRight.getAbsoluteAngle());
+		// SmartDashboard.putNumber("Module Angle Absolute Rear Right", m_rearRight.getAbsoluteAngle());
 
-		SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
-		SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
-		SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
-		SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
+		// SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
+		// SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
+		// SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
+		// SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
 
-		SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
-		SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
-		SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
+		// SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
+		// SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
+		// SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
 
-		SmartDashboard.putNumber("Gyro Angle", MathUtil.inputModulus(m_gyro.getAngle(), 0, 360));
+		// SmartDashboard.putNumber("Gyro Angle", MathUtil.inputModulus(m_gyro.getAngle(), 0, 360));
 
-		SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
-		SmartDashboard.putNumber("Heading Correction Timer", m_headingCorrectionTimer.get());
+		// SmartDashboard.putNumber("Heading Correction Setpoint", Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
+		// SmartDashboard.putNumber("Heading Correction Timer", m_headingCorrectionTimer.get());
 
-		SmartDashboard.putData("Field", m_field2d);
+		// SmartDashboard.putData("Field", m_field2d);
 	}
 
 	/**

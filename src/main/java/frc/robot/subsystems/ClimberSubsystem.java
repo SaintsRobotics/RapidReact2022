@@ -57,11 +57,11 @@ public class ClimberSubsystem extends SubsystemBase {
 			m_climbSpeed = 0;
 		}
 
-		SmartDashboard.putBoolean("Climber Locked", m_isLocked);
-		SmartDashboard.putNumber("Climber Speed Desired", m_climbSpeed);
-		SmartDashboard.putNumber("Climber Speed Left", m_leftClimber.get());
-		SmartDashboard.putNumber("Climber Speed Right", m_rightClimber.get());
-		SmartDashboard.putNumber("Climber Servo Position Left", m_leftServo.get());
-		SmartDashboard.putNumber("Climber Servo Position Right", m_rightServo.get());
+		// SmartDashboard.putBoolean("Climber Locked", m_isLocked);
+		// SmartDashboard.putNumber("Climber Speed Desired", m_climbSpeed);
+		// SmartDashboard.putNumber("Climber Speed Left", m_leftClimber.get());
+		// SmartDashboard.putNumber("Climber Speed Right", m_rightClimber.get());
+		// SmartDashboard.putNumber("Climber Servo Position Left", m_leftServo.get());
+		// SmartDashboard.putNumber("Climber Servo Position Right", m_rightServo.get());
 	}
 }
