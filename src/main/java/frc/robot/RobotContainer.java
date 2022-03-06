@@ -87,7 +87,7 @@ public class RobotContainer {
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
 		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> m_climberSubsystem.setSpeed(
-				-MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband) * 0.5),
+				-MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband) * 0.3),
 				m_climberSubsystem));
 	}
 
@@ -159,10 +159,9 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		return new SequentialCommandGroup(
+				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", true),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-				new ParallelCommandGroup(
-						new AutonIntake(m_shooterSubsystem),
-						new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", true)),
+				new AutonIntake(m_shooterSubsystem),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
 				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall2", false),
 				new AutonShoot(m_shooterSubsystem));
