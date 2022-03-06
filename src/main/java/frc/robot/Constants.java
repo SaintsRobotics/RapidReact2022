@@ -98,6 +98,7 @@ public final class Constants {
 	public static final class ClimberConstants {
 		public static final int kLeftArmPort = 15;
 		public static final int kRightArmPort = 3;
+
 		public static final int kLeftServoPort = 1;
 		public static final int kRightServoPort = 0;
 
@@ -106,6 +107,7 @@ public final class Constants {
 
 		public static final double kLeftServoLockedPosition = 1;
 		public static final double kLeftServoUnlockedPosition = 0.5;
+
 		public static final double kRightServoLockedPosition = 0.6;
 		public static final double kRightServoUnlockedPosition = 1;
 
