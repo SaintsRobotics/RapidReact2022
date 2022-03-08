@@ -19,10 +19,8 @@ public class ClimberArmSubsystem extends SubsystemBase {
 	private CANSparkMax m_leftClimberArm = new CANSparkMax(ClimberConstants.kLeftArmPort, MotorType.kBrushless);
 	private CANSparkMax m_rightClimberArm = new CANSparkMax(ClimberConstants.kRightArmPort, MotorType.kBrushless);
 
-	// private CANCoder m_leftEncoder = new
-	// CANCoder(ClimberConstants.kLeftEncoderPort);
-	// private CANCoder m_rightEncoder = new
-	// CANCoder(ClimberConstants.kRightEncoderPort);
+	private CANCoder m_leftEncoder = new CANCoder(ClimberConstants.kLeftEncoderPort);
+	private CANCoder m_rightEncoder = new CANCoder(ClimberConstants.kRightEncoderPort);
 
 	private PIDController m_leftPID = new PIDController(0.3, 0, 0);
 	private PIDController m_rightPID = new PIDController(0.3, 0, 0);
@@ -30,7 +28,9 @@ public class ClimberArmSubsystem extends SubsystemBase {
 	private Servo m_leftServo = new Servo(ClimberConstants.kLeftServoPort);
 	private Servo m_rightServo = new Servo(ClimberConstants.kRightServoPort);
 
-	private double m_climbSpeed;
+	// private double m_climbSpeed;
+	private double m_leftClimbSpeed;
+	private double m_rightClimbSpeed;
 
 	public boolean m_isLocked = true;
 
@@ -43,19 +43,19 @@ public class ClimberArmSubsystem extends SubsystemBase {
 		m_rightClimberArm.setInverted(false);
 	}
 
-	// public void realignArms() {
-	// if (m_leftEncoder.getPosition() < m_rightEncoder.getPosition()) {
-	// m_leftPID.setSetpoint(m_rightEncoder.getPosition());
-	// m_leftSpeed = m_leftPID.calculate(m_leftEncoder.getPosition());
-	// } else {
-	// m_rightPID.setSetpoint(m_leftEncoder.getPosition());
-	// m_rightSpeed = m_rightPID.calculate(m_rightEncoder.getPosition());
-	// }
-	// }
+	public void realignArms() {
+		if (m_leftEncoder.getPosition() < m_rightEncoder.getPosition()) {
+			m_leftPID.setSetpoint(m_rightEncoder.getPosition());
+			m_leftClimbSpeed = m_leftPID.calculate(m_leftEncoder.getPosition());
+		} else {
+			m_rightPID.setSetpoint(m_leftEncoder.getPosition());
+			m_rightClimbSpeed = m_rightPID.calculate(m_rightEncoder.getPosition());
+		}
+	}
 
 	public void setSpeed(double speed) {
-		m_climbSpeed = speed;
-
+		m_leftClimbSpeed = speed;
+		m_rightClimbSpeed = speed;
 	}
 
 	public void releaseServos() {
@@ -73,21 +73,22 @@ public class ClimberArmSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		SmartDashboard.putNumber("Climber Speed", m_leftClimberArm.get()); // Same as right arm
-		if (!m_isLocked || m_climbSpeed < 0) {
-			m_leftClimberArm.set(m_climbSpeed);
-			m_rightClimberArm.set(m_climbSpeed);
-		}
-		else {
+		if (!m_isLocked || m_leftClimbSpeed < 0 || m_rightClimbSpeed < 0) {
+			m_leftClimberArm.set(m_leftClimbSpeed);
+			m_rightClimberArm.set(m_rightClimbSpeed);
+		} else {
 			m_leftClimberArm.set(0);
 			m_rightClimberArm.set(0);
-			m_climbSpeed = 0;
-		} 
+			m_leftClimbSpeed = 0;
+			m_rightClimbSpeed = 0;
+		}
 
 		SmartDashboard.putBoolean("should_lock", m_isLocked);
-		SmartDashboard.putNumber("Desired Climber Speed", m_climbSpeed);
+		SmartDashboard.putNumber("Desired Climber Speed", m_leftClimbSpeed);
+		SmartDashboard.putNumber("Desired Climber Speed", m_rightClimbSpeed);
 		SmartDashboard.putNumber("Climber Left Servo Position", m_leftServo.get());
 		SmartDashboard.putNumber("Climber Right Servo Position", m_rightServo.get());
-		// SmartDashboard.putNumber("Left Encoder", m_leftEncoder.getPosition());
-		// SmartDashboard.putNumber("Right Encoder", m_rightEncoder.getPosition());
+		SmartDashboard.putNumber("Left Encoder", m_leftEncoder.getPosition());
+		SmartDashboard.putNumber("Right Encoder", m_rightEncoder.getPosition());
 	}
 }
