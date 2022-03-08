@@ -107,8 +107,8 @@ public final class Constants {
 		public static final double kRightServoLockedPos = 0;
 		public static final double kRightServoReleasedPos = 1;
 
-		// public static final int kLeftEncoderPort = 4;
-		// public static final int kRightEncoderPort = 6;
+		public static final int kLeftEncoderPort = 21;
+		public static final int kRightEncoderPort = 22;
 	}
 
 	public static final class OIConstants {
