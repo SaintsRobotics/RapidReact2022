@@ -64,6 +64,7 @@ public class ClimberSubsystem extends SubsystemBase {
 		} else {
 			m_leftServo.set(ClimberConstants.kLeftServoLockedPosition);
 			m_rightServo.set(ClimberConstants.kRightServoLockedPosition);
+
 			m_leftClimber.set(m_speed);
 			m_rightClimber.set(m_speed);
 		}
