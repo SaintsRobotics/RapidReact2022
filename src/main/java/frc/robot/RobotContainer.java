@@ -156,6 +156,9 @@ public class RobotContainer {
 		new JoystickButton(m_operatorController, Button.kB.value)
 				.whenPressed(() -> m_climberSubsystem.releaseServos())
 				.whenReleased(() -> m_climberSubsystem.lockServos());
+		new JoystickButton(m_operatorController, Button.kA.value)
+				.whenPressed(() -> m_climberSubsystem.realignArms())
+				.whenPressed(() -> m_climberSubsystem.setSpeed(0));
 	}
 
 	/**

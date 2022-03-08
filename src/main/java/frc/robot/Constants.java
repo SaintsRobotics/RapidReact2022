@@ -96,7 +96,6 @@ public final class Constants {
 
 	
 	public static final class ClimberConstants {
-		// TODO update with real ports
 		public static final int kLeftArmPort = 15;
 		public static final int kRightArmPort = 3;
 		public static final int kLeftServoPort = 1; 
@@ -109,6 +108,11 @@ public final class Constants {
 
 		public static final int kLeftEncoderPort = 21;
 		public static final int kRightEncoderPort = 22;
+		// TODO fix these constants after testing with climber arms
+		public static final int kLeftArmMaxValue = 10;
+		public static final int kRightArmMaxValue = 10;
+		public static final int kLeftArmMinValue = 1;
+		public static final int kRightArmMinValue = 1;
 	}
 
 	public static final class OIConstants {

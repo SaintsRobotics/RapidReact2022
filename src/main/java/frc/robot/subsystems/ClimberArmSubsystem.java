@@ -88,7 +88,7 @@ public class ClimberArmSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Desired Climber Speed", m_rightClimbSpeed);
 		SmartDashboard.putNumber("Climber Left Servo Position", m_leftServo.get());
 		SmartDashboard.putNumber("Climber Right Servo Position", m_rightServo.get());
-		SmartDashboard.putNumber("Left Encoder", m_leftEncoder.getPosition());
-		SmartDashboard.putNumber("Right Encoder", m_rightEncoder.getPosition());
+		SmartDashboard.putNumber("Climber Left Encoder", m_leftEncoder.getPosition());
+		SmartDashboard.putNumber("Climber Right Encoder", m_rightEncoder.getPosition());
 	}
 }
