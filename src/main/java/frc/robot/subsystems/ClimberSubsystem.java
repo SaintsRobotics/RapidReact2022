@@ -30,15 +30,6 @@ public class ClimberSubsystem extends SubsystemBase {
 		m_rightClimber.setInverted(ClimberConstants.kRightArmReversed);
 	}
 
-	/**
-	 * Sets the speed of the climber.
-	 * 
-	 * @param speed Speed from -1 to 1.
-	 */
-	public void setSpeed(double speed) {
-		m_speed = speed;
-	}
-
 	@Override
 	public void periodic() {
 		final double leftServoPosition = m_leftServo.get();
@@ -76,5 +67,14 @@ public class ClimberSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Climber Servo Position Left", leftServoPosition);
 			SmartDashboard.putNumber("Climber Servo Position Right", rightServoPosition);
 		}
+	}
+
+	/**
+	 * Sets the speed of the climber.
+	 * 
+	 * @param speed Speed from -1 to 1.
+	 */
+	public void setSpeed(double speed) {
+		m_speed = speed;
 	}
 }
