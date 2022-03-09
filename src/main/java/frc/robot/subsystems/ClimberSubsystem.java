@@ -40,29 +40,37 @@ public class ClimberSubsystem extends SubsystemBase {
 		final double leftServoPosition = m_leftServo.get();
 		final double rightServoPosition = m_rightServo.get();
 
-		// TODO create multiple if statements for right and left climb speed
-		// Unlocks the servos before raising the arm.
+		// Unlocks the left servo before raising the left climber.
 		if (m_leftClimbSpeed > 0) {
 			m_leftServo.set(ClimberConstants.kLeftServoUnlockedPosition);
-			m_rightServo.set(ClimberConstants.kRightServoUnlockedPosition);
 
-			// Checks that both servos are released before running the motor by checking if
-			// the position errors of the servos are within acceptable bounds of the
+			// Checks that the left servo is released before running the motor by checking if
+			// the position errors of the servo is within acceptable bounds of the
 			// unlocked position.
 			final boolean leftServoUnlocked = MathUtil.applyDeadband(
 					leftServoPosition - ClimberConstants.kLeftServoUnlockedPosition,
 					ClimberConstants.kServoDeadband) == 0;
+
+			m_leftClimber.set(leftServoUnlocked ? m_leftClimbSpeed : 0);
+		} else {
+			m_leftServo.set(ClimberConstants.kLeftServoLockedPosition);
+			m_leftClimber.set(m_leftClimbSpeed);
+		}
+
+		// Unlocks the right servo before raising the right climber.
+		if (m_rightClimbSpeed > 0) {
+			m_rightServo.set(ClimberConstants.kRightServoUnlockedPosition);
+
+			// Checks that the right servo is released before running the motor by checking if
+			// the position errors of the servo is within acceptable bounds of the
+			// unlocked position.
 			final boolean rightServoUnlocked = MathUtil.applyDeadband(
 					rightServoPosition - ClimberConstants.kRightServoUnlockedPosition,
 					ClimberConstants.kServoDeadband) == 0;
 
-			m_leftClimber.set(leftServoUnlocked && rightServoUnlocked ? m_leftClimbSpeed : 0);
-			m_rightClimber.set(leftServoUnlocked && rightServoUnlocked ? m_rightClimbSpeed : 0);
+			m_rightClimber.set(rightServoUnlocked ? m_rightClimbSpeed : 0);
 		} else {
-			m_leftServo.set(ClimberConstants.kLeftServoLockedPosition);
 			m_rightServo.set(ClimberConstants.kRightServoLockedPosition);
-
-			m_leftClimber.set(m_leftClimbSpeed);
 			m_rightClimber.set(m_rightClimbSpeed);
 		}
 
