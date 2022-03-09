@@ -25,8 +25,8 @@ public class ClimberSubsystem extends SubsystemBase {
 	private final CANCoder m_leftEncoder = new CANCoder(ClimberConstants.kLeftEncoderPort);
 	private final CANCoder m_rightEncoder = new CANCoder(ClimberConstants.kRightEncoderPort);
 
-	private double m_leftClimbSpeed;
-	private double m_rightClimbSpeed;
+	private double m_leftSpeed;
+	private double m_rightSpeed;
 
 	/** Creates a new {@link ClimberSubsystem}. */
 	public ClimberSubsystem() {
@@ -40,7 +40,7 @@ public class ClimberSubsystem extends SubsystemBase {
 		final double rightServoPosition = m_rightServo.get();
 
 		// Unlocks the left servo before raising the left climber.
-		if (m_leftClimbSpeed > 0) {
+		if (m_leftSpeed > 0) {
 			m_leftServo.set(ClimberConstants.kLeftServoUnlockedPosition);
 
 			// Checks that the left servo is released before running the motor by checking
@@ -48,14 +48,14 @@ public class ClimberSubsystem extends SubsystemBase {
 			// unlocked position.
 			m_leftClimber.set(
 					atSetpoint(leftServoPosition, ClimberConstants.kLeftServoUnlockedPosition,
-							ClimberConstants.kServoTolerance) ? m_leftClimbSpeed : 0);
+							ClimberConstants.kServoTolerance) ? m_leftSpeed : 0);
 		} else {
 			m_leftServo.set(ClimberConstants.kLeftServoLockedPosition);
-			m_leftClimber.set(m_leftClimbSpeed);
+			m_leftClimber.set(m_leftSpeed);
 		}
 
 		// Unlocks the right servo before raising the right climber.
-		if (m_rightClimbSpeed > 0) {
+		if (m_rightSpeed > 0) {
 			m_rightServo.set(ClimberConstants.kRightServoUnlockedPosition);
 
 			// Checks that the right servo is released before running the motor by checking
@@ -63,15 +63,15 @@ public class ClimberSubsystem extends SubsystemBase {
 			// unlocked position.
 			m_rightClimber.set(
 					atSetpoint(rightServoPosition, ClimberConstants.kRightServoUnlockedPosition,
-							ClimberConstants.kServoTolerance) ? m_rightClimbSpeed : 0);
+							ClimberConstants.kServoTolerance) ? m_rightSpeed : 0);
 		} else {
 			m_rightServo.set(ClimberConstants.kRightServoLockedPosition);
-			m_rightClimber.set(m_rightClimbSpeed);
+			m_rightClimber.set(m_rightSpeed);
 		}
 
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Climber Speed Desired Left", m_leftClimbSpeed);
-			SmartDashboard.putNumber("Climber Speed Desired Right", m_rightClimbSpeed);
+			SmartDashboard.putNumber("Climber Speed Desired Left", m_leftSpeed);
+			SmartDashboard.putNumber("Climber Speed Desired Right", m_rightSpeed);
 			SmartDashboard.putNumber("Climber Speed Left", m_leftClimber.get());
 			SmartDashboard.putNumber("Climber Speed Right", m_rightClimber.get());
 			SmartDashboard.putNumber("Climber Servo Position Left", leftServoPosition);
@@ -97,8 +97,8 @@ public class ClimberSubsystem extends SubsystemBase {
 	 * @param rightSpeed Speed from -1 to 1.
 	 */
 	public void setSpeed(double leftSpeed, double rightSpeed) {
-		m_leftClimbSpeed = leftSpeed;
-		m_rightClimbSpeed = rightSpeed;
+		m_leftSpeed = leftSpeed;
+		m_rightSpeed = rightSpeed;
 	}
 
 	/**
