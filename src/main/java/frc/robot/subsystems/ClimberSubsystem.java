@@ -39,35 +39,14 @@ public class ClimberSubsystem extends SubsystemBase {
 		final double leftServoPosition = m_leftServo.get();
 		final double rightServoPosition = m_rightServo.get();
 
-		// Unlocks the left servo before raising the left climber.
-		if (m_leftSpeed > 0) {
-			m_leftServo.set(ClimberConstants.kLeftServoUnlockedPosition);
+		// Unlocks the servos before raising the left climber.
+		m_leftServo.set(m_leftSpeed > 0 ? ClimberConstants.kLeftServoUnlockedPosition
+				: ClimberConstants.kLeftServoLockedPosition);
+		m_rightServo.set(m_rightSpeed > 0 ? ClimberConstants.kRightServoUnlockedPosition
+				: ClimberConstants.kRightServoLockedPosition);
 
-			// Checks that the left servo is released before running the motor by checking
-			// if the position errors of the servo is within acceptable tolerance from the
-			// unlocked position.
-			m_leftClimber.set(
-					atSetpoint(leftServoPosition, ClimberConstants.kLeftServoUnlockedPosition,
-							ClimberConstants.kServoTolerance) ? m_leftSpeed : 0);
-		} else {
-			m_leftServo.set(ClimberConstants.kLeftServoLockedPosition);
-			m_leftClimber.set(m_leftSpeed);
-		}
-
-		// Unlocks the right servo before raising the right climber.
-		if (m_rightSpeed > 0) {
-			m_rightServo.set(ClimberConstants.kRightServoUnlockedPosition);
-
-			// Checks that the right servo is released before running the motor by checking
-			// if the position errors of the servo is within acceptable tolerance from the
-			// unlocked position.
-			m_rightClimber.set(
-					atSetpoint(rightServoPosition, ClimberConstants.kRightServoUnlockedPosition,
-							ClimberConstants.kServoTolerance) ? m_rightSpeed : 0);
-		} else {
-			m_rightServo.set(ClimberConstants.kRightServoLockedPosition);
-			m_rightClimber.set(m_rightSpeed);
-		}
+		m_leftClimber.set(m_leftSpeed);
+		m_rightClimber.set(m_rightSpeed);
 
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Climber Speed Desired Left", m_leftSpeed);
@@ -117,19 +96,5 @@ public class ClimberSubsystem extends SubsystemBase {
 	 */
 	public double getRightPose() {
 		return m_rightEncoder.getPosition();
-	}
-
-	/**
-	 * Returns true if the measurement is within acceptable tolerance of the
-	 * setpoint.
-	 * 
-	 * @param measurement The current measurement.
-	 * @param setpoint    The desired measurement.
-	 * @param tolerance   The acceptable tolerance.
-	 * @return True if the measurement is within acceptable tolerance of the
-	 *         setpoint.
-	 */
-	private boolean atSetpoint(double measurement, double setpoint, double tolerance) {
-		return Math.abs(setpoint - measurement) < tolerance;
 	}
 }
