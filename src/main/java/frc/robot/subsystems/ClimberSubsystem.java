@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,9 +25,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
 	private final CANCoder m_leftEncoder = new CANCoder(ClimberConstants.kLeftEncoderPort);
 	private final CANCoder m_rightEncoder = new CANCoder(ClimberConstants.kRightEncoderPort);
-
-	private PIDController m_leftPID = new PIDController(0.3, 0, 0);
-	private PIDController m_rightPID = new PIDController(0.3, 0, 0);
 
 	private double m_leftClimbSpeed;
 	private double m_rightClimbSpeed;
@@ -88,17 +84,35 @@ public class ClimberSubsystem extends SubsystemBase {
 	 * @param speed Speed from -1 to 1.
 	 */
 	public void setSpeed(double speed) {
-		m_leftClimbSpeed = speed;
-		m_rightClimbSpeed = speed;
+		setSpeed(speed, speed);
 	}
 
-	public void realignArms() {
-		if (m_leftEncoder.getPosition() < m_rightEncoder.getPosition()) {
-			m_leftPID.setSetpoint(m_rightEncoder.getPosition());
-			m_leftClimbSpeed = m_leftPID.calculate(m_leftEncoder.getPosition());
-		} else {
-			m_rightPID.setSetpoint(m_leftEncoder.getPosition());
-			m_rightClimbSpeed = m_rightPID.calculate(m_rightEncoder.getPosition());
-		}
+	/**
+	 * Sets the speed of the climber.
+	 * 
+	 * @param leftSpeed  Speed from -1 to 1.
+	 * @param rightSpeed Speed from -1 to 1.
+	 */
+	public void setSpeed(double leftSpeed, double rightSpeed) {
+		m_leftClimbSpeed = leftSpeed;
+		m_rightClimbSpeed = rightSpeed;
+	}
+
+	/**
+	 * Returns the position of the left climber given by the left encoder.
+	 * 
+	 * @return The position of the left climber.
+	 */
+	public double getLeftPose() {
+		return m_leftEncoder.getPosition();
+	}
+
+	/**
+	 * Returns the position of the right climber given by the right encoder.
+	 * 
+	 * @return The position of the right climber.
+	 */
+	public double getRightPose() {
+		return m_rightEncoder.getPosition();
 	}
 }

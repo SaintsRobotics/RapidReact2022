@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.AlignClimberCommand;
 import frc.robot.commands.AutonArm;
 import frc.robot.commands.AutonIntake;
 import frc.robot.commands.AutonShoot;
@@ -146,9 +147,9 @@ public class RobotContainer {
 				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intakeReverse()))
 				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
 
+		// Aligns the climber when A is held.
 		new JoystickButton(m_operatorController, Button.kA.value)
-				.whenPressed(() -> m_climberSubsystem.realignArms())
-				.whenPressed(() -> m_climberSubsystem.setSpeed(0));
+				.whenHeld(new AlignClimberCommand(m_climberSubsystem));
 	}
 
 	/**
