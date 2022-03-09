@@ -82,7 +82,7 @@ public final class Constants {
 		public static final int kRightFeederPort = 6;
 		public static final int kTopFeederPort = 14;
 
-		public static final double kShooterSpeedRPM = 4400;
+		public static final double kShooterSpeedRPM = 3520;
 		public static final int kLowerArmAngle = 170;
 		public static final int kUpperArmAngle = 74;
 		public static final double kIntakeSpeed = 0.7;
@@ -94,17 +94,22 @@ public final class Constants {
 		public static final boolean kRightFeederReversed = false;
 	}
 
-	
+	/** Constants for the climber. */
 	public static final class ClimberConstants {
 		public static final int kLeftArmPort = 15;
 		public static final int kRightArmPort = 3;
-		public static final int kLeftServoPort = 1; 
+
+		public static final int kLeftServoPort = 1;
 		public static final int kRightServoPort = 0;
 
-		public static final double kLeftServoLockedPos = 1;
-		public static final double kLeftServoReleasedPos = 0.4;
-		public static final double kRightServoLockedPos = 0;
-		public static final double kRightServoReleasedPos = 1;
+		public static final boolean kLeftArmReversed = true;
+		public static final boolean kRightArmReversed = false;
+
+		public static final double kLeftServoLockedPosition = 1;
+		public static final double kLeftServoUnlockedPosition = 0.2;
+
+		public static final double kRightServoLockedPosition = 0.3;
+		public static final double kRightServoUnlockedPosition = 1;
 
 		public static final int kLeftEncoderPort = 21;
 		public static final int kRightEncoderPort = 22;
@@ -113,14 +118,15 @@ public final class Constants {
 		public static final int kRightArmMaxValue = 10;
 		public static final int kLeftArmMinValue = 1;
 		public static final int kRightArmMinValue = 1;
+
+		public static final double kServoDeadband = 0.05;
 	}
 
 	public static final class OIConstants {
 		public static final int kDriverControllerPort = 0;
 		public static final int kOperatorControllerPort = 1;
 		public static final double kControllerDeadband = 0.11;
-	}
-	public static final class ConversionConstants {
-		public static final int kDegreesInARotation = 360;
+
+		public static final boolean kTelemetry = false;
 	}
 }

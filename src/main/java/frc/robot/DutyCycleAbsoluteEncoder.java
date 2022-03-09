@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
-import frc.robot.Constants.ConversionConstants;
 
 public class DutyCycleAbsoluteEncoder {
     private final DutyCycle m_dutyCycle;
@@ -34,7 +33,7 @@ public class DutyCycleAbsoluteEncoder {
      * @return the absolute position
      */
     public double getAbsolutePosition() {
-        return m_dutyCycle.getOutput() * ConversionConstants.kDegreesInARotation;
+        return m_dutyCycle.getOutput() * 360;
     }
 
 }

@@ -4,29 +4,22 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
@@ -35,14 +28,12 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.AutonArm;
 import frc.robot.commands.AutonIntake;
 import frc.robot.commands.AutonShoot;
-import frc.robot.commands.ClimberArmCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PathWeaverCommand;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.subsystems.ClimberArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.ClimberArmSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -55,7 +46,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 public class RobotContainer {
 	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
 	private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-	private final ClimberArmSubsystem m_climberSubsystem = new ClimberArmSubsystem();
+	private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
@@ -95,7 +86,9 @@ public class RobotContainer {
 		Limelight.setCameraMode(1);
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
-		m_climberSubsystem.setDefaultCommand(new ClimberArmCommand(m_climberSubsystem, m_operatorController));
+		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> m_climberSubsystem.setSpeed(
+				-MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband) * 0.5),
+				m_climberSubsystem));
 	}
 
 	/**
@@ -139,9 +132,9 @@ public class RobotContainer {
 				.whileHeld(() -> m_shooterSubsystem.lowerArm())
 				.whenReleased(() -> m_shooterSubsystem.stopArm());
 
-		// Toggles the shooter when Y button is pressed.
+		// Turns on shooter when Y button is held.
 		new JoystickButton(m_operatorController, Button.kY.value)
-				.toggleWhenPressed(new ShooterCommand(m_shooterSubsystem));
+				.whenHeld(new ShooterCommand(m_shooterSubsystem));
 
 		// runs intake forward while left trigger is held
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
@@ -152,10 +145,7 @@ public class RobotContainer {
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
 				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intakeReverse()))
 				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
-		// releases servos when held and locks servos when released
-		new JoystickButton(m_operatorController, Button.kB.value)
-				.whenPressed(() -> m_climberSubsystem.releaseServos())
-				.whenReleased(() -> m_climberSubsystem.lockServos());
+
 		new JoystickButton(m_operatorController, Button.kA.value)
 				.whenPressed(() -> m_climberSubsystem.realignArms())
 				.whenPressed(() -> m_climberSubsystem.setSpeed(0));
@@ -167,52 +157,13 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		return new SequentialCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", true),
+		return new SequentialCommandGroup(
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-				new AutonIntake(m_shooterSubsystem),
+				new ParallelCommandGroup(
+						new AutonIntake(m_shooterSubsystem),
+						new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", true)),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
 				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall2", false),
 				new AutonShoot(m_shooterSubsystem));
-	}
-
-	/**
-	 * Follows a path generated by PathWeaver.
-	 * 
-	 * @param trajectoryJSON The name of the json file containing the path. In the
-	 *                       format "paths/trajectory.wpilib.json". Should be stored
-	 *                       under deploy>paths.
-	 * @return {@link SwerveControllerCommand} that follows the given
-	 *         {@link Trajectory}.
-	 */
-	public SwerveControllerCommand pathFollowCommand(String trajectoryJSON) {
-		Trajectory trajectory = new Trajectory();
-
-		try {
-			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-			trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-		} catch (IOException ex) {
-			DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-		}
-
-		PIDController xPID = new PIDController(1, 0, 0);
-		PIDController yPID = new PIDController(1, 0, 0);
-		ProfiledPIDController rotPID = new ProfiledPIDController(1, 0, 0,
-				new TrapezoidProfile.Constraints(Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 2.6));
-		xPID.setTolerance(0.05);
-		yPID.setTolerance(0.05);
-		rotPID.setTolerance(Math.PI / 24);
-		rotPID.enableContinuousInput(-Math.PI, Math.PI);
-
-		m_swerveDriveSubsystem.resetOdometry(trajectory.getInitialPose());
-
-		return new SwerveControllerCommand(
-				trajectory,
-				m_swerveDriveSubsystem::getPose,
-				SwerveConstants.kDriveKinematics,
-				xPID,
-				yPID,
-				rotPID,
-				m_swerveDriveSubsystem::setModuleStates,
-				m_swerveDriveSubsystem);
 	}
 }
