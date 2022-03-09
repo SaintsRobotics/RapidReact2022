@@ -119,7 +119,7 @@ public final class Constants {
 		public static final int kLeftArmMinValue = 1;
 		public static final int kRightArmMinValue = 1;
 
-		public static final double kServoDeadband = 0.05;
+		public static final double kServoTolerance = 0.05;
 	}
 
 	public static final class OIConstants {

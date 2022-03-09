@@ -8,7 +8,6 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -44,14 +43,12 @@ public class ClimberSubsystem extends SubsystemBase {
 		if (m_leftClimbSpeed > 0) {
 			m_leftServo.set(ClimberConstants.kLeftServoUnlockedPosition);
 
-			// Checks that the left servo is released before running the motor by checking if
-			// the position errors of the servo is within acceptable bounds of the
+			// Checks that the left servo is released before running the motor by checking
+			// if the position errors of the servo is within acceptable tolerance from the
 			// unlocked position.
-			final boolean leftServoUnlocked = MathUtil.applyDeadband(
-					leftServoPosition - ClimberConstants.kLeftServoUnlockedPosition,
-					ClimberConstants.kServoDeadband) == 0;
-
-			m_leftClimber.set(leftServoUnlocked ? m_leftClimbSpeed : 0);
+			m_leftClimber.set(
+					atSetpoint(leftServoPosition, ClimberConstants.kLeftServoUnlockedPosition,
+							ClimberConstants.kServoTolerance) ? m_leftClimbSpeed : 0);
 		} else {
 			m_leftServo.set(ClimberConstants.kLeftServoLockedPosition);
 			m_leftClimber.set(m_leftClimbSpeed);
@@ -61,14 +58,12 @@ public class ClimberSubsystem extends SubsystemBase {
 		if (m_rightClimbSpeed > 0) {
 			m_rightServo.set(ClimberConstants.kRightServoUnlockedPosition);
 
-			// Checks that the right servo is released before running the motor by checking if
-			// the position errors of the servo is within acceptable bounds of the
+			// Checks that the right servo is released before running the motor by checking
+			// if the position errors of the servo is within acceptable tolerance from the
 			// unlocked position.
-			final boolean rightServoUnlocked = MathUtil.applyDeadband(
-					rightServoPosition - ClimberConstants.kRightServoUnlockedPosition,
-					ClimberConstants.kServoDeadband) == 0;
-
-			m_rightClimber.set(rightServoUnlocked ? m_rightClimbSpeed : 0);
+			m_rightClimber.set(
+					atSetpoint(rightServoPosition, ClimberConstants.kRightServoUnlockedPosition,
+							ClimberConstants.kServoTolerance) ? m_rightClimbSpeed : 0);
 		} else {
 			m_rightServo.set(ClimberConstants.kRightServoLockedPosition);
 			m_rightClimber.set(m_rightClimbSpeed);
@@ -122,5 +117,19 @@ public class ClimberSubsystem extends SubsystemBase {
 	 */
 	public double getRightPose() {
 		return m_rightEncoder.getPosition();
+	}
+
+	/**
+	 * Returns true if the measurement is within acceptable tolerance of the
+	 * setpoint.
+	 * 
+	 * @param measurement The current measurement.
+	 * @param setpoint    The desired measurement.
+	 * @param tolerance   The acceptable tolerance.
+	 * @return True if the measurement is within acceptable tolerance of the
+	 *         setpoint.
+	 */
+	private boolean atSetpoint(double measurement, double setpoint, double tolerance) {
+		return Math.abs(setpoint - measurement) < tolerance;
 	}
 }
