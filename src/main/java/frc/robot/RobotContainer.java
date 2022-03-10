@@ -160,11 +160,11 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 
 		return new SequentialCommandGroup(
-				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationTwoBall0", true),
+				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall0", true),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationTwoBall1", false),
+				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall1", false),
 						new AutonIntake(m_shooterSubsystem)),
-				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationTwoBall2", false),
+				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall2", false),
 				new AutonShoot(m_shooterSubsystem));
 
 		// WORKING ONE BALL AUTO
@@ -176,6 +176,5 @@ public class RobotContainer {
 		// new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall2", false),
 		// new AutonShoot(m_shooterSubsystem));
 
-		
 	}
 }
