@@ -75,6 +75,12 @@ public class ShooterSubsystem extends SubsystemBase {
 		if (isIncorrectColor()) {
 			intakeReverse();
 		}
+		if (isBlue(2) && DriverStation.getAlliance() == Alliance.Red || isBlue(3) && DriverStation.getAlliance() == Alliance.Red) {
+			intakeReverse();
+		}
+		if (isRed(2) && DriverStation.getAlliance() == Alliance.Blue || isRed(3) && DriverStation.getAlliance() == Alliance.Blue) {
+			intakeReverse();
+		}
 		double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
 		if (m_shooterPID.getSetpoint() > 0) {
 			m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
