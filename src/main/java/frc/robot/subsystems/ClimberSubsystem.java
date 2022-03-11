@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.OIConstants;
 
@@ -45,8 +46,12 @@ public class ClimberSubsystem extends SubsystemBase {
 		m_rightServo.set(m_rightSpeed > 0 ? ClimberConstants.kRightServoUnlockedPosition
 				: ClimberConstants.kRightServoLockedPosition);
 
-		m_leftClimber.set(m_leftSpeed);
-		m_rightClimber.set(m_rightSpeed);
+		if (m_leftEncoder.getAbsolutePosition() >= Constants.ClimberConstants.kLeftArmMaxValue || m_leftEncoder.getAbsolutePosition() <= Constants.ClimberConstants.kLeftArmMinValue) {
+			m_leftClimber.set(m_leftSpeed);
+		}
+		if (m_rightEncoder.getAbsolutePosition() >= Constants.ClimberConstants.kRightArmMaxValue || m_rightEncoder.getAbsolutePosition() <= Constants.ClimberConstants.kRightArmMinValue) {
+			m_rightClimber.set(m_rightSpeed);
+		}
 
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Climber Speed Desired Left", m_leftSpeed);
