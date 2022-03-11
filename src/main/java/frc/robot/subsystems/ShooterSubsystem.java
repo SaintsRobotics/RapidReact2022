@@ -34,7 +34,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final MotorControllerGroup m_sideFeeders;
 	private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
 
-	private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kBlackFlywheelPort);
+	private final WPI_TalonFX m_blackFlywheel = new WPI_TalonFX(ShooterConstants.kBlackFlywheelPort);
+	private final WPI_TalonFX m_greenFlywheel = new WPI_TalonFX(ShooterConstants.kGreenFlywheelPort);
 
 	private final MUX m_MUX = new MUX();
 	private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, Port.kTwo);
@@ -52,7 +53,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	public ShooterSubsystem() {
 		m_arm.setIdleMode(IdleMode.kBrake);
 		m_arm.setInverted(true);
-		m_flywheel.setNeutralMode(NeutralMode.Coast);
+		m_blackFlywheel.setNeutralMode(NeutralMode.Coast);
+		m_greenFlywheel.setNeutralMode(NeutralMode.Coast);
 		CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
 		CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
 		m_intake.setInverted(true);
@@ -68,19 +70,34 @@ public class ShooterSubsystem extends SubsystemBase {
 	// top feeder run for how long?
 	@Override
 	public void periodic() {
-		double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
+		double blackPidOutput = m_shooterPID.calculate(Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
 		if (m_shooterPID.getSetpoint() > 0) {
-			m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
+			m_blackFlywheel.set(blackPidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
 		} else {
-			m_flywheel.set(0);
+			m_blackFlywheel.set(0);
 		}
 
 		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0
-				&& Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 0.95
+				&& Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()) > 0.95
 						* ShooterConstants.kBlackShooterSpeedRPM) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
 			if (isShooterPrimed()) {
 				m_shootingTimer.reset();
+			}
+		double greenPidOutput = m_shooterPID.calculate(Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+			if (m_shooterPID.getSetpoint() > 0) {
+				m_greenFlywheel.set(greenPidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
+			} else {
+				m_greenFlywheel.set(0);
+			}
+	
+			if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0
+					&& Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()) > 0.95
+							* ShooterConstants.kGreenShooterSpeedRPM) {
+				m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
+				if (isShooterPrimed()) {
+					m_shootingTimer.reset();
+				}
 			}
 		} else if (!isShooterPrimed() && m_runningIntake) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
@@ -89,12 +106,14 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Shooter PID Output", pidOutput);
+			SmartDashboard.putNumber("Shooter PID Output", blackPidOutput);
 			SmartDashboard.putNumber("Shooter PID velocity error", m_shooterPID.getVelocityError());
 			SmartDashboard.putNumber("Shooter PID position error", m_shooterPID.getPositionError());
 			SmartDashboard.putNumber("Shooter Feedforward output", m_feedforward.calculate(m_shooterPID.getSetpoint()));
-			SmartDashboard.putNumber("Shooter Power", m_flywheel.get());
-			SmartDashboard.putNumber("Shooter RPM", Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Shooter Power", m_blackFlywheel.get());
+			SmartDashboard.putNumber("Shooter Power", m_greenFlywheel.get());
+			SmartDashboard.putNumber("Shooter RPM", Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Shooter RPM", Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
 			SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
 			SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
