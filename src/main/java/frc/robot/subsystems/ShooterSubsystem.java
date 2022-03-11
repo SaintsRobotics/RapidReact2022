@@ -41,7 +41,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, Port.kTwo);
 
 	// TODO tune
-	private final PIDController m_armPID = new PIDController(ShooterConstants.kArmP, 0, 0);
+	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
 	private final PIDController m_blackShooterPID = new PIDController(ShooterConstants.kShooterP, 0, 0);
 	private final PIDController m_greenShooterPID = new PIDController(ShooterConstants.kShooterP, 0, 0);
 	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.65, 0);
