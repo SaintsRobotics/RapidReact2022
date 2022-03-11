@@ -92,6 +92,9 @@ public final class Constants {
 		public static final boolean kIntakeReversed = true;
 		public static final boolean kLeftFeederReversed = true;
 		public static final boolean kRightFeederReversed = false;
+
+		public static final int kRedThreshold = 300;
+		public static final int kBlueThreshold = 300;
 	}
 
 	/** Constants for the climber. */

@@ -179,18 +179,18 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	private boolean isIncorrectColor() {
-		if (DriverStation.getAlliance() == Alliance.Red && m_proximitySensor.getBlue() > 300)
+		if (DriverStation.getAlliance() == Alliance.Red && m_proximitySensor.getBlue() > ShooterConstants.kBlueThreshold)
 			return true;
-		if (DriverStation.getAlliance() == Alliance.Blue && m_proximitySensor.getRed() > 300)
+		if (DriverStation.getAlliance() == Alliance.Blue && m_proximitySensor.getRed() > ShooterConstants.kRedThreshold)
 			return true;
 
 		return false;
 	}
 
 	private void printColor() {
-		if (m_proximitySensor.getRed() > 300)
+		if (m_proximitySensor.getRed() > ShooterConstants.kRedThreshold)
 			SmartDashboard.putString("color sensed", "red");
-		if (m_proximitySensor.getBlue() > 300)
+		if (m_proximitySensor.getBlue() > ShooterConstants.kBlueThreshold)
 			SmartDashboard.putString("color sensed", "blue");
 
 		SmartDashboard.putString("color sensed", "none");
