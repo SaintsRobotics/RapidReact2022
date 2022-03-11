@@ -86,6 +86,7 @@ public final class Constants {
 
 		public static final double kBlackShooterSpeedRPM = 3520;
 		public static final double kGreenShooterSpeedRPM = 3520;
+
 		public static final int kLowerArmAngle = 170;
 		public static final int kUpperArmAngle = 74;
 		public static final double kIntakeSpeed = 0.7;
