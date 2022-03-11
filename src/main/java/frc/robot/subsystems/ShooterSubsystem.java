@@ -72,13 +72,12 @@ public class ShooterSubsystem extends SubsystemBase {
 	// top feeder run for how long?
 	@Override
 	public void periodic() {
-		if (isIncorrectColor()) {
+		if (isBlue(2) && DriverStation.getAlliance() == Alliance.Red
+				|| isBlue(3) && DriverStation.getAlliance() == Alliance.Red) {
 			intakeReverse();
 		}
-		if (isBlue(2) && DriverStation.getAlliance() == Alliance.Red || isBlue(3) && DriverStation.getAlliance() == Alliance.Red) {
-			intakeReverse();
-		}
-		if (isRed(2) && DriverStation.getAlliance() == Alliance.Blue || isRed(3) && DriverStation.getAlliance() == Alliance.Blue) {
+		if (isRed(2) && DriverStation.getAlliance() == Alliance.Blue
+				|| isRed(3) && DriverStation.getAlliance() == Alliance.Blue) {
 			intakeReverse();
 		}
 		double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
@@ -203,6 +202,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 	}
+
 	public boolean isRed(int port) {
 		if (port == 2) {
 			if (m_proximitySensor0.getRed() > ShooterConstants.kRedThreshold) {
@@ -218,17 +218,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			}
 		}
 
-	}
-
-	private boolean isIncorrectColor() {
-		if (DriverStation.getAlliance() == Alliance.Red
-				&& m_proximitySensor0.getBlue() > ShooterConstants.kBlueThreshold)
-			return true;
-		if (DriverStation.getAlliance() == Alliance.Blue
-				&& m_proximitySensor0.getRed() > ShooterConstants.kRedThreshold)
-			return true;
-
-		return false;
 	}
 
 	private void printColor() {
