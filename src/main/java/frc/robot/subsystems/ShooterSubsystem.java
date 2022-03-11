@@ -72,9 +72,10 @@ public class ShooterSubsystem extends SubsystemBase {
 	// top feeder run for how long?
 	@Override
 	public void periodic() {
-		double blackPidOutput = m_blackShooterPID.calculate(Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
+		double blackPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
+		double greenPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
 		if (m_blackShooterPID.getSetpoint() > 0) {
-			m_blackFlywheel.set(blackPidOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
+			m_blackFlywheel.set(blackPIDOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
 		} else {
 			m_blackFlywheel.set(0);
 		}
@@ -86,10 +87,8 @@ public class ShooterSubsystem extends SubsystemBase {
 			if (isShooterPrimed()) {
 				m_shootingTimer.reset();
 			}
-			double greenPidOutput = m_blackShooterPID
-					.calculate(Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
 			if (m_blackShooterPID.getSetpoint() > 0) {
-				m_greenFlywheel.set(greenPidOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
+				m_greenFlywheel.set(greenPIDOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
 			} else {
 				m_greenFlywheel.set(0);
 			}
@@ -109,19 +108,23 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Shooter PID Output", blackPidOutput);
-			SmartDashboard.putNumber("BShooter PID velocity error", m_blackShooterPID.getVelocityError());
-			SmartDashboard.putNumber("GShooter PID velocity error", m_greenShooterPID.getVelocityError());
-			SmartDashboard.putNumber("BShooter PID position error", m_blackShooterPID.getPositionError());
-			SmartDashboard.putNumber("GShooter PID position error", m_greenShooterPID.getPositionError());
-			SmartDashboard.putNumber("BShooter Feedforward output",
+			SmartDashboard.putNumber("Black Shooter PID Output", blackPIDOutput);
+			SmartDashboard.putNumber("Green Shooter PID Output", greenPIDOutput);
+
+			SmartDashboard.putNumber("Black Shooter Feedforward Output",
 					m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
-			SmartDashboard.putNumber("GShooter Feedforward output",
+			SmartDashboard.putNumber("Green Shooter Feedforward Output",
 					m_feedforward.calculate(m_greenShooterPID.getSetpoint()));
-			SmartDashboard.putNumber("BShooter Power", m_blackFlywheel.get());
-			SmartDashboard.putNumber("GShooter Power", m_greenFlywheel.get());
-			SmartDashboard.putNumber("BShooter RPM", Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
-			SmartDashboard.putNumber("GShooter RPM", Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+
+			SmartDashboard.putNumber("Black Shooter Power", m_blackFlywheel.get());
+			SmartDashboard.putNumber("Green Shooter Power", m_greenFlywheel.get());
+
+			SmartDashboard.putNumber("Black Shooter RPM", Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Green Shooter RPM", Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+
+			SmartDashboard.putNumber("Black Shooter RPM Error", m_blackShooterPID.getPositionError());
+			SmartDashboard.putNumber("Green Shooter RPM Error", m_greenShooterPID.getPositionError());
+
 			SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
 			SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
