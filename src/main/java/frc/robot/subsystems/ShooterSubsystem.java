@@ -39,7 +39,9 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
 
 	private final MUX m_MUX = new MUX();
-	private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, Port.kTwo);
+	private final REVColorSensorV3 m_proximitySensor0 = new REVColorSensorV3(m_MUX, Port.kTwo);
+	// TODO fix port for ln 44
+	private final REVColorSensorV3 m_proximitySensor1 = new REVColorSensorV3(m_MUX, Port.kThree);
 
 	// TODO tune
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
