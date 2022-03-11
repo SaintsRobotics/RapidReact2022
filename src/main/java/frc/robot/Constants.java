@@ -73,16 +73,18 @@ public final class Constants {
 		/** Gear ratio between the motor and the wheel. */
 		public static final double kDrivingGearRatio = 8.14;
 	}
-
+//TODO update ports and speeds
 	public static final class ShooterConstants {
-		public static final int kFlywheelPort = 9;
+		public static final int kBlackFlywheelPort = 9;
+		public static final int kGreenFlyWheelPort = 62;
 		public static final int kArmPort = 13;
 		public static final int kIntakeWheelsPort = 8;
 		public static final int kLeftFeederPort = 10;
 		public static final int kRightFeederPort = 6;
 		public static final int kTopFeederPort = 14;
 
-		public static final double kShooterSpeedRPM = 3520;
+		public static final double kBlackShooterSpeedRPM = 3520;
+		public static final double kGreenShooterSpeedRPM = 3520;
 		public static final int kLowerArmAngle = 170;
 		public static final int kUpperArmAngle = 74;
 		public static final double kIntakeSpeed = 0.7;

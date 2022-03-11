@@ -34,7 +34,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final MotorControllerGroup m_sideFeeders;
 	private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
 
-	private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
+	private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kBlackFlywheelPort);
 
 	private final MUX m_MUX = new MUX();
 	private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, Port.kTwo);
@@ -76,7 +76,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0
-				&& Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 0.95 * ShooterConstants.kShooterSpeedRPM) {
+				&& Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 0.95 * ShooterConstants.kBlackShooterSpeedRPM) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
 			if (isShooterPrimed()) {
 				m_shootingTimer.reset();
