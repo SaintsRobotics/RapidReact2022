@@ -110,18 +110,18 @@ public class ShooterSubsystem extends SubsystemBase {
 
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Shooter PID Output", blackPidOutput);
-			SmartDashboard.putNumber("Shooter PID velocity error", m_blackShooterPID.getVelocityError());
-			SmartDashboard.putNumber("Shooter PID velocity error", m_greenShooterPID.getVelocityError());
-			SmartDashboard.putNumber("Shooter PID position error", m_blackShooterPID.getPositionError());
-			SmartDashboard.putNumber("Shooter PID position error", m_greenShooterPID.getPositionError());
-			SmartDashboard.putNumber("Shooter Feedforward output",
+			SmartDashboard.putNumber("BShooter PID velocity error", m_blackShooterPID.getVelocityError());
+			SmartDashboard.putNumber("GShooter PID velocity error", m_greenShooterPID.getVelocityError());
+			SmartDashboard.putNumber("BShooter PID position error", m_blackShooterPID.getPositionError());
+			SmartDashboard.putNumber("GShooter PID position error", m_greenShooterPID.getPositionError());
+			SmartDashboard.putNumber("BShooter Feedforward output",
 					m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
-			SmartDashboard.putNumber("Shooter Feedforward output",
+			SmartDashboard.putNumber("GShooter Feedforward output",
 					m_feedforward.calculate(m_greenShooterPID.getSetpoint()));
-			SmartDashboard.putNumber("Shooter Power", m_blackFlywheel.get());
-			SmartDashboard.putNumber("Shooter Power", m_greenFlywheel.get());
-			SmartDashboard.putNumber("Shooter RPM", Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
-			SmartDashboard.putNumber("Shooter RPM", Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("BShooter Power", m_blackFlywheel.get());
+			SmartDashboard.putNumber("GShooter Power", m_greenFlywheel.get());
+			SmartDashboard.putNumber("BShooter RPM", Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("GShooter RPM", Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
 			SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
 			SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
