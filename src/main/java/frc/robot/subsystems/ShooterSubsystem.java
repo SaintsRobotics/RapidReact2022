@@ -76,7 +76,8 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0
-				&& Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 0.95 * ShooterConstants.kBlackShooterSpeedRPM) {
+				&& Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 0.95
+						* ShooterConstants.kBlackShooterSpeedRPM) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
 			if (isShooterPrimed()) {
 				m_shootingTimer.reset();
@@ -163,9 +164,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		} else {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		}
-		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Target Shooter Speed", RPM);
-		}
+		SmartDashboard.putNumber("Target Shooter Speed", RPM);
 	}
 
 	private boolean isShooterPrimed() {
