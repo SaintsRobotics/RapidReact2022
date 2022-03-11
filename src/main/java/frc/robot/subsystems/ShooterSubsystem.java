@@ -185,7 +185,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	/**
 	 * Shoots the ball(s)
 	 * 
-	 * @param speed Speed of the shooter in ticks per decisecond.
+	 * @param speed Speed of the black flywheel in ticks per decisecond.
 	 */
 	public void setBlackShooterSpeed(double RPM) {
 		m_blackShooterPID.setSetpoint(RPM);
@@ -198,7 +198,11 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Target Shooter Speed", RPM);
 		}
 	}
-
+	/**
+	 * Shoots the ball(s)
+	 * 
+	 * @param speed Speed of the green flywheel in ticks per decisecond.
+	 */
 	public void setGreenShooterSpeed(double RPM) {
 		m_greenShooterPID.setSetpoint(RPM);
 		if (RPM == 0) {
