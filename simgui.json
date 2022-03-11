@@ -1,4 +1,13 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "navX-Sensor[0]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
@@ -32,6 +41,9 @@
       "/LiveWindow/Ungrouped/PIDController[29]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[30]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[31]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[32]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[33]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
@@ -56,6 +68,9 @@
   },
   "NetworkTables": {
     "SmartDashboard": {
+      "Field": {
+        "open": true
+      },
       "open": true
     }
   }
