@@ -13,6 +13,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -68,6 +70,9 @@ public class ShooterSubsystem extends SubsystemBase {
 	// top feeder run for how long?
 	@Override
 	public void periodic() {
+		if (isIncorrectColor()) {
+			intakeReverse();
+		}
 		double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
 		if (m_shooterPID.getSetpoint() > 0) {
 			m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
@@ -88,6 +93,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if (OIConstants.kTelemetry) {
+			printColor();
 			SmartDashboard.putNumber("Shooter PID Output", pidOutput);
 			SmartDashboard.putNumber("Shooter PID velocity error", m_shooterPID.getVelocityError());
 			SmartDashboard.putNumber("Shooter PID position error", m_shooterPID.getPositionError());
@@ -172,25 +178,22 @@ public class ShooterSubsystem extends SubsystemBase {
 		return m_proximitySensor.getProximity() >= 180;
 	}
 
-	/*
-	 * private boolean isCorrectColor() {
-	 * if (DriverStation.getAlliance() == Alliance.Red && m_colorSensor.getRed() >
-	 * 300)
-	 * return true;
-	 * if (DriverStation.getAlliance() == Alliance.Blue && m_colorSensor.getBlue() >
-	 * 300)
-	 * return true;
-	 * 
-	 * return false;
-	 * }
-	 * 
-	 * private void printColor() {
-	 * if (m_colorSensor.getRed() > 300)
-	 * SmartDashboard.putString("color sensed", "red");
-	 * if (m_colorSensor.getBlue() > 300)
-	 * SmartDashboard.putString("color sensed", "blue");
-	 * 
-	 * SmartDashboard.putString("color sensed", "none");
-	 * }
-	 */
+	private boolean isIncorrectColor() {
+		if (DriverStation.getAlliance() == Alliance.Red && m_proximitySensor.getBlue() > 300)
+			return true;
+		if (DriverStation.getAlliance() == Alliance.Blue && m_proximitySensor.getRed() > 300)
+			return true;
+
+		return false;
+	}
+
+	private void printColor() {
+		if (m_proximitySensor.getRed() > 300)
+			SmartDashboard.putString("color sensed", "red");
+		if (m_proximitySensor.getBlue() > 300)
+			SmartDashboard.putString("color sensed", "blue");
+
+		SmartDashboard.putString("color sensed", "none");
+	}
+
 }
