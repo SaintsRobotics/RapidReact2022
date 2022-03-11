@@ -98,8 +98,8 @@ public final class Constants {
 		public static final boolean kLeftFeederReversed = true;
 		public static final boolean kRightFeederReversed = false;
 
-		public static final double kShooterP = 0.0005;
 		public static final double kArmP = 0.005;
+		public static final double kShooterP = 0.0005;
 	}
 
 	/** Constants for the climber. */
