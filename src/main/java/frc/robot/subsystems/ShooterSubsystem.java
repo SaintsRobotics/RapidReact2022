@@ -191,7 +191,9 @@ public class ShooterSubsystem extends SubsystemBase {
 		} else {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		}
-		SmartDashboard.putNumber("Target Shooter Speed", RPM);
+		if (OIConstants.kTelemetry) {
+			SmartDashboard.putNumber("Target Shooter Speed", RPM);
+		}
 	}
 
 	public void setGreenShooterSpeed(double RPM) {
@@ -201,7 +203,9 @@ public class ShooterSubsystem extends SubsystemBase {
 		} else {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		}
-		SmartDashboard.putNumber("Target Shooter Speed", RPM);
+		if (OIConstants.kTelemetry) {
+			SmartDashboard.putNumber("Target Shooter Speed", RPM);
+		}
 	}
 
 	private boolean isShooterPrimed() {
