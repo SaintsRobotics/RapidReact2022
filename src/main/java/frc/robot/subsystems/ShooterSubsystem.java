@@ -13,13 +13,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.DutyCycleAbsoluteEncoder;
 import frc.robot.MUX;
 import frc.robot.MUX.Port;
 import frc.robot.REVColorSensorV3;
@@ -28,7 +28,7 @@ import frc.robot.Utils;
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
 public class ShooterSubsystem extends SubsystemBase {
 	private final CANSparkMax m_arm = new CANSparkMax(ShooterConstants.kArmPort, MotorType.kBrushless);
-	private final DutyCycleAbsoluteEncoder m_armEncoder = new DutyCycleAbsoluteEncoder(9);
+	private final DutyCycleEncoder m_armEncoder = new DutyCycleEncoder(9);
 
 	private final CANSparkMax m_intake = new CANSparkMax(ShooterConstants.kIntakeWheelsPort, MotorType.kBrushless);
 	private final MotorControllerGroup m_sideFeeders;
@@ -66,8 +66,10 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	// top feeder run for how long?
+	// TODO put setDutyCycleRange in a better spot if possible
 	@Override
 	public void periodic() {
+		m_armEncoder.setDutyCycleRange(0, 1);
 		double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
 		if (m_shooterPID.getSetpoint() > 0) {
 			m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
