@@ -177,7 +177,40 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	private boolean isShooterPrimed() {
-		return m_proximitySensor.getProximity() >= 180;
+		return m_proximitySensor0.getProximity() >= 180;
+	}
+
+	public boolean isBlue(int port) {
+		if (port == 2) {
+			if (m_proximitySensor0.getBlue() > ShooterConstants.kBlueThreshold) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			if (m_proximitySensor1.getBlue() > ShooterConstants.kBlueThreshold) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+	}
+	public boolean isRed(int port) {
+		if (port == 2) {
+			if (m_proximitySensor0.getRed() > ShooterConstants.kRedThreshold) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			if (m_proximitySensor1.getRed() > ShooterConstants.kRedThreshold) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
 	}
 
 	private boolean isIncorrectColor() {
