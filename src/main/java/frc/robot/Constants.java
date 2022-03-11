@@ -73,7 +73,8 @@ public final class Constants {
 		/** Gear ratio between the motor and the wheel. */
 		public static final double kDrivingGearRatio = 8.14;
 	}
-//TODO update ports and speeds
+
+	// TODO update ports and speeds
 	public static final class ShooterConstants {
 		public static final int kBlackFlywheelPort = 9;
 		public static final int kGreenFlywheelPort = 62;
@@ -94,6 +95,9 @@ public final class Constants {
 		public static final boolean kIntakeReversed = true;
 		public static final boolean kLeftFeederReversed = true;
 		public static final boolean kRightFeederReversed = false;
+
+		public static final double kShooterP = 0.0005;
+		public static final double kArmP = 0.005;
 	}
 
 	/** Constants for the climber. */
