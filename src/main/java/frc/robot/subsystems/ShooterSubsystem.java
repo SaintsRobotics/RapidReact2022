@@ -107,7 +107,8 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
 			SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
 			SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
-			SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
+			SmartDashboard.putNumber("proximity0", m_proximitySensor0.getProximity());
+			SmartDashboard.putNumber("proximity1", m_proximitySensor1.getProximity());
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
 	}
@@ -214,18 +215,20 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	private boolean isIncorrectColor() {
-		if (DriverStation.getAlliance() == Alliance.Red && m_proximitySensor.getBlue() > ShooterConstants.kBlueThreshold)
+		if (DriverStation.getAlliance() == Alliance.Red
+				&& m_proximitySensor0.getBlue() > ShooterConstants.kBlueThreshold)
 			return true;
-		if (DriverStation.getAlliance() == Alliance.Blue && m_proximitySensor.getRed() > ShooterConstants.kRedThreshold)
+		if (DriverStation.getAlliance() == Alliance.Blue
+				&& m_proximitySensor0.getRed() > ShooterConstants.kRedThreshold)
 			return true;
 
 		return false;
 	}
 
 	private void printColor() {
-		if (m_proximitySensor.getRed() > ShooterConstants.kRedThreshold)
+		if (m_proximitySensor0.getRed() > ShooterConstants.kRedThreshold)
 			SmartDashboard.putString("color sensed", "red");
-		if (m_proximitySensor.getBlue() > ShooterConstants.kBlueThreshold)
+		if (m_proximitySensor0.getBlue() > ShooterConstants.kBlueThreshold)
 			SmartDashboard.putString("color sensed", "blue");
 
 		SmartDashboard.putString("color sensed", "none");
