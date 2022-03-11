@@ -78,6 +78,7 @@ public final class Constants {
 	public static final class ShooterConstants {
 		public static final int kBlackFlywheelPort = 9;
 		public static final int kGreenFlywheelPort = 62;
+
 		public static final int kArmPort = 13;
 		public static final int kIntakeWheelsPort = 8;
 		public static final int kLeftFeederPort = 10;
