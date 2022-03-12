@@ -121,4 +121,9 @@ public final class Constants {
 
 		public static final boolean kTelemetry = false;
 	}
+
+	public static final class FieldConstants{
+		public static final double cHubX = 8.325;
+		public static final double cHubY = 4.125;
+	}
 }
