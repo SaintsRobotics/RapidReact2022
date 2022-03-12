@@ -195,7 +195,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		}
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Target Shooter Speed", RPM);
+			SmartDashboard.putNumber("Black Target Shooter Speed", RPM);
 		}
 	}
 	/**
@@ -211,7 +211,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		}
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Target Shooter Speed", RPM);
+			SmartDashboard.putNumber("Green Target Shooter Speed", RPM);
 		}
 	}
 
