@@ -77,7 +77,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		double blackPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
-		double greenPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
+		double greenPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
 		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean shooterIsRed = m_shooterColorSensor.getRed() > ShooterConstants.kRedThreshold;
@@ -90,7 +91,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			// TODO also run the feeders in reverse
 			intakeReverse();
 		}
-
 
 		if (m_blackShooterPID.getSetpoint() > 0) {
 			m_blackFlywheel.set(blackPIDOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
@@ -224,6 +224,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Black Target Shooter Speed", RPM);
 		}
 	}
+
 	/**
 	 * Shoots the ball(s)
 	 * 
