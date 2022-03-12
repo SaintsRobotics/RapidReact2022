@@ -78,7 +78,6 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	// top feeder run for how long?
-	// TODO put setDutyCycleRange in a better spot if possible
 	@Override
 	public void periodic() {
 		double blackPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
@@ -153,7 +152,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
 			SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
 			SmartDashboard.putNumber("Arm Angle", m_armEncoder.getDistance());
-			SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
 
 			SmartDashboard.putNumber("Queue Proximity", m_queueColorSensor.getProximity());
 			SmartDashboard.putBoolean("Queue Is Blue", queueIsBlue);
