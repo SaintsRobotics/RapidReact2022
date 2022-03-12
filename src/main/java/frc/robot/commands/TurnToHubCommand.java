@@ -31,6 +31,8 @@ public class TurnToHubCommand extends CommandBase {
     double targetHeading = 360 - Math.toDegrees(Math.atan(xHubDisplacement/yHubDisplacement));
 
     m_moveCommand.withAbsoluteHeading(targetHeading);
+
+    m_moveCommand.schedule();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,7 +45,7 @@ public class TurnToHubCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    m_moveCommand.cancel();
   }
 
   // Returns true when the command should end.
