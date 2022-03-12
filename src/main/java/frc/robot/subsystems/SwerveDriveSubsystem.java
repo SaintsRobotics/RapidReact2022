@@ -238,7 +238,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		m_rearLeft.setDesiredState(desiredStates[1]);
 		m_frontRight.setDesiredState(desiredStates[2]);
 		m_rearRight.setDesiredState(desiredStates[3]);
-		if (Robot.isReal()) {
+		if (!Robot.isReal()) {
 			double rotation = Math.toDegrees(SwerveConstants.kDriveKinematics.toChassisSpeeds(desiredStates).omegaRadiansPerSecond * Robot.kDefaultPeriod);
 			m_simulatedYaw.set(m_simulatedYaw.get() - rotation);
 		}
