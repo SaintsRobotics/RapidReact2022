@@ -156,9 +156,10 @@ public class RobotContainer {
 
 		return new SequentialCommandGroup(
 				// new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall0", true),
-				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "BlueMidTwoBall1", true),
-						new AutonIntake(m_shooterSubsystem)),
+				// new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+				// new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "BlueMidTwoBall1", true),
+						// new AutonIntake(m_shooterSubsystem)),
+					new PathWeaverCommand(m_swerveDriveSubsystem, "BlueMidTwoBall1", true),
 				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueMidTwoBall2", false),
 				new AutonShoot(m_shooterSubsystem));
 
