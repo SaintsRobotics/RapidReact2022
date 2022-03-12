@@ -52,6 +52,10 @@ public class ShooterSubsystem extends SubsystemBase {
 	public ShooterSubsystem() {
 		m_arm.setIdleMode(IdleMode.kBrake);
 		m_arm.setInverted(true);
+
+		// TODO change to getAngle if WPILib adds it
+		m_armEncoder.setDistancePerRotation(360);
+
 		m_flywheel.setNeutralMode(NeutralMode.Coast);
 		CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
 		CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
@@ -69,7 +73,6 @@ public class ShooterSubsystem extends SubsystemBase {
 	// TODO put setDutyCycleRange in a better spot if possible
 	@Override
 	public void periodic() {
-		m_armEncoder.setDutyCycleRange(0, 1);
 		double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
 		if (m_shooterPID.getSetpoint() > 0) {
 			m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
@@ -100,7 +103,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
 			SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
-			SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
+			SmartDashboard.putNumber("Arm Angle", m_armEncoder.getDistance());
 			SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
@@ -112,7 +115,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		if (m_armPID.atSetpoint())
 			m_arm.set(0);
 		else
-			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), -0.25, -0.1));
+			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), -0.25, -0.1));
 	}
 
 	/** Lowers the arm. */
@@ -121,7 +124,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		if (m_armPID.atSetpoint())
 			m_arm.set(0);
 		else
-			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getAbsolutePosition()), 0.1, 0.25));
+			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), 0.1, 0.25));
 	}
 
 	public void stopArm() {
