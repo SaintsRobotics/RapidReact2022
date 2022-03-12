@@ -22,16 +22,15 @@ public class TurnToHubCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double currentPose = m_swerveSubsystem.getPose().getRotation().getRadians();
-    double currentX = m_swerveSubsystem.getPose().getX();
-    double currentY = m_swerveSubsystem.getPose().getY();
+    double xPoseRobot = m_swerveSubsystem.getPose().getX();
+    double yPoseRobot = m_swerveSubsystem.getPose().getY();
 
-    double xDistance = Math.abs(currentX - Constants.FieldConstants.cHubX);
-    double yDistance = Math.abs(currentY - Constants.FieldConstants.cHubY);
+    double xHubDisplacement = Math.abs(xPoseRobot - Constants.FieldConstants.kHubX);
+    double yHubDisplacement = Math.abs(yPoseRobot - Constants.FieldConstants.kHubY);
     
-    double theta = Math.atan(xDistance/yDistance);
+    double targetHeading = 2*Math.PI- Math.atan(xHubDisplacement/yHubDisplacement);
 
-    m_moveCommand.withAbsoluteHeading(360-theta);
+    m_moveCommand.withAbsoluteHeading(targetHeading);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

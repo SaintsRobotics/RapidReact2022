@@ -123,7 +123,7 @@ public final class Constants {
 	}
 
 	public static final class FieldConstants{
-		public static final double cHubX = 8.325;
-		public static final double cHubY = 4.125;
+		public static final double kHubX = 8.325;
+		public static final double kHubY = 4.125;
 	}
 }

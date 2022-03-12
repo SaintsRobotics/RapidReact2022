@@ -32,6 +32,7 @@ import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PathWeaverCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.TurnToHubCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -145,7 +146,11 @@ public class RobotContainer {
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
 				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intakeReverse()))
 				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
-	}
+
+		// turns to hub
+
+		//new JoystickButton(m_operatorController, Button.kY.value).whenPressed(new TurnToHubCommand(m_swerveDriveSubsystem, new MoveCommmand()));
+	}	
 
 	/**
 	 * Use this to pass the autonomous command to the main {@link Robot} class.
