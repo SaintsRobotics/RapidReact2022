@@ -70,9 +70,10 @@ public class PathWeaverCommand extends CommandBase {
 				new PIDController(1, 0, 0),
 				new PIDController(1, 0, 0),
 				rotPID,
-				m_subsystem::setModuleStates,
-				m_subsystem);
+				m_subsystem::setModuleStates);
 		m_command.schedule();
+
+	
 	}
 
 	@Override
