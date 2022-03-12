@@ -39,9 +39,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
 
 	private final MUX m_MUX = new MUX();
-	private final REVColorSensorV3 m_proximitySensor0 = new REVColorSensorV3(m_MUX, Port.kTwo);
-	// TODO fix port for ln 44
-	private final REVColorSensorV3 m_proximitySensor1 = new REVColorSensorV3(m_MUX, Port.kThree);
+	private final REVColorSensorV3 m_queueColorSensor = new REVColorSensorV3(m_MUX, Port.kTwo);
+	private final REVColorSensorV3 m_shooterColorSensor = new REVColorSensorV3(m_MUX, Port.kThree);
 
 	// TODO tune
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
@@ -72,14 +71,20 @@ public class ShooterSubsystem extends SubsystemBase {
 	// top feeder run for how long?
 	@Override
 	public void periodic() {
-		if (isBlue(2) && DriverStation.getAlliance() == Alliance.Red
-				|| isBlue(3) && DriverStation.getAlliance() == Alliance.Red) {
+		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
+		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
+		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
+		final boolean shooterIsRed = m_shooterColorSensor.getRed() > ShooterConstants.kRedThreshold;
+
+		// Checks if the color of ball is opposite that of the alliance.
+		if ((queueIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
+				(queueIsRed && DriverStation.getAlliance() == Alliance.Blue) ||
+				(shooterIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
+				(shooterIsRed && DriverStation.getAlliance() == Alliance.Blue)) {
+			// TODO also run the feeders in reverse
 			intakeReverse();
 		}
-		if (isRed(2) && DriverStation.getAlliance() == Alliance.Blue
-				|| isRed(3) && DriverStation.getAlliance() == Alliance.Blue) {
-			intakeReverse();
-		}
+
 		double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
 		if (m_shooterPID.getSetpoint() > 0) {
 			m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
@@ -100,7 +105,6 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if (OIConstants.kTelemetry) {
-			printColor();
 			SmartDashboard.putNumber("Shooter PID Output", pidOutput);
 			SmartDashboard.putNumber("Shooter PID velocity error", m_shooterPID.getVelocityError());
 			SmartDashboard.putNumber("Shooter PID position error", m_shooterPID.getPositionError());
@@ -112,8 +116,15 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
 			SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
 			SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
-			SmartDashboard.putNumber("proximity0", m_proximitySensor0.getProximity());
-			SmartDashboard.putNumber("proximity1", m_proximitySensor1.getProximity());
+
+			SmartDashboard.putNumber("Queue Proximity", m_queueColorSensor.getProximity());
+			SmartDashboard.putBoolean("Queue Is Blue", queueIsBlue);
+			SmartDashboard.putBoolean("Queue Is Red", queueIsRed);
+
+			SmartDashboard.putNumber("Shooter Proximity", m_shooterColorSensor.getProximity());
+			SmartDashboard.putBoolean("Shooter Is Blue", shooterIsBlue);
+			SmartDashboard.putBoolean("Shooter Is Red", shooterIsRed);
+
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
 	}
@@ -183,50 +194,6 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	private boolean isShooterPrimed() {
-		return m_proximitySensor0.getProximity() >= 180;
+		return m_queueColorSensor.getProximity() >= 180;
 	}
-
-	public boolean isBlue(int port) {
-		if (port == 2) {
-			if (m_proximitySensor0.getBlue() > ShooterConstants.kBlueThreshold) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			if (m_proximitySensor1.getBlue() > ShooterConstants.kBlueThreshold) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-	}
-
-	public boolean isRed(int port) {
-		if (port == 2) {
-			if (m_proximitySensor0.getRed() > ShooterConstants.kRedThreshold) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			if (m_proximitySensor1.getRed() > ShooterConstants.kRedThreshold) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-	}
-
-	private void printColor() {
-		if (m_proximitySensor0.getRed() > ShooterConstants.kRedThreshold)
-			SmartDashboard.putString("color sensed", "red");
-		if (m_proximitySensor0.getBlue() > ShooterConstants.kBlueThreshold)
-			SmartDashboard.putString("color sensed", "blue");
-
-		SmartDashboard.putString("color sensed", "none");
-	}
-
 }
