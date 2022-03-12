@@ -148,8 +148,8 @@ public class RobotContainer {
 				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
 
 		// turns to hub
-
-		//new JoystickButton(m_operatorController, Button.kY.value).whenPressed(new TurnToHubCommand(m_swerveDriveSubsystem, new MoveCommmand()));
+		new JoystickButton(m_driveController, Button.kY.value)
+			.whenPressed(new TurnToHubCommand(m_swerveDriveSubsystem, m_moveCommand.schedule()));
 	}	
 
 	/**
