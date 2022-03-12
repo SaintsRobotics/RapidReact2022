@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import frc.robot.MUX.Port;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -74,15 +75,23 @@ public final class Constants {
 		public static final double kDrivingGearRatio = 8.14;
 	}
 
+	// TODO update ports and speeds
 	public static final class ShooterConstants {
-		public static final int kFlywheelPort = 9;
+		public static final int kBlackFlywheelPort = 9;
+		public static final int kGreenFlywheelPort = 62;
+
 		public static final int kArmPort = 13;
 		public static final int kIntakeWheelsPort = 8;
 		public static final int kLeftFeederPort = 10;
 		public static final int kRightFeederPort = 6;
 		public static final int kTopFeederPort = 14;
 
-		public static final double kShooterSpeedRPM = 3520;
+		public static final Port kQueueColorSensorPort = Port.kTwo;
+		public static final Port kShooterColorSensorPort = Port.kThree;
+
+		public static final double kBlackShooterSpeedRPM = 3520;
+		public static final double kGreenShooterSpeedRPM = 3520;
+
 		public static final int kLowerArmAngle = 170;
 		public static final int kUpperArmAngle = 74;
 		public static final double kIntakeSpeed = 0.7;
@@ -92,6 +101,10 @@ public final class Constants {
 		public static final boolean kIntakeReversed = true;
 		public static final boolean kLeftFeederReversed = true;
 		public static final boolean kRightFeederReversed = false;
+
+		public static final int kRedThreshold = 300;
+		public static final int kBlueThreshold = 300;
+		public static final double kShooterP = 0.0005;
 	}
 
 	/** Constants for the climber. */

@@ -13,6 +13,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,7 +23,6 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.DutyCycleAbsoluteEncoder;
 import frc.robot.MUX;
-import frc.robot.MUX.Port;
 import frc.robot.REVColorSensorV3;
 import frc.robot.Utils;
 
@@ -34,14 +35,19 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final MotorControllerGroup m_sideFeeders;
 	private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
 
-	private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
+	private final WPI_TalonFX m_blackFlywheel = new WPI_TalonFX(ShooterConstants.kBlackFlywheelPort);
+	private final WPI_TalonFX m_greenFlywheel = new WPI_TalonFX(ShooterConstants.kGreenFlywheelPort);
 
 	private final MUX m_MUX = new MUX();
-	private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, Port.kTwo);
+	private final REVColorSensorV3 m_queueColorSensor = new REVColorSensorV3(m_MUX,
+			ShooterConstants.kQueueColorSensorPort);
+	private final REVColorSensorV3 m_shooterColorSensor = new REVColorSensorV3(m_MUX,
+			ShooterConstants.kShooterColorSensorPort);
 
 	// TODO tune
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
-	private final PIDController m_shooterPID = new PIDController(0.0005, 0, 0);
+	private final PIDController m_blackShooterPID = new PIDController(ShooterConstants.kShooterP, 0, 0);
+	private final PIDController m_greenShooterPID = new PIDController(ShooterConstants.kShooterP, 0, 0);
 	private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.65, 0);
 
 	private boolean m_runningIntake = false;
@@ -52,14 +58,16 @@ public class ShooterSubsystem extends SubsystemBase {
 	public ShooterSubsystem() {
 		m_arm.setIdleMode(IdleMode.kBrake);
 		m_arm.setInverted(true);
-		m_flywheel.setNeutralMode(NeutralMode.Coast);
+		m_blackFlywheel.setNeutralMode(NeutralMode.Coast);
+		m_greenFlywheel.setNeutralMode(NeutralMode.Coast);
 		CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
 		CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
 		m_intake.setInverted(true);
 		leftFeeder.setInverted(true);
 		rightFeeder.setInverted(false);
 		m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
-		m_shooterPID.setTolerance(50);
+		m_blackShooterPID.setTolerance(50);
+		m_greenShooterPID.setTolerance(50);
 		m_armPID.setTolerance(2);
 
 		m_shootingTimer.start();
@@ -68,18 +76,48 @@ public class ShooterSubsystem extends SubsystemBase {
 	// top feeder run for how long?
 	@Override
 	public void periodic() {
-		double pidOutput = m_shooterPID.calculate(Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
-		if (m_shooterPID.getSetpoint() > 0) {
-			m_flywheel.set(pidOutput + m_feedforward.calculate(m_shooterPID.getSetpoint()));
-		} else {
-			m_flywheel.set(0);
+		double blackPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
+		double greenPIDOutput = m_blackShooterPID.calculate(Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
+		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
+		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
+		final boolean shooterIsRed = m_shooterColorSensor.getRed() > ShooterConstants.kRedThreshold;
+
+		// Checks if the color of ball is opposite that of the alliance.
+		if ((queueIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
+				(queueIsRed && DriverStation.getAlliance() == Alliance.Blue) ||
+				(shooterIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
+				(shooterIsRed && DriverStation.getAlliance() == Alliance.Blue)) {
+			// TODO also run the feeders in reverse
+			intakeReverse();
 		}
 
-		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_shooterPID.getSetpoint() > 0
-				&& Utils.toRPM(m_flywheel.getSelectedSensorVelocity()) > 0.95 * ShooterConstants.kShooterSpeedRPM) {
+		if (m_blackShooterPID.getSetpoint() > 0) {
+			m_blackFlywheel.set(blackPIDOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
+		} else {
+			m_blackFlywheel.set(0);
+		}
+
+		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_blackShooterPID.getSetpoint() > 0
+				&& Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()) > 0.95
+						* ShooterConstants.kBlackShooterSpeedRPM) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
 			if (isShooterPrimed()) {
 				m_shootingTimer.reset();
+			}
+			if (m_blackShooterPID.getSetpoint() > 0) {
+				m_greenFlywheel.set(greenPIDOutput + m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
+			} else {
+				m_greenFlywheel.set(0);
+			}
+
+			if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_blackShooterPID.getSetpoint() > 0
+					&& Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()) > 0.95
+							* ShooterConstants.kGreenShooterSpeedRPM) {
+				m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
+				if (isShooterPrimed()) {
+					m_shootingTimer.reset();
+				}
 			}
 		} else if (!isShooterPrimed() && m_runningIntake) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
@@ -88,18 +126,37 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Shooter PID Output", pidOutput);
-			SmartDashboard.putNumber("Shooter PID velocity error", m_shooterPID.getVelocityError());
-			SmartDashboard.putNumber("Shooter PID position error", m_shooterPID.getPositionError());
-			SmartDashboard.putNumber("Shooter Feedforward output", m_feedforward.calculate(m_shooterPID.getSetpoint()));
-			SmartDashboard.putNumber("Shooter Power", m_flywheel.get());
-			SmartDashboard.putNumber("Shooter RPM", Utils.toRPM(m_flywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Black Shooter PID Output", blackPIDOutput);
+			SmartDashboard.putNumber("Green Shooter PID Output", greenPIDOutput);
+
+			SmartDashboard.putNumber("Black Shooter Feedforward Output",
+					m_feedforward.calculate(m_blackShooterPID.getSetpoint()));
+			SmartDashboard.putNumber("Green Shooter Feedforward Output",
+					m_feedforward.calculate(m_greenShooterPID.getSetpoint()));
+
+			SmartDashboard.putNumber("Black Shooter Power", m_blackFlywheel.get());
+			SmartDashboard.putNumber("Green Shooter Power", m_greenFlywheel.get());
+
+			SmartDashboard.putNumber("Black Shooter RPM", Utils.toRPM(m_blackFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Green Shooter RPM", Utils.toRPM(m_greenFlywheel.getSelectedSensorVelocity()));
+
+			SmartDashboard.putNumber("Black Shooter RPM Error", m_blackShooterPID.getPositionError());
+			SmartDashboard.putNumber("Green Shooter RPM Error", m_greenShooterPID.getPositionError());
+
 			SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
 			SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
 			SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
 			SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
-			SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
+
+			SmartDashboard.putNumber("Queue Proximity", m_queueColorSensor.getProximity());
+			SmartDashboard.putBoolean("Queue Is Blue", queueIsBlue);
+			SmartDashboard.putBoolean("Queue Is Red", queueIsRed);
+
+			SmartDashboard.putNumber("Shooter Proximity", m_shooterColorSensor.getProximity());
+			SmartDashboard.putBoolean("Shooter Is Blue", shooterIsBlue);
+			SmartDashboard.putBoolean("Shooter Is Red", shooterIsRed);
+
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
 	}
@@ -154,43 +211,38 @@ public class ShooterSubsystem extends SubsystemBase {
 	/**
 	 * Shoots the ball(s)
 	 * 
-	 * @param speed Speed of the shooter in ticks per decisecond.
+	 * @param speed Speed of the black flywheel in RPM.
 	 */
-	public void setShooterSpeed(double RPM) {
-		m_shooterPID.setSetpoint(RPM);
+	public void setBlackShooterSpeed(double RPM) {
+		m_blackShooterPID.setSetpoint(RPM);
 		if (RPM == 0) {
 			m_sideFeeders.set(0);
 		} else {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		}
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Target Shooter Speed", RPM);
+			SmartDashboard.putNumber("Black Target Shooter Speed", RPM);
+		}
+	}
+
+	/**
+	 * Shoots the ball(s)
+	 * 
+	 * @param speed Speed of the green flywheel in RPM.
+	 */
+	public void setGreenShooterSpeed(double RPM) {
+		m_greenShooterPID.setSetpoint(RPM);
+		if (RPM == 0) {
+			m_sideFeeders.set(0);
+		} else {
+			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
+		}
+		if (OIConstants.kTelemetry) {
+			SmartDashboard.putNumber("Green Target Shooter Speed", RPM);
 		}
 	}
 
 	private boolean isShooterPrimed() {
-		return m_proximitySensor.getProximity() >= 180;
+		return m_queueColorSensor.getProximity() >= 180;
 	}
-
-	/*
-	 * private boolean isCorrectColor() {
-	 * if (DriverStation.getAlliance() == Alliance.Red && m_colorSensor.getRed() >
-	 * 300)
-	 * return true;
-	 * if (DriverStation.getAlliance() == Alliance.Blue && m_colorSensor.getBlue() >
-	 * 300)
-	 * return true;
-	 * 
-	 * return false;
-	 * }
-	 * 
-	 * private void printColor() {
-	 * if (m_colorSensor.getRed() > 300)
-	 * SmartDashboard.putString("color sensed", "red");
-	 * if (m_colorSensor.getBlue() > 300)
-	 * SmartDashboard.putString("color sensed", "blue");
-	 * 
-	 * SmartDashboard.putString("color sensed", "none");
-	 * }
-	 */
 }
