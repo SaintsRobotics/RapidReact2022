@@ -65,6 +65,9 @@ public final class Constants {
 		 * TODO update value with new robot.
 		 */
 		public static final double kTurningStopTime = 0.2;
+
+		public static final double kShootingDistance = 30;
+		public static final double kDistanceUncertainty = 10;
 	}
 
 	public static final class ModuleConstants {

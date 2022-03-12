@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.Rev2mDistanceSensor;
+import com.revrobotics.Rev2mDistanceSensor.Port;
 
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
@@ -21,10 +23,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Utils;
 
 /** Controls the drivetrain of the robot using swerve. */
 public class SwerveDriveSubsystem extends SubsystemBase {
+	
 	private final SwerveModule m_frontLeft = new SwerveModule(
 			SwerveConstants.kFrontLeftDriveMotorPort,
 			SwerveConstants.kFrontLeftTurningMotorPort,
@@ -60,6 +65,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	// TODO tune pid
 	private final PIDController m_headingCorrectionPID = new PIDController(5, 0, 0);
 	private final Timer m_headingCorrectionTimer;
+
+	//CHANGE THIS PORT!!!!
+	private final Rev2mDistanceSensor m_distanceSensor = new Rev2mDistanceSensor(Port.kOnboard); // 3
 
 	/** Creates a new {@link SwerveDriveSubsystem}. */
 	public SwerveDriveSubsystem() {
@@ -111,6 +119,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 					Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
 
 			SmartDashboard.putData("Field", m_field2d);
+			
+			checkDistance();
 		}
 	}
 
@@ -219,6 +229,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		m_frontRight.setBrake();
 		m_rearLeft.setBrake();
 		m_rearRight.setBrake();
+	}
+
+	public void checkDistance() {
+		SmartDashboard.putBoolean("Right distance to shoot",
+		 Math.abs(m_distanceSensor.getRange() - Constants.SwerveConstants.kShootingDistance)
+		  <= Constants.SwerveConstants.kDistanceUncertainty);
 	}
 
 	/**
