@@ -23,7 +23,6 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.DutyCycleAbsoluteEncoder;
 import frc.robot.MUX;
-import frc.robot.MUX.Port;
 import frc.robot.REVColorSensorV3;
 import frc.robot.Utils;
 
@@ -39,8 +38,10 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final WPI_TalonFX m_flywheel = new WPI_TalonFX(ShooterConstants.kFlywheelPort);
 
 	private final MUX m_MUX = new MUX();
-	private final REVColorSensorV3 m_queueColorSensor = new REVColorSensorV3(m_MUX, Port.kTwo);
-	private final REVColorSensorV3 m_shooterColorSensor = new REVColorSensorV3(m_MUX, Port.kThree);
+	private final REVColorSensorV3 m_queueColorSensor = new REVColorSensorV3(m_MUX,
+			ShooterConstants.kQueueColorSensorPort);
+	private final REVColorSensorV3 m_shooterColorSensor = new REVColorSensorV3(m_MUX,
+			ShooterConstants.kShooterColorSensorPort);
 
 	// TODO tune
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);

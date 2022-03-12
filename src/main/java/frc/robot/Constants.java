@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import frc.robot.MUX.Port;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -81,6 +82,9 @@ public final class Constants {
 		public static final int kLeftFeederPort = 10;
 		public static final int kRightFeederPort = 6;
 		public static final int kTopFeederPort = 14;
+
+		public static final Port kQueueColorSensorPort = Port.kTwo;
+		public static final Port kShooterColorSensorPort = Port.kThree;
 
 		public static final double kShooterSpeedRPM = 3520;
 		public static final int kLowerArmAngle = 170;
