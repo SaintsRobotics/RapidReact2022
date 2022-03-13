@@ -75,10 +75,9 @@ public final class Constants {
 		public static final double kDrivingGearRatio = 8.14;
 	}
 
-	// TODO update ports and speeds
 	public static final class ShooterConstants {
-		public static final int kBlackFlywheelPort = 9;
-		public static final int kGreenFlywheelPort = 62;
+		public static final int kBottomFlywheelPort = 9;
+		public static final int kTopFlywheelPort = 8;
 
 		public static final int kArmPort = 13;
 		public static final int kIntakeWheelsPort = 8;
@@ -89,8 +88,8 @@ public final class Constants {
 		public static final Port kQueueColorSensorPort = Port.kTwo;
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
-		public static final double kBlackShooterSpeedRPM = 3520;
-		public static final double kGreenShooterSpeedRPM = 3520;
+		public static final double kBottomShooterSpeedRPM = 3520;
+		public static final double kTopShooterSpeedRPM = 3520; // TODO: THIS RPM NEEDS UPDATING
 
 		public static final int kLowerArmAngle = 170;
 		public static final int kUpperArmAngle = 74;
