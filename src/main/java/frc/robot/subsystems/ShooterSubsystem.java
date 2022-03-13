@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -23,6 +24,7 @@ import frc.robot.DutyCycleAbsoluteEncoder;
 import frc.robot.MUX;
 import frc.robot.MUX.Port;
 import frc.robot.REVColorSensorV3;
+import frc.robot.REVDistanceSensor;
 import frc.robot.Utils;
 
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
@@ -38,6 +40,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	private final MUX m_MUX = new MUX();
 	private final REVColorSensorV3 m_proximitySensor = new REVColorSensorV3(m_MUX, Port.kTwo);
+	private final REVDistanceSensor m_distanceSensor = new REVDistanceSensor(m_MUX, Port.kThree);
 
 	// TODO tune
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
@@ -87,6 +90,10 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_topFeeder.set(0);
 		}
 
+		
+		// boolean to sense shooter range
+		SmartDashboard.putBoolean("In Range?", Utils.withinRange(m_distanceSensor.getDistance(), 1.5, 0.1));
+
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Shooter PID Output", pidOutput);
 			SmartDashboard.putNumber("Shooter PID velocity error", m_shooterPID.getVelocityError());
@@ -101,6 +108,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
 			SmartDashboard.putNumber("proximity", m_proximitySensor.getProximity());
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
+			SmartDashboard.putNumber("Distance from Hub", m_distanceSensor.getDistance());
 		}
 	}
 

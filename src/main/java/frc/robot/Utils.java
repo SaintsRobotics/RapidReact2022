@@ -29,4 +29,16 @@ public class Utils {
 	public static double toRPM(double ticksPerDecisecond) {
 		return ticksPerDecisecond * 600 / 2048;
 	}
+
+	/**
+	 * Returns whether a measurement is within a certain tolerance range around a desired target.
+	 * 
+	 * @param measurement The measured value to be checked.
+	 * @param target The desired value.
+	 * @param tolerance The acceptable deviation from the target.
+	 * @return Whether or not the measurement is within the acceptable range.
+	 */
+	public static boolean withinRange (double measurement, double target, double tolerance) {
+		return (measurement > target - tolerance && measurement < target + tolerance);
+	}
 }
