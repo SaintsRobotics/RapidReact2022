@@ -46,11 +46,16 @@ public class ClimberSubsystem extends SubsystemBase {
 		m_rightServo.set(m_rightSpeed > 0 ? ClimberConstants.kRightServoUnlockedPosition
 				: ClimberConstants.kRightServoLockedPosition);
 
-		if (m_leftEncoder.getAbsolutePosition() >= Constants.ClimberConstants.kLeftArmMaxValue || m_leftEncoder.getAbsolutePosition() <= Constants.ClimberConstants.kLeftArmMinValue) {
+		if (m_leftEncoder.getAbsolutePosition() < Constants.ClimberConstants.kLeftArmMaxValue && m_leftEncoder.getAbsolutePosition() > Constants.ClimberConstants.kLeftArmMinValue) {
 			m_leftClimber.set(m_leftSpeed);
 		}
-		if (m_rightEncoder.getAbsolutePosition() >= Constants.ClimberConstants.kRightArmMaxValue || m_rightEncoder.getAbsolutePosition() <= Constants.ClimberConstants.kRightArmMinValue) {
+		else {
+			m_leftClimber.set(0);
+		}
+		if (m_rightEncoder.getAbsolutePosition() < Constants.ClimberConstants.kRightArmMaxValue && m_rightEncoder.getAbsolutePosition() > Constants.ClimberConstants.kRightArmMinValue) {
 			m_rightClimber.set(m_rightSpeed);
+		} else {
+			m_rightClimber.set(0);
 		}
 
 		if (OIConstants.kTelemetry) {
