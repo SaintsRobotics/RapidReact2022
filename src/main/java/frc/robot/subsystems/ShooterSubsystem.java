@@ -47,8 +47,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
 	private final PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterP, 0, 0);
 	private final PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterP, 0, 0); // TODO: THIS PID NEEDS TUNING
-	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.65, 0);
-	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.8, 0);
+	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.3, 0);
+	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.84, 0);
 
 	private boolean m_runningIntake = false;
 	private boolean m_reversingIntake = false;
@@ -94,7 +94,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
 		if (m_bottomShooterPID.getSetpoint() > 0) {
 			m_bottomFlywheel.set(bottomPIDOutput + m_bottomFeedforward.calculate(m_bottomShooterPID.getSetpoint()));
-			m_topFlywheel.set(topPIDOutput + m_topFeedforward.calculate(m_bottomShooterPID.getSetpoint()));
+			m_topFlywheel.set(topPIDOutput + m_topFeedforward.calculate(m_topShooterPID.getSetpoint()));
 		} else {
 			m_bottomFlywheel.set(0);
 			m_topFlywheel.set(0);
