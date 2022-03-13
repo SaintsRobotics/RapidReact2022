@@ -102,20 +102,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
 		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_bottomShooterPID.getSetpoint() > 0
 				&& Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()) > 0.95
-						* ShooterConstants.kBottomShooterSpeedRPM) {
+						* ShooterConstants.kBottomShooterSpeedRPM && Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()) > 0.95
+						* ShooterConstants.kTopShooterSpeedRPM) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
 			if (isShooterPrimed()) {
 				m_shootingTimer.reset();
 			}
 
-			if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_bottomShooterPID.getSetpoint() > 0
-					&& Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()) > 0.95
-							* ShooterConstants.kTopShooterSpeedRPM) {
-				m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
-				if (isShooterPrimed()) {
-					m_shootingTimer.reset();
-				}
-			}
 		} else if (!isShooterPrimed() && m_runningIntake) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
 		} else if (!m_reversingIntake) {
@@ -210,15 +203,18 @@ public class ShooterSubsystem extends SubsystemBase {
 	 * 
 	 * @param speed Speed of the black flywheel in RPM.
 	 */
-	public void setBottomShooterSpeed(double RPM) {
-		m_bottomShooterPID.setSetpoint(RPM);
-		if (RPM == 0) {
+	public void setShooterSpeeds(double bottomTargetRPM, double topTargetRPM) {
+		m_bottomShooterPID.setSetpoint(bottomTargetRPM);
+		m_topShooterPID.setSetpoint(topTargetRPM);
+		if (bottomTargetRPM == 0) {
 			m_sideFeeders.set(0);
 		} else {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		}
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Black Target Shooter Speed", RPM);
+			SmartDashboard.putNumber("Bottom Target Shooter Speed", bottomTargetRPM);
+			SmartDashboard.putNumber("Top Target Shooter Speed", topTargetRPM);
+			
 		}
 	}
 
@@ -227,17 +223,6 @@ public class ShooterSubsystem extends SubsystemBase {
 	 * 
 	 * @param speed Speed of the roller in RPM.
 	 */
-	public void setTopShooterSpeed(double RPM) {
-		m_topShooterPID.setSetpoint(RPM);
-		if (RPM == 0) {
-			m_sideFeeders.set(0);
-		} else {
-			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
-		}
-		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Green Target Shooter Speed", RPM);
-		}
-	}
 
 	private boolean isShooterPrimed() {
 		return m_queueColorSensor.getProximity() >= 180;

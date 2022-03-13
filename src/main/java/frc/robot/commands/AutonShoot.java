@@ -28,15 +28,14 @@ public class AutonShoot extends CommandBase {
 	@Override
 	public void execute() {
 		timer += 0.02;
-		m_subsystem.setBottomShooterSpeed(ShooterConstants.kBottomShooterSpeedRPM);
-		m_subsystem.setTopShooterSpeed(ShooterConstants.kTopShooterSpeedRPM);
+		m_subsystem.setShooterSpeeds(ShooterConstants.kBottomShooterSpeedRPM, ShooterConstants.kTopShooterSpeedRPM);
+	
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		m_subsystem.setBottomShooterSpeed(0);
-		m_subsystem.setTopShooterSpeed(0);
+		m_subsystem.setShooterSpeeds(0, 0);
 	}
 
 	// Returns true when the command should end.
