@@ -155,7 +155,6 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 
 		return new SequentialCommandGroup(
-				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall0", true),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", false),
 						new AutonIntake(m_shooterSubsystem)),
