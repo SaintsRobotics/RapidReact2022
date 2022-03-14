@@ -36,5 +36,4 @@ public class REV2mDistanceSensor {
         m_mux.switchToPort(m_port);
         return m_sensor.getRange(Unit.kMillimeters) / 1000;
     }
-
 }
