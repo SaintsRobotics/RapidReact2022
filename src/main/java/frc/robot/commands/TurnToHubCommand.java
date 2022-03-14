@@ -28,8 +28,11 @@ public class TurnToHubCommand extends CommandBase {
     double xHubDisplacement = Math.abs(xPoseRobot - Constants.FieldConstants.kHubX);
     double yHubDisplacement = Math.abs(yPoseRobot - Constants.FieldConstants.kHubY);
     
-    double targetHeading = 360 - Math.toDegrees(Math.atan(xHubDisplacement/yHubDisplacement));
-
+    double targetHeading;
+    if(xPoseRobot > Constants.FieldConstants.kHubX && yPoseRobot > Constants.FieldConstants.kHubY) targetHeading = 180 + Math.toDegrees(Math.atan(xHubDisplacement/yHubDisplacement));
+    else if(xPoseRobot < Constants.FieldConstants.kHubX && yPoseRobot > Constants.FieldConstants.kHubY) targetHeading = 180 - Math.toDegrees(Math.atan(xHubDisplacement/yHubDisplacement));
+    else if(xPoseRobot < Constants.FieldConstants.kHubX && yPoseRobot < Constants.FieldConstants.kHubY) targetHeading = 90 - Math.toDegrees(Math.atan(xHubDisplacement/yHubDisplacement));
+    else targetHeading = 360 - Math.toDegrees(Math.atan(xHubDisplacement/yHubDisplacement));
     m_moveCommand.withAbsoluteHeading(targetHeading);
 
     m_moveCommand.schedule();
