@@ -165,8 +165,9 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putBoolean("Shooter Is Blue", shooterIsBlue);
 			SmartDashboard.putBoolean("Shooter Is Red", shooterIsRed);
 
+			SmartDashboard.putNumber("Distance Sensor Meters", m_distanceSensor.getDistance());
+
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
-			SmartDashboard.putNumber("Distance from Hub", m_distanceSensor.getDistance());
 		}
 	}
 
