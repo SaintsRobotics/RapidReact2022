@@ -88,8 +88,8 @@ public final class Constants {
 		public static final Port kQueueColorSensorPort = Port.kTwo;
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
-		public static final double kBottomShooterSpeedRPM = 1800;
-		public static final double kTopShooterSpeedRPM = 5300; // TODO: THIS RPM NEEDS UPDATING
+		public static final double kBottomShooterSpeedRPM = 2400;
+		public static final double kTopShooterSpeedRPM = 5100; // TODO: THIS RPM NEEDS UPDATING
 
 		public static final int kLowerArmAngle = 170;
 		public static final int kUpperArmAngle = 74;
@@ -103,8 +103,8 @@ public final class Constants {
 
 		public static final int kRedThreshold = 300;
 		public static final int kBlueThreshold = 300;
-		public static final double kBottomShooterP = 0.0005;
-		public static final double kTopShooterP = 0.0005; //0.000015;
+		public static final double kBottomShooterP = 0.0006;
+		public static final double kTopShooterP = 0.00025; //0.000015;
 	}
 
 	/** Constants for the climber. */
@@ -132,6 +132,6 @@ public final class Constants {
 		public static final int kOperatorControllerPort = 1;
 		public static final double kControllerDeadband = 0.11;
 
-		public static final boolean kTelemetry = true;
+		public static final boolean kTelemetry = false;
 	}
 }

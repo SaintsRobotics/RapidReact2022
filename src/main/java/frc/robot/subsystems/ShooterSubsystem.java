@@ -46,13 +46,15 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
 	private final PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterP, 0, 0);
-	private final PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterP, 0, 0); // TODO: THIS PID NEEDS TUNING
-	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.3, 0);
-	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.84, 0);
+	private final PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterP, 0, 0); // TODO: THIS
+																											// PID NEEDS
+																											// TUNING
+	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.35, 0);
+	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.8, 0);
 
 	private boolean m_runningIntake = false;
 	private boolean m_reversingIntake = false;
-	private Timer m_shootingTimer = new Timer();
+	private Timer m_feederTimer = new Timer();
 
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
@@ -66,17 +68,18 @@ public class ShooterSubsystem extends SubsystemBase {
 		leftFeeder.setInverted(true);
 		rightFeeder.setInverted(false);
 		m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
-		m_bottomShooterPID.setTolerance(50);
-		m_topShooterPID.setTolerance(50);
+		m_bottomShooterPID.setTolerance(0.05 * ShooterConstants.kTopShooterSpeedRPM, 100 / 0.02);
+		m_topShooterPID.setTolerance(0.05 * ShooterConstants.kBottomShooterSpeedRPM, 100 / 0.02);
 		m_armPID.setTolerance(2);
 
-		m_shootingTimer.start();
+		m_feederTimer.start();
 	}
 
 	// top feeder run for how long?
 	@Override
 	public void periodic() {
-		double bottomPIDOutput = m_bottomShooterPID.calculate(Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
+		double bottomPIDOutput = m_bottomShooterPID
+				.calculate(Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
 		double topPIDOutput = m_topShooterPID.calculate(Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
 		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
@@ -100,18 +103,18 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_topFlywheel.set(0);
 		}
 
-		if ((isShooterPrimed() || m_shootingTimer.get() < 2) && m_bottomShooterPID.getSetpoint() > 0
-				&& Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()) > 0.95
-						* ShooterConstants.kBottomShooterSpeedRPM && Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()) > 0.95
-						* ShooterConstants.kTopShooterSpeedRPM) {
+		if (m_feederTimer.get() > 0) {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
-			if (isShooterPrimed()) {
-				m_shootingTimer.reset();
+			if (m_feederTimer.get() > 3) {
+				m_feederTimer.stop();
+				m_feederTimer.reset();
 			}
-
-		} else if (!isShooterPrimed() && m_runningIntake) {
+		} else if (m_bottomShooterPID.atSetpoint() && m_topShooterPID.atSetpoint() && isShooterPrimed()
+				&& m_bottomShooterPID.getSetpoint() > 0) {
+			m_feederTimer.start();
+		} else if (!isShooterPrimed() && m_runningIntake) { // if we're trying to intake - prime the first ball
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
-		} else if (!m_reversingIntake) {
+		} else if (!m_reversingIntake) { // as long as we're not trying to spit out the wrong color, set to zero
 			m_topFeeder.set(0);
 		}
 
@@ -124,6 +127,9 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Top Shooter Feedforward Output",
 					m_topFeedforward.calculate(m_topShooterPID.getSetpoint()));
 
+			SmartDashboard.putBoolean("top at setpoint", m_topShooterPID.atSetpoint());
+			SmartDashboard.putBoolean("bottom at setpoint", m_bottomShooterPID.atSetpoint());
+
 			SmartDashboard.putNumber("Bottom Shooter Power", m_bottomFlywheel.get());
 			SmartDashboard.putNumber("Top Shooter Power", m_topFlywheel.get());
 
@@ -132,6 +138,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
 			SmartDashboard.putNumber("Bottom Shooter RPM Error", m_bottomShooterPID.getPositionError());
 			SmartDashboard.putNumber("Top Shooter RPM Error", m_topShooterPID.getPositionError());
+
+			SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
 
 			SmartDashboard.putNumber("Side Feeder Speed", m_sideFeeders.get());
 			SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
@@ -214,7 +222,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Bottom Target Shooter Speed", bottomTargetRPM);
 			SmartDashboard.putNumber("Top Target Shooter Speed", topTargetRPM);
-			
+
 		}
 	}
 
@@ -227,4 +235,13 @@ public class ShooterSubsystem extends SubsystemBase {
 	private boolean isShooterPrimed() {
 		return m_queueColorSensor.getProximity() >= 180;
 	}
+
+	public void topFeederOn() {
+		m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
+	}
+
+	public void topFeederOff() {
+		m_topFeeder.set(0);
+	}
+
 }
