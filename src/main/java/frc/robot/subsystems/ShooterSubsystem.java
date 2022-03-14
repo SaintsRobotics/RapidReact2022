@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -25,7 +24,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.DutyCycleAbsoluteEncoder;
 import frc.robot.MUX;
 import frc.robot.REVColorSensorV3;
-import frc.robot.REVDistanceSensor;
+import frc.robot.REV2mDistanceSensor;
 import frc.robot.Utils;
 
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
@@ -45,6 +44,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			ShooterConstants.kQueueColorSensorPort);
 	private final REVColorSensorV3 m_shooterColorSensor = new REVColorSensorV3(m_MUX,
 			ShooterConstants.kShooterColorSensorPort);
+	private final REV2mDistanceSensor m_distanceSensor = new REV2mDistanceSensor(m_MUX, ShooterConstants.kDistanceSensorPort);
 
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
 	private final PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterP, 0, 0);
