@@ -88,6 +88,8 @@ public class ShooterSubsystem extends SubsystemBase {
 		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean shooterIsRed = m_shooterColorSensor.getRed() > ShooterConstants.kRedThreshold;
 
+		final double distanceSensorMeters = m_distanceSensor.getDistance();
+
 		// Checks if the color of ball is opposite that of the alliance.
 		if ((queueIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
 				(queueIsRed && DriverStation.getAlliance() == Alliance.Blue) ||
@@ -121,10 +123,8 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		
-		// boolean to sense shooter range
-		double distanceFromHub = m_distanceSensor.getDistance();
-		if (distanceFromHub < 0) {
-			SmartDashboard.putBoolean("In Range?", Utils.withinRange(distanceFromHub, 0.45, 0.2));
+		if (distanceSensorMeters < 0) {
+			SmartDashboard.putBoolean("In Range?", Utils.withinRange(distanceSensorMeters, 0.45, 0.2));
 		}
 		SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
 
@@ -165,7 +165,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putBoolean("Shooter Is Blue", shooterIsBlue);
 			SmartDashboard.putBoolean("Shooter Is Red", shooterIsRed);
 
-			SmartDashboard.putNumber("Distance Sensor Meters", m_distanceSensor.getDistance());
+			SmartDashboard.putNumber("Distance Sensor Meters", distanceSensorMeters);
 
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
