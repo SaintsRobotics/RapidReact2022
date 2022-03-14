@@ -19,11 +19,14 @@ public class AutonShoot extends CommandBase {
 		addRequirements(subsystem);
 		m_subsystem = subsystem;
 	}
+	@Override
+	public void initialize() {
+		m_timer.reset();
+	}
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		m_timer.reset();
 		m_timer.start();
 		m_subsystem.setShooterSpeed(ShooterConstants.kShooterSpeedRPM);
 	}
