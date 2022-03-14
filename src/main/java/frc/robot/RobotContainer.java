@@ -155,10 +155,13 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 
 		return new SequentialCommandGroup(
+
+				new AutonShoot(m_shooterSubsystem),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationThreeBall1", true),
 						new AutonIntake(m_shooterSubsystem)),
-				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationThreeBall2", false),
+				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationThreeBall2", false),
+						new AutonIntake(m_shooterSubsystem)),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
 				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationThreeBall3", false),
 				new AutonShoot(m_shooterSubsystem));
