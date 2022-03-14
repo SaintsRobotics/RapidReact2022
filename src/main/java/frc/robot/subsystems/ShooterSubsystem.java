@@ -44,7 +44,8 @@ public class ShooterSubsystem extends SubsystemBase {
 			ShooterConstants.kQueueColorSensorPort);
 	private final REVColorSensorV3 m_shooterColorSensor = new REVColorSensorV3(m_MUX,
 			ShooterConstants.kShooterColorSensorPort);
-	private final REV2mDistanceSensor m_distanceSensor = new REV2mDistanceSensor(m_MUX, ShooterConstants.kDistanceSensorPort);
+	private final REV2mDistanceSensor m_distanceSensor = new REV2mDistanceSensor(m_MUX,
+			ShooterConstants.kDistanceSensorPort);
 
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
 	private final PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterP, 0, 0);
@@ -122,10 +123,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_topFeeder.set(0);
 		}
 
-		
-		if (distanceSensorMeters < 0) {
-			SmartDashboard.putBoolean("In Range?", Utils.withinRange(distanceSensorMeters, 0.45, 0.2));
-		}
 		SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
 
 		if (OIConstants.kTelemetry) {
@@ -166,6 +163,8 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putBoolean("Shooter Is Red", shooterIsRed);
 
 			SmartDashboard.putNumber("Distance Sensor Meters", distanceSensorMeters);
+			SmartDashboard.putBoolean("Within Shooting Range", Utils.withinRange(distanceSensorMeters,
+					ShooterConstants.kShootingDistanceMeters, ShooterConstants.kShootingDistanceToleranceMeters));
 
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}

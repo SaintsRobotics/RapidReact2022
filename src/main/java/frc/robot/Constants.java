@@ -66,9 +66,6 @@ public final class Constants {
 		 * TODO update value with new robot.
 		 */
 		public static final double kTurningStopTime = 0.2;
-
-		public static final double kShootingDistance = 30;
-		public static final double kDistanceUncertainty = 10;
 	}
 
 	public static final class ModuleConstants {
@@ -108,7 +105,10 @@ public final class Constants {
 		public static final int kRedThreshold = 300;
 		public static final int kBlueThreshold = 300;
 		public static final double kBottomShooterP = 0.0006;
-		public static final double kTopShooterP = 0.00025; //0.000015;
+		public static final double kTopShooterP = 0.00025; // 0.000015;
+
+		public static final double kShootingDistanceMeters = 0.2;
+		public static final double kShootingDistanceToleranceMeters = 0.05;
 	}
 
 	/** Constants for the climber. */
