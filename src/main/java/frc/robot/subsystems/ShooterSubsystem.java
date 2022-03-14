@@ -92,7 +92,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
 		
 		// boolean to sense shooter range
-		SmartDashboard.putBoolean("In Range?", Utils.withinRange(m_distanceSensor.getDistance(), 1.5, 0.1));
+		double distanceFromHub = m_distanceSensor.getDistance();
+		if (distanceFromHub < 0) {
+			SmartDashboard.putBoolean("In Range?", Utils.withinRange(distanceFromHub, 0.45, 0.2));
+		}
+
 
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Shooter PID Output", pidOutput);

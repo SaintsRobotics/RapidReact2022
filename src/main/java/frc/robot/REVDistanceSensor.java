@@ -16,6 +16,7 @@ public class REVDistanceSensor {
         m_port = port;
         m_mux.switchToPort(m_port);
 		m_sensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);
+        m_sensor.setAutomaticMode(true);
     }
 
     /**
