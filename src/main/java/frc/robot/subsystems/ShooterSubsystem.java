@@ -125,6 +125,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
 		SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
 
+		SmartDashboard.putBoolean("Within Shooting Range", Utils.atSetpoint(distanceSensorMeters,
+				ShooterConstants.kShootingDistanceMeters, ShooterConstants.kShootingDistanceToleranceMeters));
+
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Bottom Shooter PID Output", bottomPIDOutput);
 			SmartDashboard.putNumber("Top Shooter PID Output", topPIDOutput);
@@ -163,8 +166,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putBoolean("Shooter Is Red", shooterIsRed);
 
 			SmartDashboard.putNumber("Distance Sensor Meters", distanceSensorMeters);
-			SmartDashboard.putBoolean("Within Shooting Range", Utils.atSetpoint(distanceSensorMeters,
-					ShooterConstants.kShootingDistanceMeters, ShooterConstants.kShootingDistanceToleranceMeters));
 
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
