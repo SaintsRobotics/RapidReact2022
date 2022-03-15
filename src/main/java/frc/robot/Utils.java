@@ -31,14 +31,15 @@ public class Utils {
 	}
 
 	/**
-	 * Returns whether a measurement is within a certain tolerance range around a desired target.
+	 * Returns whether a measurement is within acceptable tolerance of a setpoint
 	 * 
-	 * @param measurement The measured value to be checked.
-	 * @param target The desired value.
-	 * @param tolerance The acceptable deviation from the target.
-	 * @return Whether or not the measurement is within the acceptable range.
+	 * @param measurement The measurement value.
+	 * @param setpoint    The desired value.
+	 * @param tolerance   The acceptable deviation from the setpoint.
+	 * @return Whether the measurement is within the acceptable tolerance the
+	 *         setpoint.
 	 */
-	public static boolean withinRange (double measurement, double target, double tolerance) {
-		return (measurement > target - tolerance && measurement < target + tolerance);
+	public static boolean atSetpoint(double measurement, double setpoint, double tolerance) {
+		return Math.abs(setpoint - measurement) < tolerance;
 	}
 }
