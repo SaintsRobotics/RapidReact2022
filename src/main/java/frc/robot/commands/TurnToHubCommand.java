@@ -28,6 +28,7 @@ public class TurnToHubCommand extends CommandBase {
     double xHubDisplacement = Math.abs(xPoseRobot - Constants.FieldConstants.kHubX);
     double yHubDisplacement = Math.abs(yPoseRobot - Constants.FieldConstants.kHubY);
     
+    
     double targetHeading;
     if(xPoseRobot > Constants.FieldConstants.kHubX && yPoseRobot > Constants.FieldConstants.kHubY) targetHeading = 180 + Math.toDegrees(Math.atan(xHubDisplacement/yHubDisplacement));
     else if(xPoseRobot < Constants.FieldConstants.kHubX && yPoseRobot > Constants.FieldConstants.kHubY) targetHeading = 180 - Math.toDegrees(Math.atan(xHubDisplacement/yHubDisplacement));
