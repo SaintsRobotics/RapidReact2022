@@ -11,9 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.ClimberConstants;
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.*;
 
 /** Subsystem that controls the climber. */
 public class ClimberSubsystem extends SubsystemBase {
@@ -46,17 +44,28 @@ public class ClimberSubsystem extends SubsystemBase {
 		m_rightServo.set(m_rightSpeed > 0 ? ClimberConstants.kRightServoUnlockedPosition
 				: ClimberConstants.kRightServoLockedPosition);
 
-		if (m_leftEncoder.getAbsolutePosition() < Constants.ClimberConstants.kLeftArmMaxValue && m_leftEncoder.getAbsolutePosition() > Constants.ClimberConstants.kLeftArmMinValue) {
-			m_leftClimber.set(m_leftSpeed);
-		}
-		else {
-			m_leftClimber.set(0);
-		}
-		if (m_rightEncoder.getAbsolutePosition() < Constants.ClimberConstants.kRightArmMaxValue && m_rightEncoder.getAbsolutePosition() > Constants.ClimberConstants.kRightArmMinValue) {
-			m_rightClimber.set(m_rightSpeed);
-		} else {
-			m_rightClimber.set(0);
-		}
+		m_leftClimber.set(m_leftSpeed);
+		m_rightClimber.set(m_rightSpeed);
+		// if (m_leftEncoder.getAbsolutePosition() <
+		// Constants.ClimberConstants.kLeftArmMaxValue &&
+		// m_leftEncoder.getAbsolutePosition() >
+		// Constants.ClimberConstants.kLeftArmMinValue) {
+		// m_leftClimber.set(m_leftSpeed);
+		// }
+		// else {
+		// m_leftClimber.set(0);
+		// }
+		// if (m_rightEncoder.getAbsolutePosition() <
+		// Constants.ClimberConstants.kRightArmMaxValue &&
+		// m_rightEncoder.getAbsolutePosition() >
+		// Constants.ClimberConstants.kRightArmMinValue) {
+		// m_rightClimber.set(m_rightSpeed);
+		// } else {
+		// m_rightClimber.set(0);
+		// }
+
+		SmartDashboard.putNumber("Climber Position Left", m_leftEncoder.getPosition());
+		SmartDashboard.putNumber("Climber Position Right", m_rightEncoder.getPosition());
 
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Climber Speed Desired Left", m_leftSpeed);
@@ -65,8 +74,6 @@ public class ClimberSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Climber Speed Right", m_rightClimber.get());
 			SmartDashboard.putNumber("Climber Servo Position Left", leftServoPosition);
 			SmartDashboard.putNumber("Climber Servo Position Right", rightServoPosition);
-			SmartDashboard.putNumber("Climber Position Left", m_leftEncoder.getPosition());
-			SmartDashboard.putNumber("Climber Position Right", m_rightEncoder.getPosition());
 		}
 	}
 

@@ -126,11 +126,10 @@ public final class Constants {
 
 		public static final int kLeftEncoderPort = 21;
 		public static final int kRightEncoderPort = 22;
-		// TODO fix these constants after testing with climber arms
-		public static final int kLeftArmMaxValue = 10;
-		public static final int kRightArmMaxValue = 10;
-		public static final int kLeftArmMinValue = 1;
-		public static final int kRightArmMinValue = 1;
+		public static final int kLeftArmHigh = -1191;
+		public static final int kRightArmHigh = 1121;
+		public static final int kLeftArmLow = -113;
+		public static final int kRightArmLow = -44;
 
 		public static final double kServoTolerance = 0.05;
 	}
