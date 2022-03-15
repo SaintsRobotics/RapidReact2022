@@ -30,9 +30,9 @@ public class AlignClimberCommand extends CommandBase {
 
 	@Override
 	public void initialize() {
-		final double center = (m_subsystem.getLeftPose() + m_subsystem.getRightPose()) / 2;
-		m_leftPID.setSetpoint(center);
-		m_rightPID.setSetpoint(center);
+		double lower = Math.min(m_subsystem.getLeftPose(), m_subsystem.getRightPose());
+		m_leftPID.setSetpoint(lower);
+		m_rightPID.setSetpoint(lower);
 	}
 
 	@Override
