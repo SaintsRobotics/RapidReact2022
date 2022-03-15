@@ -148,8 +148,13 @@ public class RobotContainer {
 				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
 
 		// Aligns the climber when A is held.
-		new JoystickButton(m_operatorController, Button.kA.value)
+		new JoystickButton(m_operatorController, Button.kX.value)
 				.whenHeld(new AlignClimberCommand(m_climberSubsystem));
+				
+		new JoystickButton(m_operatorController, Button.kA.value)
+				.whileHeld(() -> m_shooterSubsystem.topFeederOn())
+				.whenReleased(() -> m_shooterSubsystem.topFeederOff());
+
 	}
 
 	/**
