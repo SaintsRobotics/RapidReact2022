@@ -23,8 +23,8 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.DutyCycleAbsoluteEncoder;
 import frc.robot.MUX;
-import frc.robot.REVColorSensorV3;
 import frc.robot.REV2mDistanceSensor;
+import frc.robot.REVColorSensorV3;
 import frc.robot.Utils;
 
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
