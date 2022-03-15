@@ -4,7 +4,12 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Limelight;
@@ -14,12 +19,16 @@ public class GetBallCommand extends CommandBase {
 
 	// TODO: tune pid
 	private final PIDController m_rotPid = new PIDController(0.03, 0, 0);
+	private NetworkTable table;
+	private UsbCamera camera;
+	private VideoMode videoMode;
 	private MoveCommand m_moveCommand;
 	private final int m_pipeline;
 	private static double COLLECTION_TOLERANCE = 0.45;
 	private static double MOUNTING_ANGLE_DEGREES = -10;
 	private static double LIMELIGHT_HEIGHT = 0.5;
 	private static double BALL_CENTER_HEIGHT = 0.1;
+
 
 	/**
 	 * Creates a new {@link GetBallCommand}.
@@ -31,6 +40,21 @@ public class GetBallCommand extends CommandBase {
 		m_moveCommand = moveCommand;
 		m_pipeline = pipeline;
 		m_rotPid.setTolerance(0.1);
+
+		//image related stuff
+		NetworkTableInstance.getDefault().startClient(); //
+		table = NetworkTableInstance.getDefault().getTable("limelight");
+		
+		// usb camera
+		camera = CameraServer.startAutomaticCapture();
+		//camera.setResolution(640, 360); //only works for 640 x 360
+		videoMode = new VideoMode(PixelFormat.kYUYV, 800, 448, 30);
+		//set DriverStation resolution to:
+		//320 x 240 for ~15 fps
+		//160 x 120 for ~20 fps
+		camera.setFPS(30);
+		camera.setVideoMode(videoMode);
+
 	}
 
 	@Override
@@ -65,5 +89,9 @@ public class GetBallCommand extends CommandBase {
 		// converted
 		// from degrees
 		// to radians
+	}
+
+	private void getBallImage() {
+		table.getEntry("filename");		
 	}
 }
