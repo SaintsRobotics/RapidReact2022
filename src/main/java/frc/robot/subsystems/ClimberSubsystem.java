@@ -35,9 +35,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		final double leftServoPosition = m_leftServo.get();
-		final double rightServoPosition = m_rightServo.get();
-
 		// Unlocks the servos before raising the left climber.
 		m_leftServo.set(m_leftSpeed > 0 ? ClimberConstants.kLeftServoUnlockedPosition
 				: ClimberConstants.kLeftServoLockedPosition);
@@ -72,8 +69,8 @@ public class ClimberSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Climber Speed Desired Right", m_rightSpeed);
 			SmartDashboard.putNumber("Climber Speed Left", m_leftClimber.get());
 			SmartDashboard.putNumber("Climber Speed Right", m_rightClimber.get());
-			SmartDashboard.putNumber("Climber Servo Position Left", leftServoPosition);
-			SmartDashboard.putNumber("Climber Servo Position Right", rightServoPosition);
+			SmartDashboard.putNumber("Climber Servo Position Left", m_leftServo.get());
+			SmartDashboard.putNumber("Climber Servo Position Right", m_rightServo.get());
 		}
 	}
 
