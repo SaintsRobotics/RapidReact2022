@@ -87,18 +87,18 @@ public class RobotContainer {
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
 
-		final double leftClimbSpeed = -Utils
+		final DoubleSupplier leftClimbSpeed = () -> -Utils
 				.oddSquare(MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband))
 				* 0.5;
-		final double rightClimbSpeed = -Utils
+		final DoubleSupplier rightClimbSpeed = () -> -Utils
 				.oddSquare(MathUtil.applyDeadband(m_operatorController.getRightY(), OIConstants.kControllerDeadband))
 				* 0.5;
 
 		// Allows for independent control of climbers when enabled in test mode.
 		// Otherwise climbers are controlled together.
 		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> m_climberSubsystem.setSpeed(
-				leftClimbSpeed,
-				DriverStation.isTest() ? rightClimbSpeed : leftClimbSpeed),
+				leftClimbSpeed.getAsDouble(),
+				DriverStation.isTest() ? rightClimbSpeed.getAsDouble() : leftClimbSpeed.getAsDouble()),
 				m_climberSubsystem));
 	}
 
