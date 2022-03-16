@@ -86,12 +86,19 @@ public class RobotContainer {
 		Limelight.setCameraMode(1);
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
+
+		final double leftClimbSpeed = -Utils
+				.oddSquare(MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband))
+				* 0.5;
+		final double rightClimbSpeed = -Utils
+				.oddSquare(MathUtil.applyDeadband(m_operatorController.getRightY(), OIConstants.kControllerDeadband))
+				* 0.5;
+
+		// Allows for independent control of climbers when enabled in test mode.
+		// Otherwise climbers are controlled together.
 		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> m_climberSubsystem.setSpeed(
-				-Utils.oddSquare(
-						MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband)) * 0.5,
-				-Utils.oddSquare(
-						MathUtil.applyDeadband(m_operatorController.getRightY(), OIConstants.kControllerDeadband))
-						* 0.5),
+				leftClimbSpeed,
+				DriverStation.isTest() ? rightClimbSpeed : leftClimbSpeed),
 				m_climberSubsystem));
 	}
 
