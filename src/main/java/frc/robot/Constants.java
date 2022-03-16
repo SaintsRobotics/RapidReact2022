@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import frc.robot.MUX.Port;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -75,23 +76,35 @@ public final class Constants {
 	}
 
 	public static final class ShooterConstants {
-		public static final int kFlywheelPort = 9;
+		public static final int kBottomFlywheelPort = 9;
+		public static final int kTopFlywheelPort = 23;
+
 		public static final int kArmPort = 13;
 		public static final int kIntakeWheelsPort = 8;
 		public static final int kLeftFeederPort = 10;
 		public static final int kRightFeederPort = 6;
 		public static final int kTopFeederPort = 14;
 
-		public static final double kShooterSpeedRPM = 3520;
-		public static final int kLowerArmAngle = 48;
-		public static final int kUpperArmAngle = 310;
+		public static final Port kQueueColorSensorPort = Port.kTwo;
+		public static final Port kShooterColorSensorPort = Port.kThree;
+
+		public static final double kBottomShooterSpeedRPM = 2200;
+		public static final double kTopShooterSpeedRPM = 5000; // TODO: THIS RPM NEEDS UPDATING
+
+		public static final int kLowerArmAngle = 50;
+		public static final int kUpperArmAngle = -50;
 		public static final double kIntakeSpeed = 0.7;
 		public static final double kTopFeederSpeedSlow = 0.1;
 		public static final double kTopFeederSpeedFast = 1;
-		public static final double kSideFeederSpeed = 0.4;
+		public static final double kSideFeederSpeed = 0.6;
 		public static final boolean kIntakeReversed = true;
 		public static final boolean kLeftFeederReversed = true;
 		public static final boolean kRightFeederReversed = false;
+
+		public static final int kRedThreshold = 300;
+		public static final int kBlueThreshold = 300;
+		public static final double kBottomShooterP = 0.0006;
+		public static final double kTopShooterP = 0.00025; //0.000015;
 	}
 
 	/** Constants for the climber. */
@@ -106,9 +119,9 @@ public final class Constants {
 		public static final boolean kRightArmReversed = false;
 
 		public static final double kLeftServoLockedPosition = 1;
-		public static final double kLeftServoUnlockedPosition = 0.2;
+		public static final double kLeftServoUnlockedPosition = 0.5;
 
-		public static final double kRightServoLockedPosition = 0.3;
+		public static final double kRightServoLockedPosition = 0.5;
 		public static final double kRightServoUnlockedPosition = 1;
 
 		public static final double kServoDeadband = 0.05;
