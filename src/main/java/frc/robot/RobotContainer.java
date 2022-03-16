@@ -87,8 +87,11 @@ public class RobotContainer {
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
 		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> m_climberSubsystem.setSpeed(
-				-MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband) * 0.5,
-				-MathUtil.applyDeadband(m_operatorController.getRightY(), OIConstants.kControllerDeadband) * 0.5),
+				-Utils.oddSquare(
+						MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband)) * 0.5,
+				-Utils.oddSquare(
+						MathUtil.applyDeadband(m_operatorController.getRightY(), OIConstants.kControllerDeadband))
+						* 0.5),
 				m_climberSubsystem));
 	}
 
