@@ -63,7 +63,7 @@ public class PathWeaverCommand extends CommandBase {
 				new TrapezoidProfile.Constraints(Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 2.6));
 		rotPID.enableContinuousInput(-Math.PI, Math.PI);
 
-		// TODO this should require the subsystem but that breaks the autonomous routine
+		// This doesn't require the subsystem because PathWeaverCommand requires it.
 		m_command = new SwerveControllerCommand(
 				m_trajectory,
 				m_subsystem::getPose,
