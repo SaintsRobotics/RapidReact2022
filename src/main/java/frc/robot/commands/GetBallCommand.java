@@ -66,7 +66,7 @@ public class GetBallCommand extends CommandBase {
 
 		double distance = getDistance();
 
-		m_moveCommand.withRotSpeedSupplier(() -> m_rotPid.calculate(Limelight.getX(), 0)).withRobotRelativeX(distance)
+		m_moveCommand.withRotSpeedSupplier(() -> m_rotPid.calculate(SmartDashboard.getNumber("Smart Ball x", 0), 0)).withRobotRelativeX(distance)
 				.schedule();
 	}
 

@@ -106,7 +106,7 @@ public class RobotContainer {
 		// Aims at the color of ball that matches the alliance color while the B button
 		// is held.
 		new JoystickButton(m_driveController, Button.kB.value)
-				.whenHeld(new LimelightAimingCommand(m_aimingMoveCommand,
+				.whenHeld(new GetBallCommand(m_aimingMoveCommand,
 						DriverStation.getAlliance() == Alliance.Blue ? 1 : 2));
 
 		// Toggles the shooter when Y button is pressed.
