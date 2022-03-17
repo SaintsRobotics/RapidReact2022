@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Class to access the limelight through network tables. */
 public final class Limelight {

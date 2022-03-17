@@ -11,6 +11,7 @@ import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Limelight;
 
@@ -79,12 +80,12 @@ public class GetBallCommand extends CommandBase {
 	@Override
 	public boolean isFinished() {
 		return Math.abs(getDistance()) < COLLECTION_TOLERANCE
-				&& Math.abs(m_rotPid.calculate(Limelight.getX(), 0)) < 0.03;
+				&& Math.abs(m_rotPid.calculate(SmartDashboard.getNumber("Smart Ball x", 0), 0)) < 0.03;
 	}
 
 	public double getDistance() {
 		return (BALL_CENTER_HEIGHT - LIMELIGHT_HEIGHT)
-				/ (Math.tan((MOUNTING_ANGLE_DEGREES + Limelight.getY()) * Math.PI / 180)); // units in
+				/ (Math.tan((MOUNTING_ANGLE_DEGREES + SmartDashboard.getNumber("Smart Ball y", 0)) * Math.PI / 180)); // units in
 		// meters,
 		// converted
 		// from degrees
