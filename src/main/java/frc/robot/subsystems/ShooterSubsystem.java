@@ -123,18 +123,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_topFeeder.set(0);
 		}
 
-		SmartDashboard.putNumber("Bottom Shooter PID Output", bottomPIDOutput);
-		SmartDashboard.putNumber("Top Shooter PID Output", topPIDOutput);
-
-		SmartDashboard.putBoolean("top at setpoint", m_topShooterPID.atSetpoint());
-		SmartDashboard.putBoolean("bottom at setpoint", m_bottomShooterPID.atSetpoint());
-
-		SmartDashboard.putNumber("Bottom Shooter RPM", Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
-		SmartDashboard.putNumber("Top Shooter RPM", Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
-
-		SmartDashboard.putNumber("Bottom Shooter RPM Error", m_bottomShooterPID.getPositionError());
-		SmartDashboard.putNumber("Top Shooter RPM Error", m_topShooterPID.getPositionError());
-
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Bottom Shooter PID Output", bottomPIDOutput);
 			SmartDashboard.putNumber("Top Shooter PID Output", topPIDOutput);
