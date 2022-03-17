@@ -4,7 +4,15 @@
 
 package frc.robot;
 
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -17,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
-
+	private Thread m_visionThread;
 	private RobotContainer m_robotContainer;
 
 	/**
@@ -27,6 +35,46 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		m_robotContainer = new RobotContainer();
+		CameraServer.startAutomaticCapture();
+
+		m_visionThread = new Thread(
+			() -> {
+
+				//Set up the camera server
+				UsbCamera camera = CameraServer.startAutomaticCapture();
+
+				//Set the resolution
+				camera.setResolution(640, 480);
+
+				//Set up the Sink for the video
+				CvSink cvSink = CameraServer.getVideo();
+
+				//Create the matrix for the image
+				Mat mat = new Mat();
+
+				//Create the parallel thread that manages video capturing.
+				while (!Thread.interrupted()) {
+
+					//Print out an error message if the frame rate is too low. Restart loop if this is so
+					if (cvSink.grabFrame(mat) == 0) {
+						System.out.println("Frame not found!");
+						continue;
+					}
+
+					//Preprocess the image
+					Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2GRAY);
+					Imgproc.GaussianBlur(mat, mat, new Size(17, 17), 8);
+
+					//Identify the circles
+					Imgproc.HoughCircles(mat, mat, Imgproc.HOUGH_GRADIENT, 1.2, 100, 100, 30, 75, 400);
+
+					//Put the values to Smart Dashboard
+					SmartDashboard.putNumber("Smart Ball X", mat.get(0, 0)[0]);
+					SmartDashboard.putNumber("Smart Ball y", mat.get(0, 0)[1]);
+
+				}
+			}
+		);
 	}
 
 	/**
