@@ -23,6 +23,8 @@ public final class Limelight {
 	 * @return Horizontal offset from -29.8 to 29.8 degrees.
 	 */
 	public static double getX() {
+
+		//return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ball detect x angle").getDouble(0);
 		return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
 	}
 
@@ -32,6 +34,7 @@ public final class Limelight {
 	 * @return Vertical offset from -24.85 to 24.85 degrees.
 	 */
 	public static double getY() {
+		//return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ball detect y angle").getDouble(0);
 		return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
 	}
 
