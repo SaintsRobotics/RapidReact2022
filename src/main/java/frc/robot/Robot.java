@@ -69,8 +69,13 @@ public class Robot extends TimedRobot {
 					Imgproc.HoughCircles(mat, mat, Imgproc.HOUGH_GRADIENT, 1.2, 100, 100, 30, 75, 400);
 
 					//Put the values to Smart Dashboard
-					SmartDashboard.putNumber("Smart Ball X", Math.atan(mat.get(0, 0)[0] - 320));
-					SmartDashboard.putNumber("Smart Ball y", Math.atan(mat.get(0, 0)[1] - 240));
+					if (mat.rows() > 0) {
+						SmartDashboard.putNumber("Smart Ball X", Math.atan(mat.get(0, 0)[0] - 320));
+						SmartDashboard.putNumber("Smart Ball y", Math.atan(mat.get(0, 0)[1] - 240));
+					} else {
+						SmartDashboard.putNumber("Smart Ball X", 0);
+						SmartDashboard.putNumber("Smart Ball y", 0);
+					}
 				}
 			}
 		);
