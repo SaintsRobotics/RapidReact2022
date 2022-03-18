@@ -40,6 +40,15 @@ public class ClimberSubsystem extends SubsystemBase {
 	/**
 	 * Sets the speed of the climber.
 	 * 
+	 * @param speed Speed from -1 to 1.
+	 */
+	public void set(double speed) {
+		set(speed, speed);
+	}
+
+	/**
+	 * Sets the speed of the climber.
+	 * 
 	 * @param leftSpeed  Speed from -1 to 1.
 	 * @param rightSpeed Speed from -1 to 1.
 	 */
