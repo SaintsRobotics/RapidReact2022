@@ -166,11 +166,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
 
-		SmartDashboard.putNumber("Bottom Shooter RPM", Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
-		SmartDashboard.putNumber("Top Shooter RPM", Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
-		SmartDashboard.putBoolean("top at setpoint", m_topShooterPID.atSetpoint());
-		SmartDashboard.putBoolean("bottom at setpoint", m_bottomShooterPID.atSetpoint());
-
 	}
 
 	/** Raises the arm. */
