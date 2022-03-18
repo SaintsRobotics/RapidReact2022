@@ -165,7 +165,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
-
 	}
 
 	/** Raises the arm. */
