@@ -31,6 +31,9 @@ public class ClimberSubsystem extends SubsystemBase {
 	public ClimberSubsystem() {
 		m_leftClimber.setInverted(ClimberConstants.kLeftArmReversed);
 		m_rightClimber.setInverted(ClimberConstants.kRightArmReversed);
+		m_leftEncoder.setPosition(0);
+		m_rightEncoder.setPosition(0);
+
 	}
 
 	@Override

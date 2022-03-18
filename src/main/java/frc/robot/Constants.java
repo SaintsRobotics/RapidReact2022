@@ -126,10 +126,12 @@ public final class Constants {
 
 		public static final int kLeftEncoderPort = 21;
 		public static final int kRightEncoderPort = 22;
+
 		public static final int kLeftArmHigh = -1191;
 		public static final int kRightArmHigh = 1121;
-		public static final int kLeftArmLow = -113;
-		public static final int kRightArmLow = -44;
+
+		public static final int kLeftArmLow = 0;
+		public static final int kRightArmLow = 0;
 	}
 
 	public static final class OIConstants {
