@@ -187,10 +187,10 @@ public class RobotContainer {
 				// WORKING TWO BALL AUTON
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-						"RedHangarTwoBall1", true),
+						"RedStationTwoBall1", true),
 						new AutonIntake(m_shooterSubsystem)),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall2", false),
+				new PathWeaverCommand(m_swerveDriveSubsystem, "RedStationTwoBall2", false),
 				new AutonShoot(m_shooterSubsystem));
 
 		// WORKING ONE BALL AUTO
