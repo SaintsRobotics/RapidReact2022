@@ -25,12 +25,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.AutonArm;
-import frc.robot.commands.AutonIntake;
-import frc.robot.commands.AutonShoot;
+import frc.robot.commands.ArmCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PathWeaverCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -96,10 +96,13 @@ public class RobotContainer {
 
 		// Allows for independent control of climbers when enabled in test mode.
 		// Otherwise climbers are controlled together.
-		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> m_climberSubsystem.setSpeed(
-				leftClimbSpeed.getAsDouble(),
-				DriverStation.isTest() ? rightClimbSpeed.getAsDouble() : leftClimbSpeed.getAsDouble()),
-				m_climberSubsystem));
+		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> {
+			if (DriverStation.isTest()) {
+				m_climberSubsystem.set(leftClimbSpeed.getAsDouble(), rightClimbSpeed.getAsDouble());
+			} else {
+				m_climberSubsystem.set(leftClimbSpeed.getAsDouble());
+			}
+		}, m_climberSubsystem));
 	}
 
 	/**
@@ -187,10 +190,10 @@ public class RobotContainer {
 				// WORKING TWO BALL AUTON
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-						"RedStationTwoBall1", true),
+						"BlueStationTwoBall1", true),
 						new AutonIntake(m_shooterSubsystem)),
 				new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-				new PathWeaverCommand(m_swerveDriveSubsystem, "RedStationTwoBall2", false),
+				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationTwoBall2", false),
 				new AutonShoot(m_shooterSubsystem));
 
 		// WORKING ONE BALL AUTO

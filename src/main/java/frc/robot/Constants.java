@@ -89,13 +89,13 @@ public final class Constants {
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
 		public static final double kBottomShooterSpeedRPM = 2200;
-		public static final double kTopShooterSpeedRPM = 5000; // TODO: THIS RPM NEEDS UPDATING
+		public static final double kTopShooterSpeedRPM = 5300;
 
 		public static final int kLowerArmAngle = 50;
 		public static final int kUpperArmAngle = -50;
 		public static final double kIntakeSpeed = 0.7;
 		public static final double kTopFeederSpeedSlow = 0.1;
-		public static final double kTopFeederSpeedFast = 1;
+		public static final double kTopFeederSpeedFast = 0.9;
 		public static final double kSideFeederSpeed = 0.6;
 		public static final boolean kIntakeReversed = true;
 		public static final boolean kLeftFeederReversed = true;
@@ -103,8 +103,8 @@ public final class Constants {
 
 		public static final int kRedThreshold = 300;
 		public static final int kBlueThreshold = 300;
-		public static final double kBottomShooterP = 0.0006;
-		public static final double kTopShooterP = 0.00025; //0.000015;
+		public static final double kBottomShooterP = 0.0003;
+		public static final double kTopShooterP = 0.000007;
 	}
 
 	/** Constants for the climber. */
@@ -115,8 +115,8 @@ public final class Constants {
 		public static final int kLeftServoPort = 1;
 		public static final int kRightServoPort = 0;
 
-		public static final boolean kLeftArmReversed = true;
-		public static final boolean kRightArmReversed = false;
+		public static final boolean kLeftClimberReversed = true;
+		public static final boolean kRightClimberReversed = false;
 
 		public static final double kLeftServoLockedPosition = 1;
 		public static final double kLeftServoUnlockedPosition = 0.5;
