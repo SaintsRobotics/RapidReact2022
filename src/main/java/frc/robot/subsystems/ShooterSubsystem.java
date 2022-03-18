@@ -50,7 +50,7 @@ public class ShooterSubsystem extends SubsystemBase {
 																											// PID NEEDS
 																											// TUNING
 	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.35, 0);
-	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.82, 0);
+	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.84, 0);
 
 	private boolean m_runningIntake = false;
 	private boolean m_reversingIntake = false;
@@ -74,7 +74,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		rightFeeder.setInverted(false);
 		m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
 		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kTopShooterSpeedRPM, 100 / 0.02);
-		m_topShooterPID.setTolerance(0.1 * ShooterConstants.kBottomShooterSpeedRPM, 100 / 0.02);
+		m_topShooterPID.setTolerance(0.08 * ShooterConstants.kBottomShooterSpeedRPM, 100 / 0.02);
 		m_armPID.setTolerance(2);
 
 		m_feederTimer.start();
