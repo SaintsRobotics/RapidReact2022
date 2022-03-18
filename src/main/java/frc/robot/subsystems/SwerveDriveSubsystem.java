@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.Constants;
 import frc.robot.Robot;
 
 /** Controls the drivetrain of the robot using swerve. */
@@ -238,4 +237,5 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Desired Rot", rotDegrees);
 		}
 	}
+}
 }
