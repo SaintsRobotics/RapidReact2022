@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -174,36 +175,13 @@ public class RobotContainer {
 
 		return new SequentialCommandGroup(
 
-				// new AutonShoot(m_shooterSubsystem),
-				// new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-				// new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-				// "BlueStationThreeBall1", true),
-				// new AutonIntake(m_shooterSubsystem)),
-				// new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-				// "BlueStationThreeBall2", false),
-				// new AutonIntake(m_shooterSubsystem)),
-				// new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-				// new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationThreeBall3",
-				// false),
-				// new AutonShoot(m_shooterSubsystem));
-
-				// WORKING TWO BALL AUTON
-				new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-						"BlueStationTwoBall1", true),
-						new IntakeCommand(m_shooterSubsystem)),
-				new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-				new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationTwoBall2", false),
-				new ShootCommand(m_shooterSubsystem));
-
-		// WORKING ONE BALL AUTO
-		// return new SequentialCommandGroup(
-		// new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall1", true),
-		// new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-		// new AutonIntake(m_shooterSubsystem),
-		// new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-		// new PathWeaverCommand(m_swerveDriveSubsystem, "BlueHangarTwoBall2", false),
-		// new AutonShoot(m_shooterSubsystem));
+			new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+			new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
+					SmartDashboard.getString("AutonPath", "RedHangarTwoBall") + "1", true),
+					new IntakeCommand(m_shooterSubsystem)),
+			new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
+			new PathWeaverCommand(m_swerveDriveSubsystem, SmartDashboard.getString("AutonPath", "RedHangarTwoBall") + "2", false),
+			new ShootCommand(m_shooterSubsystem));
 
 	}
 }
