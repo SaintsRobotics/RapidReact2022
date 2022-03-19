@@ -51,8 +51,8 @@ public final class Constants {
 		public static final double kWheelBase = 0.6;
 
 		/** Range of shooting distance values */
-		public static final double kMinShootingDistance = 2;
-		public static final double kMaxShootingDistance = 3;
+		public static final double kMinShootingDistance = 0;
+		public static final double kMaxShootingDistance = 24;
 
 
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
