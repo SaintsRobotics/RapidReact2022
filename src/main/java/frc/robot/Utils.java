@@ -29,17 +29,4 @@ public class Utils {
 	public static double toRPM(double ticksPerDecisecond) {
 		return ticksPerDecisecond * 600 / 2048;
 	}
-
-	/**
-	 * Returns whether a measurement is within acceptable tolerance of a setpoint
-	 * 
-	 * @param measurement The measurement value.
-	 * @param setpoint    The desired value.
-	 * @param tolerance   The acceptable deviation from the setpoint.
-	 * @return Whether the measurement is within the acceptable tolerance the
-	 *         setpoint.
-	 */
-	public static boolean atSetpoint(double measurement, double setpoint, double tolerance) {
-		return Math.abs(setpoint - measurement) < tolerance;
-	}
 }

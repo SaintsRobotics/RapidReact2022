@@ -50,10 +50,6 @@ public final class Constants {
 		/** Distance between front and back wheels on robot. */
 		public static final double kWheelBase = 0.6;
 
-		/** Range of shooting distance values */
-		public static final double kMinShootingDistance = 0;
-		public static final double kMaxShootingDistance = 24;
-
 		public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 				new Translation2d(kWheelBase / 2, kTrackWidth / 2),
 				new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
@@ -112,8 +108,9 @@ public final class Constants {
 		public static final double kBottomShooterP = 0.00025;
 		public static final double kTopShooterP = 0.000007;
 
-		public static final double kShootingDistanceMeters = 0.2;
-		public static final double kShootingDistanceToleranceMeters = 0.05;
+		// TODO tune shooting distance
+		public static final double kMinShootingDistance = 0;
+		public static final double kMaxShootingDistance = 24;
 	}
 
 	/** Constants for the climber. */

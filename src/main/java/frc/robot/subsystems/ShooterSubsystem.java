@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants;
 import frc.robot.MUX;
 import frc.robot.REV2mDistanceSensor;
 import frc.robot.REVColorSensorV3;
@@ -131,8 +130,9 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_topFeeder.set(0);
 		}
 
-		SmartDashboard.putBoolean("Within Shooting Range", Utils.atSetpoint(distanceSensorMeters,
-				ShooterConstants.kShootingDistanceMeters, ShooterConstants.kShootingDistanceToleranceMeters));
+		SmartDashboard.putBoolean("Is In Shooting Range",
+				m_distanceSensor.getDistance() < ShooterConstants.kMaxShootingDistance &&
+						m_distanceSensor.getDistance() > ShooterConstants.kMinShootingDistance);
 
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Bottom Shooter PID Output", bottomPIDOutput);
@@ -172,7 +172,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putBoolean("Shooter Is Red", shooterIsRed);
 
 			SmartDashboard.putNumber("Distance Sensor Meters", distanceSensorMeters);
-			SmartDashboard.putBoolean("Robot in shooting range", isInShootingRange());
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
 	}
@@ -240,7 +239,6 @@ public class ShooterSubsystem extends SubsystemBase {
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Bottom Target Shooter Speed", bottomTargetRPM);
 			SmartDashboard.putNumber("Top Target Shooter Speed", topTargetRPM);
-
 		}
 	}
 
@@ -260,10 +258,5 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	public void topFeederOff() {
 		m_topFeeder.set(0);
-	}
-
-	public boolean isInShootingRange() {
-		return m_distanceSensor.getDistance() < Constants.SwerveConstants.kMaxShootingDistance &&
-				m_distanceSensor.getDistance() > Constants.SwerveConstants.kMinShootingDistance;
 	}
 }
