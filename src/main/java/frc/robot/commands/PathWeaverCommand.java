@@ -77,7 +77,7 @@ public class PathWeaverCommand extends CommandBase {
 	}
 
 	@Override
-	public void execute () {
+	public void execute() {
 		m_command.execute();
 	}
 
