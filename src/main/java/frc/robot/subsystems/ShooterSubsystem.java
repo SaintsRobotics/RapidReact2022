@@ -135,7 +135,6 @@ public class ShooterSubsystem extends SubsystemBase {
 				ShooterConstants.kShootingDistanceMeters, ShooterConstants.kShootingDistanceToleranceMeters));
 
 		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Arm Encoder", m_armEncoder.getAbsolutePosition());
 			SmartDashboard.putNumber("Bottom Shooter PID Output", bottomPIDOutput);
 			SmartDashboard.putNumber("Top Shooter PID Output", topPIDOutput);
 
