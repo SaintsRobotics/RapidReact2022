@@ -177,10 +177,10 @@ public class RobotContainer {
 
 			new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 			new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-					SmartDashboard.getString("AutonPath", "RedHangarTwoBall") + "1", true),
+					SmartDashboard.getString("AutonPath", "BlueHangarTwoBall") + "1", true),
 					new IntakeCommand(m_shooterSubsystem)),
 			new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-			new PathWeaverCommand(m_swerveDriveSubsystem, SmartDashboard.getString("AutonPath", "RedHangarTwoBall") + "2", false),
+			new PathWeaverCommand(m_swerveDriveSubsystem, SmartDashboard.getString("AutonPath", "BlueHangarTwoBall") + "2", false),
 			new ShootCommand(m_shooterSubsystem));
 
 	}
