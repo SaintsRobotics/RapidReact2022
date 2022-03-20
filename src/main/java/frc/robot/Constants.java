@@ -91,4 +91,8 @@ public final class Constants {
 		public static final int kDriverControllerPort = 0;
 		public static final double kControllerDeadband = 0.11;
 	}
+
+	public static final class CVConstants {
+		public static final double kBallRadiusForIntake = 80;
+	}
 }

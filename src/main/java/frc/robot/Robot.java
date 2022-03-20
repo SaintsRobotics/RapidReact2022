@@ -72,6 +72,7 @@ public class Robot extends TimedRobot {
 					if (mat.rows() > 0) {
 						SmartDashboard.putNumber("Smart Ball X", Math.atan(mat.get(0, 0)[0] - 320));
 						SmartDashboard.putNumber("Smart Ball y", Math.atan(mat.get(0, 0)[1] - 240));
+						SmartDashboard.putBoolean("Ball in range", mat.get(0, 0)[2] < Constants.CVConstants.BALL_RADIUS_FOR_INTAKE)
 					} else {
 						SmartDashboard.putNumber("Smart Ball X", 0);
 						SmartDashboard.putNumber("Smart Ball y", 0);
