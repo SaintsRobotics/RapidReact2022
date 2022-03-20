@@ -14,12 +14,15 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.Robot;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveConstants;
 
 /** Class that controls the swerve wheel and reads the swerve encoder. */
-public class SwerveModule {
+public class SwerveModule implements Sendable {
 	private final CANSparkMax m_driveMotor;
 	private final CANSparkMax m_turningMotor;
 
@@ -44,7 +47,8 @@ public class SwerveModule {
 			int turningMotorChannel,
 			int turningEncoderChannel,
 			Boolean driveMotorReversed,
-			double turningEncoderOffset) {
+			double turningEncoderOffset,
+			String name) {
 		m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
 		m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 		m_turningEncoder = new CANCoder(turningEncoderChannel);
@@ -62,6 +66,8 @@ public class SwerveModule {
 		m_turningEncoder.configMagnetOffset(-turningEncoderOffset);
 
 		m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+		SendableRegistry.addLW(this, "SwerveDriveSubsystem", name);
 	}
 
 	/**
@@ -139,5 +145,17 @@ public class SwerveModule {
 
 	public void setBrake() {
 		m_driveMotor.setIdleMode(IdleMode.kBrake);
+	}
+
+	@Override
+	public void initSendable(SendableBuilder builder) {
+		builder.setSmartDashboardType("SwerveModule");
+		builder.addDoubleProperty("Angle", () -> this.getState().angle.getDegrees(), null);
+		builder.addDoubleProperty("Absolute Angle", this::getAbsoluteAngle, null);
+		builder.addDoubleProperty("Speed", () -> this.getState().speedMetersPerSecond, null);
+		builder.addDoubleProperty("Drive Motor Temperature", () -> m_driveMotor.getMotorTemperature(), null);
+		builder.addDoubleProperty("Turning Motor Temperature", () -> m_turningMotor.getMotorTemperature(), null);
+		builder.addDoubleProperty("Drive Motor Current", () -> m_driveMotor.getOutputCurrent(), null);
+		builder.addDoubleProperty("Turning Motor Current", () -> m_turningMotor.getOutputCurrent(), null);
 	}
 }
