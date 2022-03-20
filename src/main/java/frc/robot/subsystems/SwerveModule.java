@@ -129,5 +129,6 @@ public class SwerveModule implements Sendable {
 		builder.addDoubleProperty("Turning Motor Temperature", () -> m_turningMotor.getMotorTemperature(), null);
 		builder.addDoubleProperty("Drive Motor Current", () -> m_driveMotor.getOutputCurrent(), null);
 		builder.addDoubleProperty("Turning Motor Current", () -> m_turningMotor.getOutputCurrent(), null);
+		builder.addStringProperty("Idle Mode", () -> m_driveMotor.getIdleMode().toString(), null);
 	}
 }
