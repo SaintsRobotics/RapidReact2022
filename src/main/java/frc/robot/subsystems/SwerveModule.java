@@ -84,36 +84,6 @@ public class SwerveModule implements Sendable {
 	}
 
 	/**
-	 * Returns the absolute angle of the module. Use this to set the offset of the
-	 * modules.
-	 * 
-	 * @return Absolute angle of the module from 0 to 360.
-	 */
-	public double getAbsoluteAngle() {
-		return MathUtil.inputModulus(
-				Math.toDegrees(m_turningEncoder.getAbsolutePosition()) - m_turningEncoder.configGetMagnetOffset(), 0,
-				360);
-	}
-
-	/**
-	 * Returns the turning motor.
-	 * 
-	 * @return The turning motor.
-	 */
-	public CANSparkMax getTurningMotor() {
-		return m_turningMotor;
-	}
-
-	/**
-	 * Returns the drive motor.
-	 * 
-	 * @return The drive motor.
-	 */
-	public CANSparkMax getDriveMotor() {
-		return m_driveMotor;
-	}
-
-	/**
 	 * Stops the module from driving and turning. Use this so the wheels don't reset
 	 * to straight.
 	 */
@@ -151,7 +121,9 @@ public class SwerveModule implements Sendable {
 	public void initSendable(SendableBuilder builder) {
 		builder.setSmartDashboardType("SwerveModule");
 		builder.addDoubleProperty("Angle", () -> this.getState().angle.getDegrees(), null);
-		builder.addDoubleProperty("Absolute Angle", this::getAbsoluteAngle, null);
+		builder.addDoubleProperty("Absolute Angle", () -> MathUtil.inputModulus(
+				Math.toDegrees(m_turningEncoder.getAbsolutePosition()) - m_turningEncoder.configGetMagnetOffset(), 0,
+				360), null);
 		builder.addDoubleProperty("Speed", () -> this.getState().speedMetersPerSecond, null);
 		builder.addDoubleProperty("Drive Motor Temperature", () -> m_driveMotor.getMotorTemperature(), null);
 		builder.addDoubleProperty("Turning Motor Temperature", () -> m_turningMotor.getMotorTemperature(), null);
