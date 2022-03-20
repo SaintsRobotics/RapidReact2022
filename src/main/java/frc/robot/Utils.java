@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
 
 /**
@@ -26,22 +28,11 @@ public class Utils {
 	}
 
 	/**
-	 * Converts the speed of a TalonFX from the default units of ticks per
-	 * decisecond to RPM.
-	 * 
-	 * @param ticksPerDecisecond The speed in ticks per decisecond.
-	 * @return The speed in RPM.
-	 */
-	public static double toRPM(double ticksPerDecisecond) {
-		return ticksPerDecisecond * 600 / 2048;
-	}
-
-	/**
 	 * Returns whether the robot should print values to {@link SmartDashboard}.
 	 * 
 	 * @return Whether the robot should print values to {@link SmartDashboard}.
 	 */
 	public static boolean isTelemetryEnabled() {
-		return !m_digitalInput.get() || Robot.isSimulation() || OIConstants.kTelemetry;
+		return !m_digitalInput.get() || DriverStation.isTest() || Robot.isSimulation() || OIConstants.kTelemetry;
 	}
 }
