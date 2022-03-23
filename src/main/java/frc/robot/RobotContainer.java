@@ -180,28 +180,30 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		return new SequentialCommandGroup(
-			new ShootCommand(m_shooterSubsystem),
-			new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-			new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-			"BlueStationThreeBall1", true),
-			new IntakeCommand(m_shooterSubsystem)),
-			new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-			"BlueStationThreeBall2", false),
-			new IntakeCommand(m_shooterSubsystem)),
-			new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-			new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationThreeBall3",
-			false),
-			new ShootCommand(m_shooterSubsystem));
+				new ShootCommand(m_shooterSubsystem),
+				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
+						"BlueStationThreeBall1", true),
+						new SequentialCommandGroup(new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+								new IntakeCommand(m_shooterSubsystem))),
+				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
+						"BlueStationThreeBall2", false),
+						new IntakeCommand(m_shooterSubsystem)),
+				new ParallelCommandGroup(new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
+						new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationThreeBall3",
+								false)),
+				new ShootCommand(m_shooterSubsystem));
 		// // Two ball autonomous routine.
 
-		// 		new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-		// 		new ParallelCommandGroup(
-		// 				new PathWeaverCommand(m_swerveDriveSubsystem,
-		// 						SmartDashboard.getString("Autonomous Path", "BlueHangar") + "TwoBall1", true),
-		// 				new IntakeCommand(m_shooterSubsystem)),
-		// 		new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-		// 		new PathWeaverCommand(m_swerveDriveSubsystem,
-		// 				SmartDashboard.getString("Autonomous Path", "BlueHangar") + "TwoBall2", false),
-		// 		new ShootCommand(m_shooterSubsystem));
+		// new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+		// new ParallelCommandGroup(
+		// new PathWeaverCommand(m_swerveDriveSubsystem,
+		// SmartDashboard.getString("Autonomous Path", "BlueHangar") + "TwoBall1",
+		// true),
+		// new IntakeCommand(m_shooterSubsystem)),
+		// new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
+		// new PathWeaverCommand(m_swerveDriveSubsystem,
+		// SmartDashboard.getString("Autonomous Path", "BlueHangar") + "TwoBall2",
+		// false),
+		// new ShootCommand(m_shooterSubsystem));
 	}
 }
