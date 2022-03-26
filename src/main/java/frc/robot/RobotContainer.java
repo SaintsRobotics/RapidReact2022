@@ -105,7 +105,7 @@ public class RobotContainer {
 			}
 		}, m_climberSubsystem));
 
-		SmartDashboard.putString("Autonomous Path", "BlueHangar");
+		SmartDashboard.putString("Autonomous Path", "BlueMid");
 	}
 
 	/**
@@ -179,18 +179,32 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		// Two ball autonomous routine.
-		return new SequentialCommandGroup(
+		String path = SmartDashboard.getString("Autonomous Path", "BlueMid");
+		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
 				new ParallelCommandGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem,
-								SmartDashboard.getString("Autonomous Path", "BlueHangar") + "TwoBall1", true),
+								path + "TwoBall1", true),
 						new SequentialCommandGroup(
-							new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-							new IntakeCommand(m_shooterSubsystem))),
+								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+								new IntakeCommand(m_shooterSubsystem))),
 				new ParallelCommandGroup(
-					new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-					new PathWeaverCommand(m_swerveDriveSubsystem,
-							SmartDashboard.getString("Autonomous Path", "BlueHangar") + "TwoBall2", false)),
+						new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
+						new PathWeaverCommand(m_swerveDriveSubsystem,
+								path + "TwoBall2", false)),
 				new ShootCommand(m_shooterSubsystem));
+		SequentialCommandGroup fourBallAuton = new SequentialCommandGroup(
+				twoBallAuton,
+				new ParallelCommandGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall3", false),
+						new SequentialCommandGroup(
+								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+								new IntakeCommand(m_shooterSubsystem))),
+				new ParallelCommandGroup(
+					new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall4", false),
+					new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle)
+				),
+				new ShootCommand(m_shooterSubsystem)
+		);
+		return fourBallAuton;
 	}
 }

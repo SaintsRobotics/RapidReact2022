@@ -16,6 +16,7 @@
       "/LiveWindow/IntakeSubsystem": "Subsystem",
       "/LiveWindow/ShooterSubsystem": "Subsystem",
       "/LiveWindow/SwerveDriveSubsystem": "Subsystem",
+      "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[9]": "Digital Input",
       "/LiveWindow/Ungrouped/MotorControllerGroup[1]": "Motor Controller",
       "/LiveWindow/Ungrouped/PIDController[10]": "PIDController",
@@ -73,7 +74,7 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\User\\PathWeaver\\Games\\2022-field.png",
+        "image": "C:\\Users\\Admin\\Downloads\\2022gamemap.png",
         "window": {
           "visible": true
         }
