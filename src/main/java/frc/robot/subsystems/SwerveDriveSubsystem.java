@@ -30,25 +30,29 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			SwerveConstants.kFrontLeftTurningMotorPort,
 			SwerveConstants.kFrontLeftTurningEncoderPort,
 			SwerveConstants.kFrontLeftDriveMotorReversed,
-			SwerveConstants.kFrontLeftTurningEncoderOffset);
+			SwerveConstants.kFrontLeftTurningEncoderOffset,
+			"FrontLeft");
 	private final SwerveModule m_rearLeft = new SwerveModule(
 			SwerveConstants.kRearLeftDriveMotorPort,
 			SwerveConstants.kRearLeftTurningMotorPort,
 			SwerveConstants.kRearLeftTurningEncoderPort,
 			SwerveConstants.kRearLeftDriveMotorReversed,
-			SwerveConstants.kRearLeftTurningEncoderOffset);
+			SwerveConstants.kRearLeftTurningEncoderOffset,
+			"RearLeft");
 	private final SwerveModule m_frontRight = new SwerveModule(
 			SwerveConstants.kFrontRightDriveMotorPort,
 			SwerveConstants.kFrontRightTurningMotorPort,
 			SwerveConstants.kFrontRightTurningEncoderPort,
 			SwerveConstants.kFrontRightDriveMotorReversed,
-			SwerveConstants.kFrontRightTurningEncoderOffset);
+			SwerveConstants.kFrontRightTurningEncoderOffset,
+			"FrontRight");
 	private final SwerveModule m_rearRight = new SwerveModule(
 			SwerveConstants.kRearRightDriveMotorPort,
 			SwerveConstants.kRearRightTurningMotorPort,
 			SwerveConstants.kRearRightTurningEncoderPort,
 			SwerveConstants.kRearRightDriveMotorReversed,
-			SwerveConstants.kRearRightTurningEncoderOffset);
+			SwerveConstants.kRearRightTurningEncoderOffset,
+			"RearRight");
 
 	private final AHRS m_gyro = new AHRS();
 	private final SimDouble m_simulatedYaw = new SimDouble(
@@ -85,22 +89,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		m_field2d.setRobotPose(m_odometry.getPoseMeters());
 
 		if (Utils.isTelemetryEnabled()) {
-			SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
-			SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
-			SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
-			SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
-
-			// For setting offsets.
-			SmartDashboard.putNumber("Module Angle Absolute Front Left", m_frontLeft.getAbsoluteAngle());
-			SmartDashboard.putNumber("Module Angle Absolute Rear Left", m_rearLeft.getAbsoluteAngle());
-			SmartDashboard.putNumber("Module Angle Absolute Front Right", m_frontRight.getAbsoluteAngle());
-			SmartDashboard.putNumber("Module Angle Absolute Rear Right", m_rearRight.getAbsoluteAngle());
-
-			SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
-			SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
-			SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
-			SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
-
 			SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
 			SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
 			SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
