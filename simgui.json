@@ -74,7 +74,7 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\Admin\\Downloads\\2022gamemap.png",
+        "image": "C:\\Users\\admin\\Downloads\\2022-field.png",
         "window": {
           "visible": true
         }
@@ -88,5 +88,8 @@
       },
       "open": true
     }
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }

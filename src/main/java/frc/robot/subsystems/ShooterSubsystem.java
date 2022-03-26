@@ -192,7 +192,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		if (m_armPID.atSetpoint())
 			m_arm.set(0);
 		else
-			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), -0.25, -0.1));
+			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), -0.5, -0.1));
 	}
 
 	/** Lowers the arm. */

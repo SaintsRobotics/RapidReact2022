@@ -37,6 +37,6 @@ public class IntakeCommand extends CommandBase {
 
 	@Override
 	public boolean isFinished() {
-		return m_timer.get() > 3;
+		return m_timer.get() > 1;
 	}
 }
