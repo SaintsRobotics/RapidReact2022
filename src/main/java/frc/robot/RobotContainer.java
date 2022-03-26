@@ -200,11 +200,9 @@ public class RobotContainer {
 								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 								new IntakeCommand(m_shooterSubsystem))),
 				new ParallelCommandGroup(
-					new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall4", false),
-					new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle)
-				),
-				new ShootCommand(m_shooterSubsystem)
-		);
+						new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall4", false),
+						new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle)),
+				new ShootCommand(m_shooterSubsystem));
 		return fourBallAuton;
 	}
 }
