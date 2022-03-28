@@ -35,6 +35,7 @@
     "Deadband",
     "deadzone",
     "decisecond",
+    "Feedforward",
     "javadocs",
     "kauailabs",
     "linuxaarch",
@@ -52,5 +53,6 @@
     "Ungrouped",
     "windowsx",
     "wpilib"
-  ]
+  ],
+  "wpilib.selectDefaultSimulateExtension": true
 }
