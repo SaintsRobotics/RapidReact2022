@@ -11,7 +11,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.*;
+
+import frc.robot.Constants.ClimberConstants;
+import frc.robot.Utils;
 
 /** Subsystem that controls the climber. */
 public class ClimberSubsystem extends SubsystemBase {
@@ -73,6 +75,12 @@ public class ClimberSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Climber Servo Position Left", m_leftServo.get());
 			SmartDashboard.putNumber("Climber Servo Position Right", m_rightServo.get());
 		}
+
+		SmartDashboard.putNumber("Temperature Climber Left", m_leftClimber.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Climber Right", m_rightClimber.getMotorTemperature());
+
+		SmartDashboard.putNumber("Current Climber Left", m_leftClimber.getOutputCurrent());
+		SmartDashboard.putNumber("Current Climber Right", m_rightClimber.getOutputCurrent());
 	}
 
 	/**
@@ -80,8 +88,8 @@ public class ClimberSubsystem extends SubsystemBase {
 	 * 
 	 * @param speed Speed from -1 to 1.
 	 */
-	public void setSpeed(double speed) {
-		setSpeed(speed, speed);
+	public void set(double speed) {
+		set(speed, speed);
 	}
 
 	/**
@@ -90,9 +98,15 @@ public class ClimberSubsystem extends SubsystemBase {
 	 * @param leftSpeed  Speed from -1 to 1.
 	 * @param rightSpeed Speed from -1 to 1.
 	 */
-	public void setSpeed(double leftSpeed, double rightSpeed) {
-		m_leftSpeed = leftSpeed;
-		m_rightSpeed = rightSpeed;
+	public void set(double leftSpeed, double rightSpeed) {
+		// Unlocks the servos before raising the left climber.
+		m_leftServo.set(leftSpeed > 0 ? ClimberConstants.kLeftServoUnlockedPosition
+				: ClimberConstants.kLeftServoLockedPosition);
+		m_rightServo.set(rightSpeed > 0 ? ClimberConstants.kRightServoUnlockedPosition
+				: ClimberConstants.kRightServoLockedPosition);
+
+		m_leftClimber.set(leftSpeed);
+		m_rightClimber.set(rightSpeed);
 	}
 
 	/**

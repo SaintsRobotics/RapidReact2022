@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -29,9 +30,12 @@ import frc.robot.commands.AlignClimberCommand;
 import frc.robot.commands.AutonArm;
 import frc.robot.commands.AutonIntake;
 import frc.robot.commands.AutonShoot;
+import frc.robot.commands.ArmCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PathWeaverCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -97,10 +101,15 @@ public class RobotContainer {
 
 		// Allows for independent control of climbers when enabled in test mode.
 		// Otherwise climbers are controlled together.
-		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> m_climberSubsystem.setSpeed(
-				leftClimbSpeed.getAsDouble(),
-				DriverStation.isTest() ? rightClimbSpeed.getAsDouble() : leftClimbSpeed.getAsDouble()),
-				m_climberSubsystem));
+		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> {
+			if (DriverStation.isTest()) {
+				m_climberSubsystem.set(leftClimbSpeed.getAsDouble(), rightClimbSpeed.getAsDouble());
+			} else {
+				m_climberSubsystem.set(leftClimbSpeed.getAsDouble());
+			}
+		}, m_climberSubsystem));
+
+		SmartDashboard.putString("Autonomous Path", "BlueHangar");
 	}
 
 	/**
@@ -133,6 +142,11 @@ public class RobotContainer {
 		new JoystickButton(m_driveController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
+
+		// Slowly drives forward while X is held.
+		new JoystickButton(m_driveController, Button.kX.value)
+				.whileHeld(() -> m_swerveDriveSubsystem.drive(0.3, 0, 0, false), m_swerveDriveSubsystem)
+				.whenReleased(() -> m_swerveDriveSubsystem.drive(0, 0, 0, false), m_swerveDriveSubsystem);
 
 		// raises the arm while left bumper held
 		new JoystickButton(m_operatorController, Button.kLeftBumper.value)
@@ -173,13 +187,16 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
+		// Two ball autonomous routine.
 		return new SequentialCommandGroup(
-				new AutonArm(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+				new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 				new ParallelCommandGroup(
-						new AutonIntake(m_shooterSubsystem),
-						new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall1", true)),
-				new AutonArm(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-				new PathWeaverCommand(m_swerveDriveSubsystem, "RedHangarTwoBall2", false),
-				new AutonShoot(m_shooterSubsystem));
+						new PathWeaverCommand(m_swerveDriveSubsystem,
+								SmartDashboard.getString("Autonomous Path", "BlueHangar") + "TwoBall1", true),
+						new IntakeCommand(m_shooterSubsystem)),
+				new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
+				new PathWeaverCommand(m_swerveDriveSubsystem,
+						SmartDashboard.getString("Autonomous Path", "BlueHangar") + "TwoBall2", false),
+				new ShootCommand(m_shooterSubsystem));
 	}
 }
