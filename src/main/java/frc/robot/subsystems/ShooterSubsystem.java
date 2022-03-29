@@ -170,21 +170,21 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
 
-		// SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
-		// SmartDashboard.putNumber("Temperature Intake", m_intake.getMotorTemperature());
-		// SmartDashboard.putNumber("Temperature Left Feeder", m_leftFeeder.getMotorTemperature());
-		// SmartDashboard.putNumber("Temperature Right Feeder", m_rightFeeder.getMotorTemperature());
-		// SmartDashboard.putNumber("Temperature Top Feeder", m_topFeeder.getMotorTemperature());
-		// SmartDashboard.putNumber("Temperature Bottom Flywheel", m_topFlywheel.getTemperature());
-		// SmartDashboard.putNumber("Temperature Top Flywheel", m_bottomFlywheel.getTemperature());
+		SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Intake", m_intake.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Left Feeder", m_leftFeeder.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Right Feeder", m_rightFeeder.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Top Feeder", m_topFeeder.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Bottom Flywheel", m_topFlywheel.getTemperature());
+		SmartDashboard.putNumber("Temperature Top Flywheel", m_bottomFlywheel.getTemperature());
 
-		// SmartDashboard.putNumber("Current Arm", m_arm.getOutputCurrent());
-		// SmartDashboard.putNumber("Current Intake", m_intake.getOutputCurrent());
-		// SmartDashboard.putNumber("Current Left Feeder", m_leftFeeder.getOutputCurrent());
-		// SmartDashboard.putNumber("Current Right Feeder", m_rightFeeder.getOutputCurrent());
-		// SmartDashboard.putNumber("Current Top Feeder", m_topFeeder.getOutputCurrent());
-		// SmartDashboard.putNumber("Current Bottom Flywheel", m_topFlywheel.getStatorCurrent());
-		// SmartDashboard.putNumber("Current Top Flywheel", m_bottomFlywheel.getStatorCurrent());
+		SmartDashboard.putNumber("Current Arm", m_arm.getOutputCurrent());
+		SmartDashboard.putNumber("Current Intake", m_intake.getOutputCurrent());
+		SmartDashboard.putNumber("Current Left Feeder", m_leftFeeder.getOutputCurrent());
+		SmartDashboard.putNumber("Current Right Feeder", m_rightFeeder.getOutputCurrent());
+		SmartDashboard.putNumber("Current Top Feeder", m_topFeeder.getOutputCurrent());
+		SmartDashboard.putNumber("Current Bottom Flywheel", m_topFlywheel.getStatorCurrent());
+		SmartDashboard.putNumber("Current Top Flywheel", m_bottomFlywheel.getStatorCurrent());
 	}
 
 	/** Raises the arm. */
