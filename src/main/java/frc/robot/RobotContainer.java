@@ -200,7 +200,7 @@ public class RobotContainer {
 						new SequentialCommandGroup(
 								new WaitCommand(1),
 								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-								new IntakeCommand(m_shooterSubsystem, 2))),
+								new IntakeCommand(m_shooterSubsystem, 3))),
 				new ParallelCommandGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall4", false),
 						new SequentialCommandGroup(new WaitCommand(1.5),
