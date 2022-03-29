@@ -42,6 +42,6 @@ public class ShootCommand extends CommandBase {
 
 	@Override
 	public boolean isFinished() {
-		return m_timer.get() > 2;
+		return m_timer.get() > 1;
 	}
 }
