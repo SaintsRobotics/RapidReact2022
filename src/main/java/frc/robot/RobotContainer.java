@@ -183,15 +183,13 @@ public class RobotContainer {
 		String path = SmartDashboard.getString("Autonomous Path", "BlueMid");
 		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
 				new ParallelCommandGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem,
-								path + "TwoBall1", true),
+						new PathWeaverCommand(m_swerveDriveSubsystem, path + "TwoBall1", true),
 						new SequentialCommandGroup(
 								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 								new IntakeCommand(m_shooterSubsystem, 1))),
 				new ParallelCommandGroup(
 						new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-						new PathWeaverCommand(m_swerveDriveSubsystem,
-								path + "TwoBall2", false)),
+						new PathWeaverCommand(m_swerveDriveSubsystem, path + "TwoBall2", false)),
 				new ShootCommand(m_shooterSubsystem));
 		SequentialCommandGroup fourBallAuton = new SequentialCommandGroup(
 				twoBallAuton,
