@@ -74,10 +74,9 @@ public class ShooterSubsystem extends SubsystemBase {
 		m_leftFeeder.setInverted(true);
 		m_rightFeeder.setInverted(false);
 
-		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kTopMotorSpeedRPM, 100 / 0.02);
-		m_topShooterPID.setTolerance(0.08 * ShooterConstants.kBottomShooterSpeedRPM, 100 / 0.02);
+		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kTopMotorSpeedRPMTarmac, 100 / 0.02);
+		m_topShooterPID.setTolerance(0.08 * ShooterConstants.kBottomShooterSpeedRPMTarmac, 100 / 0.02);
 		m_armPID.setTolerance(2);
-		m_armPID.enableContinuousInput(-180, 180);
 
 		// m_feederTimer.start();
 	}
