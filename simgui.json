@@ -80,7 +80,7 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\Admin\\Downloads\\2022gamemap.png",
+        "image": "C:\\Users\\admin\\Downloads\\2022-field.png",
         "window": {
           "visible": true
         }
@@ -88,6 +88,9 @@
     }
   },
   "NetworkTables": {
+    "FMSInfo": {
+      "open": true
+    },
     "SmartDashboard": {
       "Field": {
         "open": true
