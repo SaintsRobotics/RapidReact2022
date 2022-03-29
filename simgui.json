@@ -80,7 +80,7 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\admin\\Downloads\\2022-field.png",
+        "image": "C:\\Users\\admin\\Documents\\GitHub\\RapidReact2022\\PathWeaver\\2022-field.png",
         "window": {
           "visible": true
         }
