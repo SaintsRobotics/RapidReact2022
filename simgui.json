@@ -66,7 +66,19 @@
       "/LiveWindow/Ungrouped/PIDController[50]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[51]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[52]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[53]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[54]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[55]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[56]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[57]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[58]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[59]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[60]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[61]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[62]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[63]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[64]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[6]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[7]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
@@ -80,7 +92,13 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\admin\\Documents\\GitHub\\RapidReact2022\\PathWeaver\\2022-field.png",
+        "bottom": 900,
+        "height": 8.229599952697754,
+        "image": "C:\\Users\\Lenny Abbas\\OneDrive\\Documents\\VSCode Workspace\\RapidReact2022\\PathWeaver\\2022-field.png",
+        "left": 74,
+        "right": 1774,
+        "top": 50,
+        "width": 16.459199905395508,
         "window": {
           "visible": true
         }
