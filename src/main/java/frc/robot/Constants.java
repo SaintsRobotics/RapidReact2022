@@ -88,9 +88,10 @@ public final class Constants {
 		public static final Port kQueueColorSensorPort = Port.kTwo;
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
-//Motor and shooter are the same for the bottom flywheel, as there is a 1:1 ratio
 		public static final double kBottomShooterSpeedRPM = 2500;
-		public static final double kTopMotorSpeedRPM = (ShooterConstants.kTopShooterSpeedRPM * 18)/52;
+		// motor speed and shooter speed are different only for the top flywheel because
+		// of the gear ratio
+		public static final double kTopMotorSpeedRPM = (ShooterConstants.kTopShooterSpeedRPM * 18) / 52;
 		public static final double kTopShooterSpeedRPM = 5500;
 		public static final double kLowerArmAngle = 50.6;
 		public static final double kUpperArmAngle = -54.6;
