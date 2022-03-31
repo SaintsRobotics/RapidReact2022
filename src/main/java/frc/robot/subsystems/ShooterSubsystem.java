@@ -68,7 +68,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
 		m_bottomFlywheel.setNeutralMode(NeutralMode.Coast);
 		m_topFlywheel.setNeutralMode(NeutralMode.Coast);
-		
+
 		m_topFlywheel.setInverted(true);
 		m_intake.setInverted(true);
 		m_leftFeeder.setInverted(true);
