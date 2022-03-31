@@ -48,11 +48,10 @@ public class ShooterSubsystem extends SubsystemBase {
 			ShooterConstants.kShooterColorSensorPort);
 
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
-	private final PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterP, 0, 0);
-
-	private final PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterP, 0, 0);
-	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.4, 0);
-	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.4, 0);
+	private PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPTarmac, 0, 0);
+	private PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterPTarmac, 0, 0);
+	private SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardTarmac, 0);
+	private SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac, 0);
 
 	private boolean m_runningIntake = false;
 	private boolean m_reversingIntake = false;
@@ -74,8 +73,8 @@ public class ShooterSubsystem extends SubsystemBase {
 		m_leftFeeder.setInverted(true);
 		m_rightFeeder.setInverted(false);
 
-		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kTopMotorSpeedRPMTarmac, 100 / 0.02);
-		m_topShooterPID.setTolerance(0.08 * ShooterConstants.kBottomShooterSpeedRPMTarmac, 100 / 0.02);
+		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kBottomMotorRPMTarmac, 100 / 0.02);
+		m_topShooterPID.setTolerance(0.08 * ShooterConstants.kTopMotorRPMTarmac, 100 / 0.02);
 		m_armPID.setTolerance(2);
 
 		// m_feederTimer.start();
@@ -243,6 +242,22 @@ public class ShooterSubsystem extends SubsystemBase {
 	public void setShooterSpeed(double bottomRPM, double topRPM) {
 		m_bottomShooterPID.setSetpoint(bottomRPM);
 		m_topShooterPID.setSetpoint(topRPM);
+		m_bottomShooterPID.setTolerance(0.08 * topRPM, 100 / 0.02);
+		m_topShooterPID.setTolerance(0.08 * bottomRPM, 100 / 0.02);
+
+		if (bottomRPM == ShooterConstants.kBottomMotorRPMFender) {
+			m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardFender, 0);
+			m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFlywheelRPMFender, 0);
+			m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPFender, 0, 0);
+			m_topShooterPID = new PIDController(ShooterConstants.kTopShooterPFender, 0, 0);
+		}
+		else if (bottomRPM == ShooterConstants.kBottomMotorRPMTarmac){
+			m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardTarmac, 0);
+			m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac, 0);
+			m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPTarmac, 0, 0);
+			m_topShooterPID = new PIDController(ShooterConstants.kTopShooterPTarmac, 0, 0);
+		}
+
 		if (bottomRPM == 0) {
 			m_sideFeeders.set(0);
 		} else {

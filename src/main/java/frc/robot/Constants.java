@@ -89,9 +89,19 @@ public final class Constants {
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
 //Motor and shooter are the same for the bottom flywheel, as there is a 1:1 ratio
-		public static final double kBottomShooterSpeedRPMTarmac = 2500;
-		public static final double kTopMotorSpeedRPMTarmac = (ShooterConstants.kTopShooterSpeedRPMTarmac * 18)/52;
-		public static final double kTopShooterSpeedRPMTarmac = 5500;
+		public static final double kBottomMotorRPMTarmac = 2500;
+		public static final double kTopMotorRPMTarmac = (ShooterConstants.kTopFlywheelRPMTarmac * 18)/52;
+		public static final double kTopFlywheelRPMTarmac = 5500;
+		public static final double kBottomFeedforwardTarmac = 0.4;
+		public static final double kTopFeedforwardTarmac = 0.4;
+
+
+		//TODO: tune these values for shooting from the fender
+		public static final double kBottomMotorRPMFender = 2500;
+		public static final double kTopMotorRPMFender = (ShooterConstants.kTopFlywheelRPMFender * 18)/52;
+		public static final double kTopFlywheelRPMFender = 5500;
+		public static final double kBottomFeedforwardFender = 0.4;
+		public static final double kTopFeedforwardFender = 0.4;
 
 		public static final double kLowerArmAngle = 50.6;
 		public static final double kUpperArmAngle = -54.6;
@@ -106,8 +116,11 @@ public final class Constants {
 
 		public static final int kRedThreshold = 300;
 		public static final int kBlueThreshold = 300;
-		public static final double kBottomShooterP = 0.00025;
-		public static final double kTopShooterP = 0.00025;
+		public static final double kBottomShooterPTarmac = 0.00025;
+		public static final double kTopShooterPTarmac = 0.00025;
+		//TODO: update these values with fender tuning 
+		public static final double kBottomShooterPFender = 0.00025;
+		public static final double kTopShooterPFender = 0.00025;
 	}
 
 	/** Constants for the climber. */
