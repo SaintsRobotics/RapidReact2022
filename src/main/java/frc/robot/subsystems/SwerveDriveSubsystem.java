@@ -19,9 +19,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Robot;
+import frc.robot.Utils;
 
 /** Controls the drivetrain of the robot using swerve. */
 public class SwerveDriveSubsystem extends SubsystemBase {
@@ -30,25 +30,29 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 			SwerveConstants.kFrontLeftTurningMotorPort,
 			SwerveConstants.kFrontLeftTurningEncoderPort,
 			SwerveConstants.kFrontLeftDriveMotorReversed,
-			SwerveConstants.kFrontLeftTurningEncoderOffset);
+			SwerveConstants.kFrontLeftTurningEncoderOffset,
+			"FrontLeft");
 	private final SwerveModule m_rearLeft = new SwerveModule(
 			SwerveConstants.kRearLeftDriveMotorPort,
 			SwerveConstants.kRearLeftTurningMotorPort,
 			SwerveConstants.kRearLeftTurningEncoderPort,
 			SwerveConstants.kRearLeftDriveMotorReversed,
-			SwerveConstants.kRearLeftTurningEncoderOffset);
+			SwerveConstants.kRearLeftTurningEncoderOffset,
+			"RearLeft");
 	private final SwerveModule m_frontRight = new SwerveModule(
 			SwerveConstants.kFrontRightDriveMotorPort,
 			SwerveConstants.kFrontRightTurningMotorPort,
 			SwerveConstants.kFrontRightTurningEncoderPort,
 			SwerveConstants.kFrontRightDriveMotorReversed,
-			SwerveConstants.kFrontRightTurningEncoderOffset);
+			SwerveConstants.kFrontRightTurningEncoderOffset,
+			"FrontRight");
 	private final SwerveModule m_rearRight = new SwerveModule(
 			SwerveConstants.kRearRightDriveMotorPort,
 			SwerveConstants.kRearRightTurningMotorPort,
 			SwerveConstants.kRearRightTurningEncoderPort,
 			SwerveConstants.kRearRightDriveMotorReversed,
-			SwerveConstants.kRearRightTurningEncoderOffset);
+			SwerveConstants.kRearRightTurningEncoderOffset,
+			"RearRight");
 
 	private final AHRS m_gyro = new AHRS();
 	private final SimDouble m_simulatedYaw = new SimDouble(
@@ -84,23 +88,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 				m_rearRight.getState());
 		m_field2d.setRobotPose(m_odometry.getPoseMeters());
 
-		if (OIConstants.kTelemetry) {
-			SmartDashboard.putNumber("Module Angle Front Left", m_frontLeft.getState().angle.getDegrees());
-			SmartDashboard.putNumber("Module Angle Rear Left", m_rearLeft.getState().angle.getDegrees());
-			SmartDashboard.putNumber("Module Angle Front Right", m_frontRight.getState().angle.getDegrees());
-			SmartDashboard.putNumber("Module Angle Rear Right", m_rearRight.getState().angle.getDegrees());
-
-			// For setting offsets.
-			SmartDashboard.putNumber("Module Angle Absolute Front Left", m_frontLeft.getAbsoluteAngle());
-			SmartDashboard.putNumber("Module Angle Absolute Rear Left", m_rearLeft.getAbsoluteAngle());
-			SmartDashboard.putNumber("Module Angle Absolute Front Right", m_frontRight.getAbsoluteAngle());
-			SmartDashboard.putNumber("Module Angle Absolute Rear Right", m_rearRight.getAbsoluteAngle());
-
-			SmartDashboard.putNumber("Module Speed Front Left", m_frontLeft.getState().speedMetersPerSecond);
-			SmartDashboard.putNumber("Module Speed Rear Left", m_rearLeft.getState().speedMetersPerSecond);
-			SmartDashboard.putNumber("Module Speed Front Right", m_frontRight.getState().speedMetersPerSecond);
-			SmartDashboard.putNumber("Module Speed Rear Right", m_rearRight.getState().speedMetersPerSecond);
-
+		if (Utils.isTelemetryEnabled()) {
 			SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
 			SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
 			SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
@@ -157,14 +145,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
 		if ((xSpeed == 0 && ySpeed == 0) || m_headingCorrectionTimer.get() < SwerveConstants.kTurningStopTime) {
 			m_headingCorrectionPID.setSetpoint(currentAngle);
-			if (OIConstants.kTelemetry) {
-				SmartDashboard.putString("Heading Correction", "Setting Setpoint");
-			}
 		} else {
 			rotation = m_headingCorrectionPID.calculate(currentAngle);
-			if (OIConstants.kTelemetry) {
-				SmartDashboard.putString("Heading Correction", "Correcting Heading");
-			}
 		}
 
 		// this check prevents the wheels from resetting to straight when the robot
@@ -224,7 +206,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		// Adds the change in angle to the current angle.
 		m_simulatedYaw.set(m_simulatedYaw.get() - rotDegrees * Robot.kDefaultPeriod);
 
-		if (OIConstants.kTelemetry) {
+		if (Utils.isTelemetryEnabled()) {
 			SmartDashboard.putNumber("Desired X", chassisSpeeds.vxMetersPerSecond);
 			SmartDashboard.putNumber("Desired Y", chassisSpeeds.vyMetersPerSecond);
 			SmartDashboard.putNumber("Desired Rot", rotDegrees);

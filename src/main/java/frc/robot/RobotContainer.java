@@ -104,6 +104,8 @@ public class RobotContainer {
 				m_climberSubsystem.set(leftClimbSpeed.getAsDouble());
 			}
 		}, m_climberSubsystem));
+
+		SmartDashboard.putString("Autonomous Path", "BlueHangar");
 	}
 
 	/**
@@ -136,6 +138,11 @@ public class RobotContainer {
 		new JoystickButton(m_driveController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
+
+		// Slowly drives forward while X is held.
+		new JoystickButton(m_driveController, Button.kX.value)
+				.whileHeld(() -> m_swerveDriveSubsystem.drive(0.3, 0, 0, false), m_swerveDriveSubsystem)
+				.whenReleased(() -> m_swerveDriveSubsystem.drive(0, 0, 0, false), m_swerveDriveSubsystem);
 
 		// raises the arm while left bumper held
 		new JoystickButton(m_operatorController, Button.kLeftBumper.value)
@@ -177,11 +184,11 @@ public class RobotContainer {
 				new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 				new ParallelCommandGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem,
-								SmartDashboard.getString("AutonPath", "BlueHangarTwoBall") + "1", true),
+								SmartDashboard.getString("Autonomous Path", "BlueHangar") + "TwoBall1", true),
 						new IntakeCommand(m_shooterSubsystem)),
 				new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
 				new PathWeaverCommand(m_swerveDriveSubsystem,
-						SmartDashboard.getString("AutonPath", "BlueHangarTwoBall") + "2", false),
+						SmartDashboard.getString("Autonomous Path", "BlueHangar") + "TwoBall2", false),
 				new ShootCommand(m_shooterSubsystem));
 	}
 }

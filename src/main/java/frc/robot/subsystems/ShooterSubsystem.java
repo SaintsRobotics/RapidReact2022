@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.MUX;
 import frc.robot.REV2mDistanceSensor;
@@ -33,7 +32,11 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final DutyCycleEncoder m_armEncoder = new DutyCycleEncoder(9);
 
 	private final CANSparkMax m_intake = new CANSparkMax(ShooterConstants.kIntakeWheelsPort, MotorType.kBrushless);
-	private final MotorControllerGroup m_sideFeeders;
+
+	private final CANSparkMax m_leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
+	private final CANSparkMax m_rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
+	private final MotorControllerGroup m_sideFeeders = new MotorControllerGroup(m_leftFeeder, m_rightFeeder);
+
 	private final CANSparkMax m_topFeeder = new CANSparkMax(ShooterConstants.kTopFeederPort, MotorType.kBrushless);
 
 	private final WPI_TalonFX m_bottomFlywheel = new WPI_TalonFX(ShooterConstants.kBottomFlywheelPort);
@@ -51,8 +54,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterP, 0, 0);
 
 	private final PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterP, 0, 0);
-	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.33, 0);
-	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.84, 0);
+	private final SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(0.4, 0);
+	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(0.4, 0);
 
 	private boolean m_runningIntake = false;
 	private boolean m_reversingIntake = false;
@@ -68,16 +71,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
 		m_bottomFlywheel.setNeutralMode(NeutralMode.Coast);
 		m_topFlywheel.setNeutralMode(NeutralMode.Coast);
-
-		CANSparkMax leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
-		CANSparkMax rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
+		
+		m_topFlywheel.setInverted(true);
 		m_intake.setInverted(true);
-		leftFeeder.setInverted(true);
-		rightFeeder.setInverted(false);
-		m_sideFeeders = new MotorControllerGroup(leftFeeder, rightFeeder);
-		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kTopShooterSpeedRPM, 100 / 0.02);
+		m_leftFeeder.setInverted(true);
+		m_rightFeeder.setInverted(false);
+
+		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kTopMotorSpeedRPM, 100 / 0.02);
 		m_topShooterPID.setTolerance(0.08 * ShooterConstants.kBottomShooterSpeedRPM, 100 / 0.02);
 		m_armPID.setTolerance(2);
+		m_armPID.enableContinuousInput(-180, 180);
 
 		// m_feederTimer.start();
 	}
@@ -86,8 +89,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		double bottomPIDOutput = m_bottomShooterPID
-				.calculate(Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
-		double topPIDOutput = m_topShooterPID.calculate(Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
+				.calculate(toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
+		double topPIDOutput = m_topShooterPID.calculate(toRPM(m_topFlywheel.getSelectedSensorVelocity()));
 		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
 		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
@@ -134,7 +137,7 @@ public class ShooterSubsystem extends SubsystemBase {
 				m_distanceSensor.getDistance() < ShooterConstants.kMaxShootingDistance &&
 						m_distanceSensor.getDistance() > ShooterConstants.kMinShootingDistance);
 
-		if (OIConstants.kTelemetry) {
+		if (Utils.isTelemetryEnabled()) {
 			SmartDashboard.putNumber("Bottom Shooter PID Output", bottomPIDOutput);
 			SmartDashboard.putNumber("Top Shooter PID Output", topPIDOutput);
 
@@ -149,8 +152,11 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Bottom Shooter Power", m_bottomFlywheel.get());
 			SmartDashboard.putNumber("Top Shooter Power", m_topFlywheel.get());
 
-			SmartDashboard.putNumber("Bottom Shooter RPM", Utils.toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
-			SmartDashboard.putNumber("Top Shooter RPM", Utils.toRPM(m_topFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Bottom Target RPM", m_bottomShooterPID.getSetpoint());
+			SmartDashboard.putNumber("Top Target RPM", m_topShooterPID.getSetpoint());
+
+			SmartDashboard.putNumber("Bottom Shooter RPM", toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
+			SmartDashboard.putNumber("Top Shooter RPM", toRPM(m_topFlywheel.getSelectedSensorVelocity()));
 
 			SmartDashboard.putNumber("Bottom Shooter RPM Error", m_bottomShooterPID.getPositionError());
 			SmartDashboard.putNumber("Top Shooter RPM Error", m_topShooterPID.getPositionError());
@@ -174,6 +180,22 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Distance Sensor Meters", distanceSensorMeters);
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
+
+		SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Intake", m_intake.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Left Feeder", m_leftFeeder.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Right Feeder", m_rightFeeder.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Top Feeder", m_topFeeder.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Bottom Flywheel", m_topFlywheel.getTemperature());
+		SmartDashboard.putNumber("Temperature Top Flywheel", m_bottomFlywheel.getTemperature());
+
+		SmartDashboard.putNumber("Current Arm", m_arm.getOutputCurrent());
+		SmartDashboard.putNumber("Current Intake", m_intake.getOutputCurrent());
+		SmartDashboard.putNumber("Current Left Feeder", m_leftFeeder.getOutputCurrent());
+		SmartDashboard.putNumber("Current Right Feeder", m_rightFeeder.getOutputCurrent());
+		SmartDashboard.putNumber("Current Top Feeder", m_topFeeder.getOutputCurrent());
+		SmartDashboard.putNumber("Current Bottom Flywheel", m_topFlywheel.getStatorCurrent());
+		SmartDashboard.putNumber("Current Top Flywheel", m_bottomFlywheel.getStatorCurrent());
 	}
 
 	/** Raises the arm. */
@@ -224,32 +246,28 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * Shoots the ball(s)
+	 * Sets the speed of the shooter.
 	 * 
-	 * @param speed Speed of the black flywheel in RPM.
+	 * @param bottomRPM Target RPM for the bottom flywheel.
+	 * @param topRPM    Target RPM for the top flywheel.
 	 */
-	public void setShooterSpeeds(double bottomTargetRPM, double topTargetRPM) {
-		m_bottomShooterPID.setSetpoint(bottomTargetRPM);
-		m_topShooterPID.setSetpoint(topTargetRPM);
-		if (bottomTargetRPM == 0) {
+	public void setShooterSpeed(double bottomRPM, double topRPM) {
+		m_bottomShooterPID.setSetpoint(bottomRPM);
+		m_topShooterPID.setSetpoint(topRPM);
+		if (bottomRPM == 0) {
 			m_sideFeeders.set(0);
 		} else {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		}
+
 		if (OIConstants.kTelemetry) {
 			SmartDashboard.putNumber("Bottom Target Shooter Speed", bottomTargetRPM);
 			SmartDashboard.putNumber("Top Target Shooter Speed", topTargetRPM);
 		}
 	}
 
-	/**
-	 * Shoots the ball(s)
-	 * 
-	 * @param speed Speed of the roller in RPM.
-	 */
-
 	private boolean isShooterPrimed() {
-		return m_queueColorSensor.getProximity() >= 180;
+		return m_shooterColorSensor.getProximity() >= 180;
 	}
 
 	public void topFeederOn() {
@@ -258,5 +276,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	public void topFeederOff() {
 		m_topFeeder.set(0);
+	}
+
+	/**
+	 * Converts the speed of a TalonFX from the default units of ticks per
+	 * decisecond to RPM.
+	 * 
+	 * @param ticksPerDecisecond The speed in ticks per decisecond.
+	 * @return The speed in RPM.
+	 */
+	private double toRPM(double ticksPerDecisecond) {
+		return ticksPerDecisecond * 600 / 2048;
 	}
 }

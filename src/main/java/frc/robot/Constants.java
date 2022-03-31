@@ -89,11 +89,12 @@ public final class Constants {
 		public static final Port kShooterColorSensorPort = Port.kTwo;
 		public static final Port kDistanceSensorPort = Port.kThree;
 
-		public static final double kBottomShooterSpeedRPM = 2100;
-		public static final double kTopShooterSpeedRPM = 5300;
-
-		public static final int kLowerArmAngle = 50;
-		public static final int kUpperArmAngle = -50;
+//Motor and shooter are the same for the bottom flywheel, as there is a 1:1 ratio
+		public static final double kBottomShooterSpeedRPM = 2500;
+		public static final double kTopMotorSpeedRPM = (ShooterConstants.kTopShooterSpeedRPM * 18)/52;
+		public static final double kTopShooterSpeedRPM = 5500;
+		public static final double kLowerArmAngle = 50.6;
+		public static final double kUpperArmAngle = -54.6;
 		public static final double kIntakeSpeed = 0.7;
 		public static final double kTopFeederSpeedSlow = 0.1;
 		public static final double kTopFeederSpeedFast = 0.9;
@@ -106,11 +107,13 @@ public final class Constants {
 		public static final int kBlueThreshold = 300;
 
 		public static final double kBottomShooterP = 0.00025;
-		public static final double kTopShooterP = 0.000007;
+
+		public static final double kTopShooterP = 0.00025;
 
 		// TODO tune shooting distance
 		public static final double kMinShootingDistance = 0;
 		public static final double kMaxShootingDistance = 24;
+
 	}
 
 	/** Constants for the climber. */

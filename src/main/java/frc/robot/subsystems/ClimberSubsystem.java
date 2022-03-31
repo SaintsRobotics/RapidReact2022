@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
-import frc.robot.Constants.OIConstants;
+import frc.robot.Utils;
 
 /** Subsystem that controls the climber. */
 public class ClimberSubsystem extends SubsystemBase {
@@ -29,12 +29,18 @@ public class ClimberSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		if (OIConstants.kTelemetry) {
+		if (Utils.isTelemetryEnabled()) {
 			SmartDashboard.putNumber("Climber Speed Left", m_leftClimber.get());
 			SmartDashboard.putNumber("Climber Speed Right", m_rightClimber.get());
 			SmartDashboard.putNumber("Climber Servo Position Left", m_leftServo.get());
 			SmartDashboard.putNumber("Climber Servo Position Right", m_rightServo.get());
 		}
+
+		SmartDashboard.putNumber("Temperature Climber Left", m_leftClimber.getMotorTemperature());
+		SmartDashboard.putNumber("Temperature Climber Right", m_rightClimber.getMotorTemperature());
+
+		SmartDashboard.putNumber("Current Climber Left", m_leftClimber.getOutputCurrent());
+		SmartDashboard.putNumber("Current Climber Right", m_rightClimber.getOutputCurrent());
 	}
 
 	/**
