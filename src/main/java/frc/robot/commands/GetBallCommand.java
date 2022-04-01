@@ -20,7 +20,6 @@ public class GetBallCommand extends CommandBase {
 
 	// TODO: tune pid
 	private final PIDController m_rotPid = new PIDController(0.03, 0, 0);
-	private NetworkTable table;
 	private UsbCamera camera;
 	private VideoMode videoMode;
 	private MoveCommand m_moveCommand;
@@ -44,7 +43,7 @@ public class GetBallCommand extends CommandBase {
 
 		//image related stuff
 		NetworkTableInstance.getDefault().startClient(); //
-		table = NetworkTableInstance.getDefault().getTable("limelight");
+		
 		
 		// usb camera
 		camera = CameraServer.startAutomaticCapture();
