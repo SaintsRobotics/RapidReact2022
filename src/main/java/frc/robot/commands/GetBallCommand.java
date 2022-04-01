@@ -55,12 +55,12 @@ public class GetBallCommand extends CommandBase {
 	@Override
 	public boolean isFinished() {
 		return Math.abs(getDistance()) < COLLECTION_TOLERANCE
-				&& Math.abs(m_rotPid.calculate(Limelight.getX(), 0)) < 0.03;
+				&& Math.abs(m_rotPid.calculate(SmartDashboard.getNumber("ball detect x angle"), 0)) < 0.03;
 	}
 
 	public double getDistance() {
 		return (BALL_CENTER_HEIGHT - LIMELIGHT_HEIGHT)
-				/ (Math.tan((MOUNTING_ANGLE_DEGREES + Limelight.getY()) * Math.PI / 180)); // units in
+				/ (Math.tan((MOUNTING_ANGLE_DEGREES + SmartDashboard.) * Math.PI / 180)); // units in
 		// meters,
 		// converted
 		// from degrees
