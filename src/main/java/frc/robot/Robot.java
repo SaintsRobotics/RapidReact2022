@@ -61,10 +61,10 @@ public class Robot extends TimedRobot {
                 }
                 
 				// Convert to grayscale.
-				Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2GRAY)
+				Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2GRAY);
 				
 				// Blur using 3 * 3 kernel.
-				Imgproc.blur(mat, mat, new Size(3, 3))
+				Imgproc.blur(mat, mat, new Size(3, 3));
 				
 				// Apply Hough transform on the blurred image.
 				cv2.HoughCircles(mat, mat, Imgproc.HOUGH_GRADIENT, 1, 20, 50, 30, 1, 40)
