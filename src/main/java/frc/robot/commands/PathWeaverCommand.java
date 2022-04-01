@@ -53,8 +53,8 @@ public class PathWeaverCommand extends CommandBase {
 			DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
 		}
 
-		final ProfiledPIDController rotPID = new ProfiledPIDController(2, 0, 0,
-				new TrapezoidProfile.Constraints(Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 2.6));
+		final ProfiledPIDController rotPID = new ProfiledPIDController(5, 0, 0,
+				new TrapezoidProfile.Constraints(Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 6));
 		rotPID.enableContinuousInput(-Math.PI, Math.PI);
 
 		// This doesn't require the subsystem because PathWeaverCommand requires it.
