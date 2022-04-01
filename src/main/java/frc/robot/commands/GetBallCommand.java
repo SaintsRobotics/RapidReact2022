@@ -91,8 +91,4 @@ public class GetBallCommand extends CommandBase {
 		// from degrees
 		// to radians
 	}
-
-	private void getBallImage() {
-		table.getEntry("filename");		
-	}
 }
