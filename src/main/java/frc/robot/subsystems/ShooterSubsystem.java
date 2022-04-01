@@ -30,7 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final CANSparkMax m_arm = new CANSparkMax(ShooterConstants.kArmPort, MotorType.kBrushless);
 	private final DutyCycleEncoder m_armEncoder = new DutyCycleEncoder(9);
 
-	private final CANSparkMax m_intake = new CANSparkMax(ShooterConstants.kIntakeWheelsPort, MotorType.kBrushless);
+	private final CANSparkMax m_intake = new CANSparkMax(ShooterConstants.kIntakePort, MotorType.kBrushless);
 
 	private final CANSparkMax m_leftFeeder = new CANSparkMax(ShooterConstants.kLeftFeederPort, MotorType.kBrushless);
 	private final CANSparkMax m_rightFeeder = new CANSparkMax(ShooterConstants.kRightFeederPort, MotorType.kBrushless);
@@ -59,28 +59,27 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
-		m_arm.setIdleMode(IdleMode.kBrake);
-		m_arm.setInverted(true);
-
 		// TODO change to getAngle if WPILib adds it
 		m_armEncoder.setDistancePerRotation(360);
 
+		m_arm.setIdleMode(IdleMode.kBrake);
 		m_bottomFlywheel.setNeutralMode(NeutralMode.Coast);
 		m_topFlywheel.setNeutralMode(NeutralMode.Coast);
-		
-		m_topFlywheel.setInverted(true);
-		m_intake.setInverted(true);
-		m_leftFeeder.setInverted(true);
-		m_rightFeeder.setInverted(false);
+
+		m_arm.setInverted(ShooterConstants.kArmReversed);
+		m_intake.setInverted(ShooterConstants.kIntakeReversed);
+		m_leftFeeder.setInverted(ShooterConstants.kLeftFeederReversed);
+		m_rightFeeder.setInverted(ShooterConstants.kRightFeederReversed);
+		m_topFeeder.setInverted(ShooterConstants.kTopFeederReversed);
+		m_bottomFlywheel.setInverted(ShooterConstants.kBottomFlywheelReversed);
+		m_topFlywheel.setInverted(ShooterConstants.kTopFlywheelReversed);
 
 		m_bottomShooterPID.setTolerance(0.08 * ShooterConstants.kBottomMotorRPMTarmac, 100 / 0.02);
 		m_topShooterPID.setTolerance(0.08 * ShooterConstants.kTopMotorRPMTarmac, 100 / 0.02);
 		m_armPID.setTolerance(2);
-
-		// m_feederTimer.start();
+		m_armPID.enableContinuousInput(-180, 180);
 	}
 
-	// top feeder run for how long?
 	@Override
 	public void periodic() {
 		double bottomPIDOutput = m_bottomShooterPID
