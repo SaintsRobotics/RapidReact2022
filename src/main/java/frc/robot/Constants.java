@@ -92,9 +92,9 @@ public final class Constants {
 
 //Motor and shooter are the same for the bottom flywheel, as there is a 1:1 ratio
 		public static final double kBottomMotorRPMTarmac = 2500;
-		public static final double kTopMotorRPMTarmac = (10000 * 18)/52;
+		public static final double kTopMotorRPMTarmac = (5500 * 18)/52;
 		public static final double kBottomFeedforwardTarmac = 0.4;
-		public static final double kTopFeedforwardTarmac = 0.55;
+		public static final double kTopFeedforwardTarmac = 0.4;
 
 
 		//TODO: tune these values for shooting from the fender
