@@ -239,14 +239,9 @@ public class ShooterSubsystem extends SubsystemBase {
 	 * @param topRPM    Target RPM for the top flywheel.
 	 */
 	public void setShooterSpeed(double bottomRPM, double topRPM) {
-		m_bottomShooterPID.setSetpoint(bottomRPM);
-		m_topShooterPID.setSetpoint(topRPM);
-		m_bottomShooterPID.setTolerance(0.08 * topRPM, 100 / 0.02);
-		m_topShooterPID.setTolerance(0.08 * bottomRPM, 100 / 0.02);
-
 		if (bottomRPM == ShooterConstants.kBottomMotorRPMFender) {
 			m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardFender, 0);
-			m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFlywheelRPMFender, 0);
+			m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardFender, 0);
 			m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPFender, 0, 0);
 			m_topShooterPID = new PIDController(ShooterConstants.kTopShooterPFender, 0, 0);
 		}
@@ -256,6 +251,11 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPTarmac, 0, 0);
 			m_topShooterPID = new PIDController(ShooterConstants.kTopShooterPTarmac, 0, 0);
 		}
+
+		m_bottomShooterPID.setSetpoint(bottomRPM);
+		m_topShooterPID.setSetpoint(topRPM);
+		m_bottomShooterPID.setTolerance(0.08 * bottomRPM, 100 / 0.02);
+		m_topShooterPID.setTolerance(0.08 * topRPM, 100 / 0.02);
 
 		if (bottomRPM == 0) {
 			m_sideFeeders.set(0);
