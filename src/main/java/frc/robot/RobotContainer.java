@@ -192,16 +192,16 @@ public class RobotContainer {
 						new IntakeCommand(m_shooterSubsystem)),
 				new ShootCommand(m_shooterSubsystem));
 
-		SequentialCommandGroup fourBallAuton = new SequentialCommandGroup(
-				twoBallAuton,
-				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall3", false),
-						new IntakeCommand(m_shooterSubsystem)),
-				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall4", false),
-						new IntakeCommand(m_shooterSubsystem)),
-				new ShootCommand(m_shooterSubsystem));
+		// SequentialCommandGroup fourBallAuton = new SequentialCommandGroup(
+		// 		twoBallAuton,
+		// 		new ParallelDeadlineGroup(
+		// 				new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall3", false),
+		// 				new IntakeCommand(m_shooterSubsystem)),
+		// 		new ParallelDeadlineGroup(
+		// 				new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall4", false),
+		// 				new IntakeCommand(m_shooterSubsystem)),
+		// 		new ShootCommand(m_shooterSubsystem));
 
-		return fourBallAuton;
+		return twoBallAuton;
 	}
 }
