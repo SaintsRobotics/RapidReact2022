@@ -12,17 +12,15 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class IntakeCommand extends CommandBase {
 	private final ShooterSubsystem m_subsystem;
 	private final Timer m_timer = new Timer();
-	private final double m_intakeTime;
 
 	/**
 	 * Creates a new {@link IntakeCommand}.
 	 * 
 	 * @param subsystem The required subsystem.
 	 */
-	public IntakeCommand(ShooterSubsystem subsystem, double time) {
+	public IntakeCommand(ShooterSubsystem subsystem) {
 		m_subsystem = subsystem;
 		addRequirements(m_subsystem);
-		m_intakeTime = time;
 	}
 
 	@Override
@@ -35,10 +33,5 @@ public class IntakeCommand extends CommandBase {
 	@Override
 	public void end(boolean interrupted) {
 		m_subsystem.intakeOff();
-	}
-
-	@Override
-	public boolean isFinished() {
-		return m_timer.get() > m_intakeTime;
 	}
 }
