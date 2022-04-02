@@ -183,6 +183,9 @@ public class ShooterSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Current Top Feeder", m_topFeeder.getOutputCurrent());
 		SmartDashboard.putNumber("Current Bottom Flywheel", m_topFlywheel.getStatorCurrent());
 		SmartDashboard.putNumber("Current Top Flywheel", m_bottomFlywheel.getStatorCurrent());
+
+		SmartDashboard.putNumber("Bottom Target RPM", m_bottomShooterPID.getSetpoint());
+		SmartDashboard.putNumber("Top Target RPM", m_topShooterPID.getSetpoint());
 	}
 
 	/** Raises the arm. */
