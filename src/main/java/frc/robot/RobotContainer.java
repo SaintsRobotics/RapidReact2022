@@ -184,16 +184,17 @@ public class RobotContainer {
 
 		SequentialCommandGroup threeBallAuton = new SequentialCommandGroup(
 				new ShootCommand(m_shooterSubsystem),
-				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-						path + "ThreeBall1", true),
-						new SequentialCommandGroup(new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+				new ParallelCommandGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem, path + "ThreeBall1", true),
+						new SequentialCommandGroup(
+								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 								new IntakeCommand(m_shooterSubsystem))),
-				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-						path + "ThreeBall2", false),
+				new ParallelCommandGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem, path + "ThreeBall2", false),
 						new IntakeCommand(m_shooterSubsystem)),
-				new ParallelCommandGroup(new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-						new PathWeaverCommand(m_swerveDriveSubsystem, path + "ThreeBall3",
-								false)),
+				new ParallelCommandGroup(
+						new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
+						new PathWeaverCommand(m_swerveDriveSubsystem, path + "ThreeBall3", false)),
 				new ShootCommand(m_shooterSubsystem));
 
 		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
