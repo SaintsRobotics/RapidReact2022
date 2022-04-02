@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Robot;
-import frc.robot.Utils;
 
 /** Controls the drivetrain of the robot using swerve. */
 public class SwerveDriveSubsystem extends SubsystemBase {
@@ -76,6 +75,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		m_headingCorrectionPID.setSetpoint(MathUtil.angleModulus(m_gyro.getRotation2d().getRadians()));
 		m_headingCorrectionTimer = new Timer();
 		m_headingCorrectionTimer.start();
+
+		if (Robot.isSimulation()) {
+			SmartDashboard.putData("Field", m_field2d);
+		}
 	}
 
 	@Override
@@ -87,19 +90,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 				m_frontRight.getState(),
 				m_rearRight.getState());
 		m_field2d.setRobotPose(m_odometry.getPoseMeters());
-
-		if (Utils.isTelemetryEnabled()) {
-			SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
-			SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
-			SmartDashboard.putNumber("Odometry Rot", m_odometry.getPoseMeters().getRotation().getDegrees());
-
-			SmartDashboard.putNumber("Gyro Angle", MathUtil.inputModulus(m_gyro.getAngle(), 0, 360));
-
-			SmartDashboard.putNumber("Heading Correction Setpoint",
-					Math.toDegrees(m_headingCorrectionPID.getSetpoint()));
-
-			SmartDashboard.putData("Field", m_field2d);
-		}
 	}
 
 	/**
@@ -200,16 +190,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		m_frontRight.setDesiredState(desiredStates[2]);
 		m_rearRight.setDesiredState(desiredStates[3]);
 
-		final ChassisSpeeds chassisSpeeds = SwerveConstants.kDriveKinematics.toChassisSpeeds(desiredStates);
-		final double rotDegrees = Math.toDegrees(chassisSpeeds.omegaRadiansPerSecond);
-
 		// Adds the change in angle to the current angle.
-		m_simulatedYaw.set(m_simulatedYaw.get() - rotDegrees * Robot.kDefaultPeriod);
-
-		if (Utils.isTelemetryEnabled()) {
-			SmartDashboard.putNumber("Desired X", chassisSpeeds.vxMetersPerSecond);
-			SmartDashboard.putNumber("Desired Y", chassisSpeeds.vyMetersPerSecond);
-			SmartDashboard.putNumber("Desired Rot", rotDegrees);
-		}
+		m_simulatedYaw.set(m_simulatedYaw.get()
+				- Math.toDegrees(SwerveConstants.kDriveKinematics.toChassisSpeeds(desiredStates).omegaRadiansPerSecond)
+						* Robot.kDefaultPeriod);
 	}
 }
