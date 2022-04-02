@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -181,26 +181,26 @@ public class RobotContainer {
 	public Command getAutonomousCommand() {
 		String path = SmartDashboard.getString("Autonomous Path", "BlueMid");
 		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
-				new ParallelCommandGroup(
+				new ParallelDeadlineGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path + "TwoBall1", true),
 						new SequentialCommandGroup(
 								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-								new IntakeCommand(m_shooterSubsystem, 1))),
-				new ParallelCommandGroup(
-						new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-						new PathWeaverCommand(m_swerveDriveSubsystem, path + "TwoBall2", false)),
+								new IntakeCommand(m_shooterSubsystem))),
+				new ParallelDeadlineGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem, path + "TwoBall2", false),
+						new IntakeCommand(m_shooterSubsystem)),
 				new ShootCommand(m_shooterSubsystem));
+
 		SequentialCommandGroup fourBallAuton = new SequentialCommandGroup(
 				twoBallAuton,
-				new ParallelCommandGroup(
+				new ParallelDeadlineGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall3", false),
-						new SequentialCommandGroup(
-								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-								new IntakeCommand(m_shooterSubsystem, 1))),
-				new ParallelCommandGroup(
+						new IntakeCommand(m_shooterSubsystem)),
+				new ParallelDeadlineGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path + "FourBall4", false),
-						new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle)),
+						new IntakeCommand(m_shooterSubsystem)),
 				new ShootCommand(m_shooterSubsystem));
+
 		return fourBallAuton;
 	}
 }
