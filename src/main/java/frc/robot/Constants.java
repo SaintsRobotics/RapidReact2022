@@ -92,20 +92,21 @@ public final class Constants {
 
 //Motor and shooter are the same for the bottom flywheel, as there is a 1:1 ratio
 		public static final double kBottomMotorRPMTarmac = 2500;
-		public static final double kTopMotorRPMTarmac = (5500 * 18)/52;
+		public static final double kTopMotorRPMTarmac = (10000 * 18)/52;
 		public static final double kBottomFeedforwardTarmac = 0.4;
-		public static final double kTopFeedforwardTarmac = 0.4;
+		public static final double kTopFeedforwardTarmac = 0.55;
 
 
 		//TODO: tune these values for shooting from the fender
 		public static final double kBottomMotorRPMFender = 2500;
-		public static final double kTopMotorRPMFender = (5500 * 18)/52;
+		public static final double kTopMotorRPMFender = (4500 * 18)/52;
 		public static final double kBottomFeedforwardFender = 0.4;
-		public static final double kTopFeedforwardFender = 0.4;
+		public static final double kTopFeedforwardFender = 0.3;
 
 		public static final double kLowerArmAngle = 50.6;
 		public static final double kUpperArmAngle = -54.6;
 		
+
 		public static final boolean kArmReversed = true;
 		public static final boolean kIntakeReversed = true;
 		public static final boolean kLeftFeederReversed = true;
@@ -122,7 +123,7 @@ public final class Constants {
 		public static final int kBlueThreshold = 300;
 		
 		public static final double kBottomShooterPTarmac = 0.00025;
-		public static final double kTopShooterPTarmac = 0.00025;
+		public static final double kTopShooterPTarmac = 0.00003;
 		//TODO: update these values with fender tuning 
 		public static final double kBottomShooterPFender = 0.00025;
 		public static final double kTopShooterPFender = 0.00025;
