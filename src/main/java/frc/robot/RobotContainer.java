@@ -180,6 +180,7 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		String path = SmartDashboard.getString("Autonomous Path", "BlueMid");
+
 		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
 				new ParallelDeadlineGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path + "TwoBall1", true),
