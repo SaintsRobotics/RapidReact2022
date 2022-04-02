@@ -106,7 +106,7 @@ public class RobotContainer {
 			}
 		}, m_climberSubsystem));
 
-		SmartDashboard.putString("Autonomous Path", "BlueMid");
+		SmartDashboard.putString("Autonomous Path", "BlueHangar");
 	}
 
 	/**
@@ -180,21 +180,21 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
+		String path = SmartDashboard.getString("Autonomous Path", "BlueHangar");
+
 		SequentialCommandGroup threeBallAuton = new SequentialCommandGroup(
 				new ShootCommand(m_shooterSubsystem),
 				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-						"BlueStationThreeBall1", true),
+						path + "ThreeBall1", true),
 						new SequentialCommandGroup(new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 								new IntakeCommand(m_shooterSubsystem))),
 				new ParallelCommandGroup(new PathWeaverCommand(m_swerveDriveSubsystem,
-						"BlueStationThreeBall2", false),
+						path + "ThreeBall2", false),
 						new IntakeCommand(m_shooterSubsystem)),
 				new ParallelCommandGroup(new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
-						new PathWeaverCommand(m_swerveDriveSubsystem, "BlueStationThreeBall3",
+						new PathWeaverCommand(m_swerveDriveSubsystem, path + "ThreeBall3",
 								false)),
 				new ShootCommand(m_shooterSubsystem));
-
-		String path = SmartDashboard.getString("Autonomous Path", "BlueMid");
 
 		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
 				new ParallelDeadlineGroup(
