@@ -50,12 +50,20 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final PIDController m_armPID = new PIDController(0.005, 0, 0);
 	private PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPTarmac, 0, 0);
 	private PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterPTarmac, 0, 0);
-	private SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardTarmac, 0);
-	private SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac, 0);
+	private SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(
+			ShooterConstants.kBottomFeedforwardTarmac, 0);
+	private SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac,
+			0);
 
 	private boolean m_runningIntake = false;
 	private boolean m_reversingIntake = false;
 	private Timer m_feederTimer = new Timer();
+
+	public static enum Mode {
+		kFender,
+		kTarmac,
+		kEnd;
+	}
 
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
@@ -168,24 +176,44 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
 		}
 
-		SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
-		SmartDashboard.putNumber("Temperature Intake", m_intake.getMotorTemperature());
-		SmartDashboard.putNumber("Temperature Left Feeder", m_leftFeeder.getMotorTemperature());
-		SmartDashboard.putNumber("Temperature Right Feeder", m_rightFeeder.getMotorTemperature());
-		SmartDashboard.putNumber("Temperature Top Feeder", m_topFeeder.getMotorTemperature());
-		SmartDashboard.putNumber("Temperature Bottom Flywheel", m_topFlywheel.getTemperature());
-		SmartDashboard.putNumber("Temperature Top Flywheel", m_bottomFlywheel.getTemperature());
-
-		SmartDashboard.putNumber("Current Arm", m_arm.getOutputCurrent());
-		SmartDashboard.putNumber("Current Intake", m_intake.getOutputCurrent());
-		SmartDashboard.putNumber("Current Left Feeder", m_leftFeeder.getOutputCurrent());
-		SmartDashboard.putNumber("Current Right Feeder", m_rightFeeder.getOutputCurrent());
-		SmartDashboard.putNumber("Current Top Feeder", m_topFeeder.getOutputCurrent());
-		SmartDashboard.putNumber("Current Bottom Flywheel", m_topFlywheel.getStatorCurrent());
-		SmartDashboard.putNumber("Current Top Flywheel", m_bottomFlywheel.getStatorCurrent());
-
+		SmartDashboard.putBoolean("Bottom Shooter At Setpoint", m_bottomShooterPID.atSetpoint());
+		SmartDashboard.putBoolean("Top Shooter At Setpoint", m_topShooterPID.atSetpoint());
 		SmartDashboard.putNumber("Bottom Target RPM", m_bottomShooterPID.getSetpoint());
 		SmartDashboard.putNumber("Top Target RPM", m_topShooterPID.getSetpoint());
+
+		SmartDashboard.putNumber("Bottom Shooter RPM", toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
+		SmartDashboard.putNumber("Top Shooter RPM", toRPM(m_topFlywheel.getSelectedSensorVelocity()));
+		SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
+
+		SmartDashboard.putNumber("top feedforward", m_topFeedforward.calculate(ShooterConstants.kTopFeedforwardTarmac));
+
+		// SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
+		// SmartDashboard.putNumber("Temperature Intake",
+		// m_intake.getMotorTemperature());
+		// SmartDashboard.putNumber("Temperature Left Feeder",
+		// m_leftFeeder.getMotorTemperature());
+		// SmartDashboard.putNumber("Temperature Right Feeder",
+		// m_rightFeeder.getMotorTemperature());
+		// SmartDashboard.putNumber("Temperature Top Feeder",
+		// m_topFeeder.getMotorTemperature());
+		// SmartDashboard.putNumber("Temperature Bottom Flywheel",
+		// m_topFlywheel.getTemperature());
+		// SmartDashboard.putNumber("Temperature Top Flywheel",
+		// m_bottomFlywheel.getTemperature());
+
+		// SmartDashboard.putNumber("Current Arm", m_arm.getOutputCurrent());
+		// SmartDashboard.putNumber("Current Intake", m_intake.getOutputCurrent());
+		// SmartDashboard.putNumber("Current Left Feeder",
+		// m_leftFeeder.getOutputCurrent());
+		// SmartDashboard.putNumber("Current Right Feeder",
+		// m_rightFeeder.getOutputCurrent());
+		// SmartDashboard.putNumber("Current Top Feeder",
+		// m_topFeeder.getOutputCurrent());
+		// SmartDashboard.putNumber("Current Bottom Flywheel",
+		// m_topFlywheel.getStatorCurrent());
+		// SmartDashboard.putNumber("Current Top Flywheel",
+		// m_bottomFlywheel.getStatorCurrent());
+
 	}
 
 	/** Raises the arm. */
@@ -241,14 +269,19 @@ public class ShooterSubsystem extends SubsystemBase {
 	 * @param bottomRPM Target RPM for the bottom flywheel.
 	 * @param topRPM    Target RPM for the top flywheel.
 	 */
-	public void setShooterSpeed(double bottomRPM, double topRPM) {
-		if (bottomRPM == ShooterConstants.kBottomMotorRPMFender) {
+	public void setShooterSpeed(Mode mode) {
+		double bottomRPM = 0;
+		double topRPM = 0;
+		if (mode == Mode.kFender) {
+			bottomRPM = ShooterConstants.kBottomMotorRPMFender;
+			topRPM = ShooterConstants.kTopMotorRPMFender;
 			m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardFender, 0);
 			m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardFender, 0);
 			m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPFender, 0, 0);
 			m_topShooterPID = new PIDController(ShooterConstants.kTopShooterPFender, 0, 0);
-		}
-		else if (bottomRPM == ShooterConstants.kBottomMotorRPMTarmac){
+		} else if (mode == Mode.kTarmac) {
+			bottomRPM = ShooterConstants.kBottomMotorRPMTarmac;
+			topRPM = ShooterConstants.kTopMotorRPMTarmac;
 			m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardTarmac, 0);
 			m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac, 0);
 			m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPTarmac, 0, 0);

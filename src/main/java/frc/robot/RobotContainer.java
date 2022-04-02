@@ -31,7 +31,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PathWeaverCommand;
-import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ShootFender;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -156,13 +156,11 @@ public class RobotContainer {
 
 		// Turns on shooter for tarmac shots when Y button is held.
 		new JoystickButton(m_operatorController, Button.kY.value)
-				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterConstants.kBottomMotorRPMTarmac,
-						ShooterConstants.kTopMotorRPMTarmac));
+				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kTarmac));
 
 		// Turns on shooter for fender shots when B button is held.
 		new JoystickButton(m_operatorController, Button.kB.value)
-				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterConstants.kBottomMotorRPMFender,
-						ShooterConstants.kTopMotorRPMFender));
+				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kFender));
 
 		// runs intake forward while left trigger is held
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
@@ -195,6 +193,6 @@ public class RobotContainer {
 				new ArmCommand(m_shooterSubsystem, ShooterConstants.kUpperArmAngle),
 				new PathWeaverCommand(m_swerveDriveSubsystem,
 						SmartDashboard.getString("Autonomous Path", "BlueHangar") + "TwoBall2", false),
-				new ShootCommand(m_shooterSubsystem));
+				new ShootFender(m_shooterSubsystem));
 	}
 }
