@@ -218,6 +218,6 @@ public class RobotContainer {
 						new IntakeCommand(m_shooterSubsystem)),
 				new ShootCommand(m_shooterSubsystem));
 
-		return fourBallAuton;
+		return threeBallAuton;
 	}
 }
