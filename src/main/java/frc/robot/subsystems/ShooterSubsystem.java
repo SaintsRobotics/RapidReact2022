@@ -301,6 +301,14 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 	}
 
+	public void setShooterSpeed (Mode approximateMode, double topRPM, double bottomRPM) {
+		setShooterSpeed(approximateMode);
+		m_bottomShooterPID.setSetpoint(bottomRPM);
+		m_topShooterPID.setSetpoint(topRPM);
+		m_bottomShooterPID.setTolerance(0.08 * bottomRPM, 100 / 0.02);
+		m_topShooterPID.setTolerance(0.08 * topRPM, 100 / 0.02);
+	}
+
 	private boolean isShooterPrimed() {
 		return m_shooterColorSensor.getProximity() >= 142;
 	}
