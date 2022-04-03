@@ -92,7 +92,7 @@ public class RobotContainer {
 		final DoubleSupplier leftClimbSpeed = () -> -Utils
 				.oddSquare(MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband))
 				* 0.5;
-		final DoubleSupplier rightClimbSpeed = () -> Utils
+		final DoubleSupplier rightClimbSpeed = () -> -Utils
 				.oddSquare(MathUtil.applyDeadband(m_operatorController.getRightY(), OIConstants.kControllerDeadband))
 				* 0.5;
 
