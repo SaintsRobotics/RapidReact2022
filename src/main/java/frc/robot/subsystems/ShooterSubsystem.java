@@ -165,22 +165,23 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
 			SmartDashboard.putNumber("Arm Angle", m_armEncoder.getDistance());
 
-			SmartDashboard.putNumber("Queue Proximity", m_queueColorSensor.getProximity());
+			
 			SmartDashboard.putBoolean("Queue Is Blue", queueIsBlue);
 			SmartDashboard.putBoolean("Queue Is Red", queueIsRed);
 
-			SmartDashboard.putNumber("Shooter Proximity", m_shooterColorSensor.getProximity());
+			SmartDashboard.putNumber("Queue Proximity", m_queueColorSensor.getProximity());
 			SmartDashboard.putBoolean("Shooter Is Blue", shooterIsBlue);
 			SmartDashboard.putBoolean("Shooter Is Red", shooterIsRed);
 
-			SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
+			
 		}
 
 		SmartDashboard.putBoolean("Bottom Shooter At Setpoint", m_bottomShooterPID.atSetpoint());
 		SmartDashboard.putBoolean("Top Shooter At Setpoint", m_topShooterPID.atSetpoint());
 		SmartDashboard.putNumber("Bottom Target RPM", m_bottomShooterPID.getSetpoint());
 		SmartDashboard.putNumber("Top Target RPM", m_topShooterPID.getSetpoint());
-
+		SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
+		SmartDashboard.putNumber("shooter proximity", m_shooterColorSensor.getProximity());
 		SmartDashboard.putNumber("Bottom Shooter RPM", toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
 		SmartDashboard.putNumber("Top Shooter RPM", toRPM(m_topFlywheel.getSelectedSensorVelocity()));
 		SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
@@ -301,7 +302,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	private boolean isShooterPrimed() {
-		return m_shooterColorSensor.getProximity() >= 180;
+		return m_shooterColorSensor.getProximity() >= 142;
 	}
 
 	public void topFeederOn() {
