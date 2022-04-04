@@ -224,7 +224,7 @@ public class RobotContainer {
 								new IntakeCommand(m_shooterSubsystem))),
 				new ParallelDeadlineGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall2", true),
-						new IntakeCommand(m_shooterSubsystem))),
+						new IntakeCommand(m_shooterSubsystem)),
 				new ParallelDeadlineGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall3", false),
 						new IntakeCommand(m_shooterSubsystem)),
