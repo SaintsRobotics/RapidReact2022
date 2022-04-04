@@ -230,7 +230,7 @@ public class RobotContainer {
 						new IntakeCommand(m_shooterSubsystem)),
 				new ShootTarmac(m_shooterSubsystem));
 		SequentialCommandGroup fourBallAuton = new SequentialCommandGroup(
-			new twoBallAuton(),
+			twoBallAuton,
 			new ParallelDeadlineGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall3", false),
 						new IntakeCommand(m_shooterSubsystem)),
