@@ -32,7 +32,6 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PathWeaverCommand;
-import frc.robot.commands.ShootFender;
 import frc.robot.commands.ShootTarmac;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -47,6 +46,8 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+	private final String m_autonPath = "BlueHangar";
+	
 	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
 	private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 	private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
