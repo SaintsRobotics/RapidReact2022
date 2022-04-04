@@ -195,7 +195,8 @@ public class RobotContainer {
 				new ParallelDeadlineGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path + "TwoBall2", false),
 						new IntakeCommand(m_shooterSubsystem)),
-				new ShootTarmac(m_shooterSubsystem));
+				new ShootTarmac(m_shooterSubsystem),
+				new PathWeaverCommand(m_swerveDriveSubsystem, path.substring(0, 1) + "EndingPose", false));
 
 		// SequentialCommandGroup fourBallAuton = new SequentialCommandGroup(
 		// 		twoBallAuton,
