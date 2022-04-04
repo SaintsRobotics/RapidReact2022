@@ -32,7 +32,6 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PathWeaverCommand;
-import frc.robot.commands.ShootFender;
 import frc.robot.commands.ShootTarmac;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -215,6 +214,7 @@ public class RobotContainer {
 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "TwoBall2", false),
 						new IntakeCommand(m_shooterSubsystem)),
 				new ShootTarmac(m_shooterSubsystem));
+
 		SequentialCommandGroup threeBallAuton = new SequentialCommandGroup(
 				new ShootTarmac(m_shooterSubsystem),
 				new ParallelDeadlineGroup(
@@ -229,7 +229,6 @@ public class RobotContainer {
 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall3", false),
 						new IntakeCommand(m_shooterSubsystem)),
 				new ShootTarmac(m_shooterSubsystem));
-				
 
 		switch (path[1]) {
 			case ("TwoBall"):
