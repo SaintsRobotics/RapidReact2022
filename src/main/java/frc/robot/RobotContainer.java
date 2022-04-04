@@ -235,20 +235,7 @@ public class RobotContainer {
 			case ("TwoBall"):
 				return twoBallAuton;
 			case ("ThreeBall"):
-				return new SequentialCommandGroup(
-						new ShootFender(m_shooterSubsystem),
-						new ParallelDeadlineGroup(
-								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + path[1] + "1", true),
-								new SequentialCommandGroup(
-										new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-										new IntakeCommand(m_shooterSubsystem))),
-						new ParallelDeadlineGroup(
-								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + path[1] + "2", false),
-								new IntakeCommand(m_shooterSubsystem)),
-						new ParallelDeadlineGroup(
-								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + path[1] + "3", false),
-								new IntakeCommand(m_shooterSubsystem)),
-						new ShootFender(m_shooterSubsystem));
+				return threeBallAuton;
 			case ("FourBall"):
 				return new SequentialCommandGroup(
 						twoBallAuton,
