@@ -176,17 +176,17 @@ public class ShooterSubsystem extends SubsystemBase {
 			
 		}
 
-		SmartDashboard.putBoolean("Bottom Shooter At Setpoint", m_bottomShooterPID.atSetpoint());
-		SmartDashboard.putBoolean("Top Shooter At Setpoint", m_topShooterPID.atSetpoint());
-		SmartDashboard.putNumber("Bottom Target RPM", m_bottomShooterPID.getSetpoint());
-		SmartDashboard.putNumber("Top Target RPM", m_topShooterPID.getSetpoint());
-		SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
-		SmartDashboard.putNumber("shooter proximity", m_shooterColorSensor.getProximity());
-		SmartDashboard.putNumber("Bottom Shooter RPM", toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
-		SmartDashboard.putNumber("Top Shooter RPM", toRPM(m_topFlywheel.getSelectedSensorVelocity()));
-		SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
+		// SmartDashboard.putBoolean("Bottom Shooter At Setpoint", m_bottomShooterPID.atSetpoint());
+		// SmartDashboard.putBoolean("Top Shooter At Setpoint", m_topShooterPID.atSetpoint());
+		// SmartDashboard.putNumber("Bottom Target RPM", m_bottomShooterPID.getSetpoint());
+		// SmartDashboard.putNumber("Top Target RPM", m_topShooterPID.getSetpoint());
+		// SmartDashboard.putBoolean("is shooter primed", isShooterPrimed());
+		// SmartDashboard.putNumber("shooter proximity", m_shooterColorSensor.getProximity());
+		// SmartDashboard.putNumber("Bottom Shooter RPM", toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
+		// SmartDashboard.putNumber("Top Shooter RPM", toRPM(m_topFlywheel.getSelectedSensorVelocity()));
+		// SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
 
-		SmartDashboard.putNumber("top feedforward", m_topFeedforward.calculate(ShooterConstants.kTopFeedforwardTarmac));
+		// SmartDashboard.putNumber("top feedforward", m_topFeedforward.calculate(ShooterConstants.kTopFeedforwardTarmac));
 
 		// SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
 		// SmartDashboard.putNumber("Temperature Intake",

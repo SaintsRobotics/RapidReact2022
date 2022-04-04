@@ -36,11 +36,11 @@ public class ClimberSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Climber Servo Position Right", m_rightServo.get());
 		}
 
-		SmartDashboard.putNumber("Temperature Climber Left", m_leftClimber.getMotorTemperature());
-		SmartDashboard.putNumber("Temperature Climber Right", m_rightClimber.getMotorTemperature());
+		// SmartDashboard.putNumber("Temperature Climber Left", m_leftClimber.getMotorTemperature());
+		// SmartDashboard.putNumber("Temperature Climber Right", m_rightClimber.getMotorTemperature());
 
-		SmartDashboard.putNumber("Current Climber Left", m_leftClimber.getOutputCurrent());
-		SmartDashboard.putNumber("Current Climber Right", m_rightClimber.getOutputCurrent());
+		// SmartDashboard.putNumber("Current Climber Left", m_leftClimber.getOutputCurrent());
+		// SmartDashboard.putNumber("Current Climber Right", m_rightClimber.getOutputCurrent());
 	}
 
 	/**
