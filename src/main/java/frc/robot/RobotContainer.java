@@ -244,9 +244,9 @@ public class RobotContainer {
 			case ("TwoBall"):
 				return twoBallAuton;
 			case ("ThreeBall"):
-				return threeBallAuton
+				return threeBallAuton;
 			case ("FourBall"):
-				return fourBallAuton
+				return fourBallAuton;
 			default:
 				return null;
 		}
