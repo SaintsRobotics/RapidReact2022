@@ -205,35 +205,33 @@ public class ShooterSubsystem extends SubsystemBase {
 	 * @param topRPM    Target RPM for the top flywheel.
 	 */
 	public void setShooterSpeed(ShootingMode mode) {
-		double bottomRPM = 0;
-		double topRPM = 0;
 		switch (mode) {
 			case kFender:
-				bottomRPM = ShooterConstants.kBottomMotorRPMFender;
-				topRPM = ShooterConstants.kTopMotorRPMFender;
+				m_bottomShooterPID.setSetpoint(ShooterConstants.kBottomMotorRPMFender);
+				m_topShooterPID.setSetpoint(ShooterConstants.kTopMotorRPMFender);
 				m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardFender, 0);
 				m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardFender, 0);
 				m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPFender);
 				m_topShooterPID.setP(ShooterConstants.kTopShooterPFender);
 				break;
 			case kTarmac:
-				bottomRPM = ShooterConstants.kBottomMotorRPMTarmac;
-				topRPM = ShooterConstants.kTopMotorRPMTarmac;
+				m_bottomShooterPID.setSetpoint(ShooterConstants.kBottomMotorRPMTarmac);
+				m_topShooterPID.setSetpoint(ShooterConstants.kTopMotorRPMTarmac);
 				m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardTarmac, 0);
 				m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac, 0);
 				m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPTarmac);
 				m_topShooterPID.setP(ShooterConstants.kTopShooterPTarmac);
 				break;
 			case kStop:
+				m_bottomShooterPID.setSetpoint(0);
+				m_topShooterPID.setSetpoint(0);
 				break;
 		}
 
-		m_bottomShooterPID.setSetpoint(bottomRPM);
-		m_topShooterPID.setSetpoint(topRPM);
-		m_bottomShooterPID.setTolerance(0.08 * bottomRPM, 100 / 0.02);
-		m_topShooterPID.setTolerance(0.08 * topRPM, 100 / 0.02);
+		m_bottomShooterPID.setTolerance(0.08 * m_bottomShooterPID.getSetpoint(), 100 / 0.02);
+		m_topShooterPID.setTolerance(0.08 * m_topShooterPID.getSetpoint(), 100 / 0.02);
 
-		if (bottomRPM == 0) {
+		if (m_bottomShooterPID.getSetpoint() == 0) {
 			m_sideFeeders.set(0);
 		} else {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
