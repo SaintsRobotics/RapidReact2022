@@ -249,7 +249,8 @@
       "/LiveWindow/Ungrouped/Talon FX [23]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [9]": "Motor Controller",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser"
     },
     "windows": {
       "/LiveWindow/ShooterSubsystem": {
@@ -277,11 +278,11 @@
     }
   },
   "NetworkTables": {
-    "FMSInfo": {
-      "open": true
-    },
     "SmartDashboard": {
       "Field": {
+        "open": true
+      },
+      "SendableChooser[0]": {
         "open": true
       },
       "open": true
