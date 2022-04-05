@@ -32,12 +32,12 @@ public class ShootFender extends CommandBase {
 
 	@Override
 	public void execute() {
-		m_subsystem.setShooterSpeed(ShootingMode.kFender);
+		m_subsystem.setShootingMode(ShootingMode.kFender);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		m_subsystem.setShooterSpeed(ShootingMode.kStop);
+		m_subsystem.setShootingMode(ShootingMode.kStop);
 	}
 
 	@Override

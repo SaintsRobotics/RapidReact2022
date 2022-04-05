@@ -32,12 +32,12 @@ public class ShootTarmac extends CommandBase {
 
 	@Override
 	public void execute() {
-		m_subsystem.setShooterSpeed(ShootingMode.kTarmac);
+		m_subsystem.setShootingMode(ShootingMode.kTarmac);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		m_subsystem.setShooterSpeed(ShootingMode.kStop);
+		m_subsystem.setShootingMode(ShootingMode.kStop);
 	}
 
 	@Override

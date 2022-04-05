@@ -199,12 +199,11 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * Sets the speed of the shooter.
+	 * Sets the {@link ShootingMode mode} for the shooter.
 	 * 
-	 * @param bottomRPM Target RPM for the bottom flywheel.
-	 * @param topRPM    Target RPM for the top flywheel.
+	 * @param mode {@link ShootingMode Mode} for the shooter.
 	 */
-	public void setShooterSpeed(ShootingMode mode) {
+	public void setShootingMode(ShootingMode mode) {
 		switch (mode) {
 			case kFender:
 				m_bottomShooterPID.setSetpoint(ShooterConstants.kBottomMotorRPMFender);

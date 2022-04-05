@@ -26,11 +26,11 @@ public class ShooterCommand extends CommandBase {
 
 	@Override
 	public void initialize() {
-		m_shooterSubsystem.setShooterSpeed(m_mode);
+		m_shooterSubsystem.setShootingMode(m_mode);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		m_shooterSubsystem.setShooterSpeed(ShootingMode.kStop);
+		m_shooterSubsystem.setShootingMode(ShootingMode.kStop);
 	}
 }
