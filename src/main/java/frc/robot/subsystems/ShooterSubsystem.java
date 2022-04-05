@@ -207,20 +207,22 @@ public class ShooterSubsystem extends SubsystemBase {
 	public void setShooterSpeed(ShootingMode mode) {
 		double bottomRPM = 0;
 		double topRPM = 0;
-		if (mode == ShootingMode.kFender) {
-			bottomRPM = ShooterConstants.kBottomMotorRPMFender;
-			topRPM = ShooterConstants.kTopMotorRPMFender;
-			m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardFender, 0);
-			m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardFender, 0);
-			m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPFender);
-			m_topShooterPID.setP(ShooterConstants.kTopShooterPFender);
-		} else if (mode == ShootingMode.kTarmac) {
-			bottomRPM = ShooterConstants.kBottomMotorRPMTarmac;
-			topRPM = ShooterConstants.kTopMotorRPMTarmac;
-			m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardTarmac, 0);
-			m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac, 0);
-			m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPTarmac);
-			m_topShooterPID.setP(ShooterConstants.kTopShooterPTarmac);
+		switch (mode) {
+			case kFender:
+				bottomRPM = ShooterConstants.kBottomMotorRPMFender;
+				topRPM = ShooterConstants.kTopMotorRPMFender;
+				m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardFender, 0);
+				m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardFender, 0);
+				m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPFender);
+				m_topShooterPID.setP(ShooterConstants.kTopShooterPFender);
+			case kTarmac:
+				bottomRPM = ShooterConstants.kBottomMotorRPMTarmac;
+				topRPM = ShooterConstants.kTopMotorRPMTarmac;
+				m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardTarmac, 0);
+				m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac, 0);
+				m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPTarmac);
+				m_topShooterPID.setP(ShooterConstants.kTopShooterPTarmac);
+			case kStop:
 		}
 
 		m_bottomShooterPID.setSetpoint(bottomRPM);
