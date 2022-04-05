@@ -48,8 +48,8 @@ public class ShooterSubsystem extends SubsystemBase {
 			ShooterConstants.kShooterColorSensorPort);
 
 	private final PIDController m_armPID = new PIDController(0.008, 0, 0);
-	private PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPTarmac, 0, 0);
-	private PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterPTarmac, 0, 0);
+	private final PIDController m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPTarmac, 0, 0);
+	private final PIDController m_topShooterPID = new PIDController(ShooterConstants.kTopShooterPTarmac, 0, 0);
 	private SimpleMotorFeedforward m_bottomFeedforward = new SimpleMotorFeedforward(
 			ShooterConstants.kBottomFeedforwardTarmac, 0);
 	private SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac,
@@ -213,15 +213,15 @@ public class ShooterSubsystem extends SubsystemBase {
 			topRPM = ShooterConstants.kTopMotorRPMFender;
 			m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardFender, 0);
 			m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardFender, 0);
-			m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPFender, 0, 0);
-			m_topShooterPID = new PIDController(ShooterConstants.kTopShooterPFender, 0, 0);
+			m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPFender);
+			m_topShooterPID.setP(ShooterConstants.kTopShooterPFender);
 		} else if (mode == Mode.kTarmac) {
 			bottomRPM = ShooterConstants.kBottomMotorRPMTarmac;
 			topRPM = ShooterConstants.kTopMotorRPMTarmac;
 			m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardTarmac, 0);
 			m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac, 0);
-			m_bottomShooterPID = new PIDController(ShooterConstants.kBottomShooterPTarmac, 0, 0);
-			m_topShooterPID = new PIDController(ShooterConstants.kTopShooterPTarmac, 0, 0);
+			m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPTarmac);
+			m_topShooterPID.setP(ShooterConstants.kTopShooterPTarmac);
 		}
 
 		m_bottomShooterPID.setSetpoint(bottomRPM);
