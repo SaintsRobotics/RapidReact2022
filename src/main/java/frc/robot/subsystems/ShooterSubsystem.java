@@ -227,9 +227,6 @@ public class ShooterSubsystem extends SubsystemBase {
 				break;
 		}
 
-		m_bottomShooterPID.setTolerance(0.08 * m_bottomShooterPID.getSetpoint(), 100 / 0.02);
-		m_topShooterPID.setTolerance(0.08 * m_topShooterPID.getSetpoint(), 100 / 0.02);
-
 		if (m_bottomShooterPID.getSetpoint() == 0) {
 			m_sideFeeders.set(0);
 		} else {
