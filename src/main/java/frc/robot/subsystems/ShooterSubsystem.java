@@ -188,6 +188,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
 		SmartDashboard.putNumber("top feedforward", m_topFeedforward.calculate(ShooterConstants.kTopFeedforwardTarmac));
 
+		SmartDashboard.putBoolean("Top at Setpoint", m_topShooterPID.atSetpoint());
+
+
 		// SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
 		// SmartDashboard.putNumber("Temperature Intake",
 		// m_intake.getMotorTemperature());
@@ -310,7 +313,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	private boolean isShooterPrimed() {
-		return m_shooterColorSensor.getProximity() >= 142;
+		return m_shooterColorSensor.getProximity() >= 140;
 	}
 
 	public void topFeederOn() {
