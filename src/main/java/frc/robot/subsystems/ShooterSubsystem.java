@@ -215,6 +215,7 @@ public class ShooterSubsystem extends SubsystemBase {
 				m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardFender, 0);
 				m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPFender);
 				m_topShooterPID.setP(ShooterConstants.kTopShooterPFender);
+				break;
 			case kTarmac:
 				bottomRPM = ShooterConstants.kBottomMotorRPMTarmac;
 				topRPM = ShooterConstants.kTopMotorRPMTarmac;
@@ -222,7 +223,9 @@ public class ShooterSubsystem extends SubsystemBase {
 				m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac, 0);
 				m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPTarmac);
 				m_topShooterPID.setP(ShooterConstants.kTopShooterPTarmac);
+				break;
 			case kStop:
+				break;
 		}
 
 		m_bottomShooterPID.setSetpoint(bottomRPM);
