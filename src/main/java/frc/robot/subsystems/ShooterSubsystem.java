@@ -90,10 +90,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		final double bottomPIDOutput = m_bottomShooterPID
-				.calculate(toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
-		final double topPIDOutput = m_topShooterPID.calculate(toRPM(m_topFlywheel.getSelectedSensorVelocity()));
-
 		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
 		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
@@ -109,8 +105,12 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if (m_bottomShooterPID.getSetpoint() > 0) {
-			m_bottomFlywheel.set(bottomPIDOutput + m_bottomFeedforward.calculate(m_bottomShooterPID.getSetpoint()));
-			m_topFlywheel.set(topPIDOutput + m_topFeedforward.calculate(m_topShooterPID.getSetpoint()));
+			m_bottomFlywheel.set(
+					m_bottomShooterPID.calculate(toRPM(m_bottomFlywheel.getSelectedSensorVelocity()))
+							+ m_bottomFeedforward.calculate(m_bottomShooterPID.getSetpoint()));
+			m_topFlywheel.set(
+					m_topShooterPID.calculate(toRPM(m_topFlywheel.getSelectedSensorVelocity()))
+							+ m_topFeedforward.calculate(m_topShooterPID.getSetpoint()));
 		} else {
 			m_bottomFlywheel.set(0);
 			m_topFlywheel.set(0);
