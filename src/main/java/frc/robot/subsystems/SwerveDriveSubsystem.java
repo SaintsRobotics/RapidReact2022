@@ -60,7 +60,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 	private final SwerveDriveOdometry m_odometry;
 	private final Field2d m_field2d = new Field2d();
 
-	// TODO tune pid
 	private final PIDController m_headingCorrectionPID = new PIDController(5, 0, 0);
 	private final Timer m_headingCorrectionTimer;
 
@@ -89,7 +88,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 				m_rearLeft.getState(),
 				m_frontRight.getState(),
 				m_rearRight.getState());
-		m_field2d.setRobotPose(m_odometry.getPoseMeters());
+
+		if (Robot.isSimulation()) {
+			m_field2d.setRobotPose(m_odometry.getPoseMeters());
+		}
 	}
 
 	/**
