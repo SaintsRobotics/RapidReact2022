@@ -206,20 +206,24 @@ public class ShooterSubsystem extends SubsystemBase {
 	public void setShootingMode(ShootingMode mode) {
 		switch (mode) {
 			case kFender:
-				m_bottomShooterPID.setSetpoint(ShooterConstants.kBottomMotorRPMFender);
-				m_topShooterPID.setSetpoint(ShooterConstants.kTopMotorRPMFender);
-				m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardFender, 0);
-				m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardFender, 0);
 				m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPFender);
 				m_topShooterPID.setP(ShooterConstants.kTopShooterPFender);
+
+				m_bottomShooterPID.setSetpoint(ShooterConstants.kBottomMotorRPMFender);
+				m_topShooterPID.setSetpoint(ShooterConstants.kTopMotorRPMFender);
+
+				m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardFender, 0);
+				m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardFender, 0);
 				break;
 			case kTarmac:
-				m_bottomShooterPID.setSetpoint(ShooterConstants.kBottomMotorRPMTarmac);
-				m_topShooterPID.setSetpoint(ShooterConstants.kTopMotorRPMTarmac);
-				m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardTarmac, 0);
-				m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac, 0);
 				m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPTarmac);
 				m_topShooterPID.setP(ShooterConstants.kTopShooterPTarmac);
+
+				m_bottomShooterPID.setSetpoint(ShooterConstants.kBottomMotorRPMTarmac);
+				m_topShooterPID.setSetpoint(ShooterConstants.kTopMotorRPMTarmac);
+
+				m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardTarmac, 0);
+				m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardTarmac, 0);
 				break;
 			case kStop:
 				m_bottomShooterPID.setSetpoint(0);
