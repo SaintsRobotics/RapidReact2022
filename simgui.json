@@ -88,7 +88,8 @@
       "/LiveWindow/Ungrouped/Talon FX [23]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [9]": "Motor Controller",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser"
     },
     "windows": {
       "/SmartDashboard/Field": {
@@ -99,11 +100,16 @@
         },
         "bottom": 900,
         "height": 8.229599952697754,
-        "image": "C:\\Users\\Public\\Documents\\vscode-workspace\\RapidReact2022\\PathWeaver\\2022-field.png",
+        "image": "C:\\Users\\Lenny Abbas\\OneDrive\\Documents\\VSCode Workspace\\RapidReact2022\\PathWeaver\\2022-field.png",
         "left": 74,
         "right": 1774,
         "top": 50,
         "width": 16.459199905395508,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/SendableChooser[0]": {
         "window": {
           "visible": true
         }
