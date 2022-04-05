@@ -224,7 +224,7 @@ public class RobotContainer {
 								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
 								new IntakeCommand(m_shooterSubsystem))),
 				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall2", true),
+						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall2", false),
 						new IntakeCommand(m_shooterSubsystem)),
 				new ParallelDeadlineGroup(
 						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall3", false),
