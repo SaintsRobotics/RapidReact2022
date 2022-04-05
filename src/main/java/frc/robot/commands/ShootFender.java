@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem.ShootingMode;
 
 /** Command that shoots up to two balls */
 public class ShootFender extends CommandBase {
@@ -31,12 +32,12 @@ public class ShootFender extends CommandBase {
 
 	@Override
 	public void execute() {
-		m_subsystem.setShooterSpeed(ShooterSubsystem.Mode.kFender);
+		m_subsystem.setShooterSpeed(ShootingMode.kFender);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		m_subsystem.setShooterSpeed(ShooterSubsystem.Mode.kEnd);
+		m_subsystem.setShooterSpeed(ShootingMode.kStop);
 	}
 
 	@Override

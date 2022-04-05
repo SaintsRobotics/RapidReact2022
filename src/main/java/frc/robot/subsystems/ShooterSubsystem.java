@@ -59,10 +59,10 @@ public class ShooterSubsystem extends SubsystemBase {
 	private boolean m_reversingIntake = false;
 	private Timer m_feederTimer = new Timer();
 
-	public static enum Mode {
+	public enum ShootingMode {
 		kFender,
 		kTarmac,
-		kEnd;
+		kStop;
 	}
 
 	/** Creates a new {@link ShooterSubsystem}. */
@@ -205,17 +205,17 @@ public class ShooterSubsystem extends SubsystemBase {
 	 * @param bottomRPM Target RPM for the bottom flywheel.
 	 * @param topRPM    Target RPM for the top flywheel.
 	 */
-	public void setShooterSpeed(Mode mode) {
+	public void setShooterSpeed(ShootingMode mode) {
 		double bottomRPM = 0;
 		double topRPM = 0;
-		if (mode == Mode.kFender) {
+		if (mode == ShootingMode.kFender) {
 			bottomRPM = ShooterConstants.kBottomMotorRPMFender;
 			topRPM = ShooterConstants.kTopMotorRPMFender;
 			m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardFender, 0);
 			m_topFeedforward = new SimpleMotorFeedforward(ShooterConstants.kTopFeedforwardFender, 0);
 			m_bottomShooterPID.setP(ShooterConstants.kBottomShooterPFender);
 			m_topShooterPID.setP(ShooterConstants.kTopShooterPFender);
-		} else if (mode == Mode.kTarmac) {
+		} else if (mode == ShootingMode.kTarmac) {
 			bottomRPM = ShooterConstants.kBottomMotorRPMTarmac;
 			topRPM = ShooterConstants.kTopMotorRPMTarmac;
 			m_bottomFeedforward = new SimpleMotorFeedforward(ShooterConstants.kBottomFeedforwardTarmac, 0);

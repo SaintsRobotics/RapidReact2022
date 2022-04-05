@@ -36,6 +36,7 @@ import frc.robot.commands.ShootTarmac;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem.ShootingMode;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
@@ -167,11 +168,11 @@ public class RobotContainer {
 
 		// Turns on shooter for tarmac shots when Y button is held.
 		new JoystickButton(m_operatorController, Button.kY.value)
-				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kTarmac));
+				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShootingMode.kTarmac));
 
 		// Turns on shooter for fender shots when B button is held.
 		new JoystickButton(m_operatorController, Button.kB.value)
-				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kFender));
+				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShootingMode.kFender));
 
 		// runs intake forward while left trigger is held
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)

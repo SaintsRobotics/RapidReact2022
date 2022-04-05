@@ -6,17 +6,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem.ShootingMode;
 
 /** Command that turns the shooter on and off. */
 public class ShooterCommand extends CommandBase {
 	private final ShooterSubsystem m_shooterSubsystem;
-	private final ShooterSubsystem.Mode m_mode;
+	private final ShootingMode m_mode;
+
 	/**
 	 * Creates a new {@link ShooterCommand}.
 	 * 
 	 * @param subsystem The required subsystem.
 	 */
-	public ShooterCommand(ShooterSubsystem subsystem, ShooterSubsystem.Mode mode) {
+	public ShooterCommand(ShooterSubsystem subsystem, ShootingMode mode) {
 		m_shooterSubsystem = subsystem;
 		m_mode = mode;
 		addRequirements(m_shooterSubsystem);
@@ -29,6 +31,6 @@ public class ShooterCommand extends CommandBase {
 
 	@Override
 	public void end(boolean interrupted) {
-		m_shooterSubsystem.setShooterSpeed(ShooterSubsystem.Mode.kEnd);
+		m_shooterSubsystem.setShooterSpeed(ShootingMode.kStop);
 	}
 }
