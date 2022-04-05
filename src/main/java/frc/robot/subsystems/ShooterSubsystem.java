@@ -90,6 +90,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+		// TODO tune PID so we don't need to call MathUtil.clamp
+		// Stops the arm if it is at the setpoint to avoid draining power.
 		if (m_armPID.atSetpoint()) {
 			m_arm.set(0);
 		} else if (m_armPID.getSetpoint() == ShooterConstants.kUpperArmAngle) {
