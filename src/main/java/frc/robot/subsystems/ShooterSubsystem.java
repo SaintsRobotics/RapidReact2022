@@ -90,9 +90,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		double bottomPIDOutput = m_bottomShooterPID
+		final double bottomPIDOutput = m_bottomShooterPID
 				.calculate(toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
-		double topPIDOutput = m_topShooterPID.calculate(toRPM(m_topFlywheel.getSelectedSensorVelocity()));
+		final double topPIDOutput = m_topShooterPID.calculate(toRPM(m_topFlywheel.getSelectedSensorVelocity()));
 		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
 		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
