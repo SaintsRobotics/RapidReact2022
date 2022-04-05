@@ -192,9 +192,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 		m_frontRight.setDesiredState(desiredStates[2]);
 		m_rearRight.setDesiredState(desiredStates[3]);
 
-		// Adds the change in angle to the current angle.
-		m_simulatedYaw.set(m_simulatedYaw.get()
-				- Math.toDegrees(SwerveConstants.kDriveKinematics.toChassisSpeeds(desiredStates).omegaRadiansPerSecond)
-						* Robot.kDefaultPeriod);
+		if (Robot.isSimulation()) {
+			// Adds the change in angle to the current angle.
+			m_simulatedYaw.set(m_simulatedYaw.get()
+					- Math.toDegrees(
+							SwerveConstants.kDriveKinematics.toChassisSpeeds(desiredStates).omegaRadiansPerSecond)
+							* Robot.kDefaultPeriod);
+		}
 	}
 }
