@@ -90,6 +90,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+		if (m_armPID.atSetpoint()) {
+			m_arm.set(0);
+		} else if (m_armPID.getSetpoint() == ShooterConstants.kUpperArmAngle) {
+			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), -0.5, -0.1));
+		} else if (m_armPID.getSetpoint() == ShooterConstants.kLowerArmAngle) {
+			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), 0.1, 0.7));
+		}
+
 		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
 		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
@@ -156,23 +164,11 @@ public class ShooterSubsystem extends SubsystemBase {
 	/** Raises the arm. */
 	public void raiseArm() {
 		m_armPID.setSetpoint(ShooterConstants.kUpperArmAngle);
-		if (m_armPID.atSetpoint())
-			m_arm.set(0);
-		else
-			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), -0.5, -0.1));
 	}
 
 	/** Lowers the arm. */
 	public void lowerArm() {
 		m_armPID.setSetpoint(ShooterConstants.kLowerArmAngle);
-		if (m_armPID.atSetpoint())
-			m_arm.set(0);
-		else
-			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), 0.1, 0.7));
-	}
-
-	public void stopArm() {
-		m_arm.set(0);
 	}
 
 	/** Runs the intake. */

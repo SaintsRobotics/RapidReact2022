@@ -45,11 +45,6 @@ public class ArmCommand extends CommandBase {
 	}
 
 	@Override
-	public void end(boolean interrupted) {
-		m_subsystem.stopArm();
-	}
-
-	@Override
 	public boolean isFinished() {
 		return m_timer.get() > 0.9;
 	}

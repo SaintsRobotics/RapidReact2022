@@ -158,13 +158,11 @@ public class RobotContainer {
 
 		// raises the arm while left bumper held
 		new JoystickButton(m_operatorController, Button.kLeftBumper.value)
-				.whileHeld(() -> m_shooterSubsystem.raiseArm())
-				.whenReleased(() -> m_shooterSubsystem.stopArm());
+				.whenPressed(() -> m_shooterSubsystem.raiseArm());
 
 		// lowers arm while right bumper held
 		new JoystickButton(m_operatorController, Button.kRightBumper.value)
-				.whileHeld(() -> m_shooterSubsystem.lowerArm())
-				.whenReleased(() -> m_shooterSubsystem.stopArm());
+				.whenPressed(() -> m_shooterSubsystem.lowerArm());
 
 		// Turns on shooter for tarmac shots when Y button is held.
 		new JoystickButton(m_operatorController, Button.kY.value)
