@@ -8,17 +8,17 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
-/** Runs the intake for a period of time. */
-public class IntakeCommand extends CommandBase {
+/** Command that shoots up to two balls */
+public class ShootTarmac extends CommandBase {
 	private final ShooterSubsystem m_subsystem;
 	private final Timer m_timer = new Timer();
 
 	/**
-	 * Creates a new {@link IntakeCommand}.
+	 * Creates a new {@link ShootCommand}.
 	 * 
 	 * @param subsystem The required subsystem.
 	 */
-	public IntakeCommand(ShooterSubsystem subsystem) {
+	public ShootTarmac(ShooterSubsystem subsystem) {
 		m_subsystem = subsystem;
 		addRequirements(m_subsystem);
 	}
@@ -27,11 +27,20 @@ public class IntakeCommand extends CommandBase {
 	public void initialize() {
 		m_timer.reset();
 		m_timer.start();
-		m_subsystem.intake();
+	}
+
+	@Override
+	public void execute() {
+		m_subsystem.setShooterSpeed(ShooterSubsystem.Mode.kTarmac);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		m_subsystem.intakeOff();
+		m_subsystem.setShooterSpeed(ShooterSubsystem.Mode.kEnd);
+	}
+
+	@Override
+	public boolean isFinished() {
+		return m_timer.get() > 2;
 	}
 }
