@@ -62,8 +62,8 @@ public class PathWeaverCommand extends CommandBase {
 				m_trajectory,
 				m_subsystem::getPose,
 				SwerveConstants.kDriveKinematics,
-				new PIDController(2, 0, 0),
-				new PIDController(2, 0, 0),
+				new PIDController(8, 0, 0),
+				new PIDController(8, 0, 0),
 				rotPID,
 				m_subsystem::setModuleStates);
 	}
