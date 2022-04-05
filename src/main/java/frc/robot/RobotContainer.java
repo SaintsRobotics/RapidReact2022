@@ -216,26 +216,24 @@ public class RobotContainer {
 						new IntakeCommand(m_shooterSubsystem)),
 				new ShootTarmac(m_shooterSubsystem));
 
-		SequentialCommandGroup threeBallAuton = new SequentialCommandGroup(
-				new ShootTarmac(m_shooterSubsystem),
-				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall1", true),
-						new SequentialCommandGroup(
-								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
-								new IntakeCommand(m_shooterSubsystem))),
-				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall2", false),
-						new IntakeCommand(m_shooterSubsystem)),
-				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall3", false),
-						new IntakeCommand(m_shooterSubsystem)),
-				new ShootTarmac(m_shooterSubsystem));
-
 		switch (path[1]) {
 			case ("TwoBall"):
 				return twoBallAuton;
 			case ("ThreeBall"):
-				return threeBallAuton;
+				return new SequentialCommandGroup(
+						new ShootTarmac(m_shooterSubsystem),
+						new ParallelDeadlineGroup(
+								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall1", true),
+								new SequentialCommandGroup(
+										new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+										new IntakeCommand(m_shooterSubsystem))),
+						new ParallelDeadlineGroup(
+								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall2", false),
+								new IntakeCommand(m_shooterSubsystem)),
+						new ParallelDeadlineGroup(
+								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall3", false),
+								new IntakeCommand(m_shooterSubsystem)),
+						new ShootTarmac(m_shooterSubsystem));
 			case ("FourBall"):
 				return new SequentialCommandGroup(
 						twoBallAuton,
