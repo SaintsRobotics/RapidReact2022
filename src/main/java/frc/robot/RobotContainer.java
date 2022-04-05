@@ -230,23 +230,21 @@ public class RobotContainer {
 						new IntakeCommand(m_shooterSubsystem)),
 				new ShootTarmac(m_shooterSubsystem));
 
-		SequentialCommandGroup fourBallAuton = new SequentialCommandGroup(
-				twoBallAuton,
-				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall3", false),
-						new IntakeCommand(m_shooterSubsystem)),
-				new ParallelDeadlineGroup(
-						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall4", false),
-						new IntakeCommand(m_shooterSubsystem)),
-				new ShootTarmac(m_shooterSubsystem));
-
 		switch (path[1]) {
 			case ("TwoBall"):
 				return twoBallAuton;
 			case ("ThreeBall"):
 				return threeBallAuton;
 			case ("FourBall"):
-				return fourBallAuton;
+				return new SequentialCommandGroup(
+					twoBallAuton,
+					new ParallelDeadlineGroup(
+							new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall3", false),
+							new IntakeCommand(m_shooterSubsystem)),
+					new ParallelDeadlineGroup(
+							new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall4", false),
+							new IntakeCommand(m_shooterSubsystem)),
+					new ShootTarmac(m_shooterSubsystem));
 			default:
 				return null;
 		}
