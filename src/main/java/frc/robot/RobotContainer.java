@@ -117,7 +117,6 @@ public class RobotContainer {
 		m_chooser.addOption("BlueStationThreeBall", "BlueStation ThreeBall");
 		m_chooser.addOption("BlueStationTwoBall", "BlueStation TwoBall");
 		SmartDashboard.putData(m_chooser);
-		SmartDashboard.putString("Autonomous Mode", "BlueHangar TwoBall");
 	}
 
 	/**
@@ -202,7 +201,7 @@ public class RobotContainer {
 			// Ex: {"BlueMid", "FourBall"}
 			path = m_chooser.getSelected().split(" ");
 		} else {
-			path = SmartDashboard.getString("Autonomous Mode", "BlueHangar TwoBall").split(" ");
+			return null;
 		}
 
 		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
