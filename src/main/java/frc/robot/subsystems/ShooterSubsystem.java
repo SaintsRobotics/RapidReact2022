@@ -163,7 +163,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
 			SmartDashboard.putNumber("Intake Wheel Speed", m_intake.get());
 			SmartDashboard.putNumber("Arm Motor Speed", m_arm.get());
-
+			SmartDashboard.putNumber("Arm Angle", m_armEncoder.getDistance());
 			
 			SmartDashboard.putBoolean("Queue Is Blue", queueIsBlue);
 			SmartDashboard.putBoolean("Queue Is Red", queueIsRed);
@@ -184,8 +184,6 @@ public class ShooterSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Bottom Shooter RPM", toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
 		SmartDashboard.putNumber("Top Shooter RPM", toRPM(m_topFlywheel.getSelectedSensorVelocity()));
 		SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
-
-		SmartDashboard.putNumber("Arm Angle", m_armEncoder.getDistance());
 
 		SmartDashboard.putNumber("top feedforward", m_topFeedforward.calculate(ShooterConstants.kTopFeedforwardTarmac));
 
