@@ -114,6 +114,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			intakeReverse();
 		}
 
+		// Disables flywheels if the setpoint is 0.
 		if (m_bottomShooterPID.getSetpoint() > 0) {
 			m_bottomFlywheel.set(
 					m_bottomShooterPID.calculate(toRPM(m_bottomFlywheel.getSelectedSensorVelocity()))
