@@ -338,12 +338,54 @@
       "/LiveWindow/Ungrouped/PIDController[386]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[387]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[388]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[389]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[38]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[390]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[391]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[392]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[393]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[394]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[395]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[396]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[397]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[398]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[399]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[39]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[400]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[401]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[402]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[403]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[404]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[405]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[406]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[407]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[408]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[409]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[40]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[410]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[411]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[412]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[413]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[414]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[415]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[416]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[417]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[418]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[419]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[41]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[420]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[421]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[422]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[423]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[424]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[425]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[426]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[427]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[428]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[429]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[42]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[430]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[43]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[44]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[45]": "PIDController",
@@ -412,7 +454,8 @@
       "/LiveWindow/Ungrouped/Talon FX [23]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [9]": "Motor Controller",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser"
     },
     "windows": {
       "/SmartDashboard/Field": {
@@ -431,18 +474,20 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/SendableChooser[0]": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },
   "NetworkTables": {
-    "FMSInfo": {
-      "open": true
-    },
     "SmartDashboard": {
-      "Field": {
-        "open": true
-      },
       "open": true
     }
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }

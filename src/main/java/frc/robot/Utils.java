@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
 
 /**
@@ -16,7 +15,7 @@ import frc.robot.Constants.OIConstants;
 public class Utils {
 	// Plugging a wire into DIO port 0 enables telemetry.
 	private static DigitalInput m_digitalInput = new DigitalInput(0);
-
+	
 	/**
 	 * Makes lower inputs smaller which allows for finer joystick control.
 	 * 
