@@ -63,6 +63,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		m_armEncoder.setDistancePerRotation(360);
 
 		m_arm.setIdleMode(IdleMode.kBrake);
+		// TODO see if set to coast by default
 		m_bottomFlywheel.setNeutralMode(NeutralMode.Coast);
 		m_topFlywheel.setNeutralMode(NeutralMode.Coast);
 
@@ -125,6 +126,7 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_topFlywheel.set(0);
 		}
 
+		// TODO clean up this garbage
 		if (m_feederTimer.get() > 0) {
 			if (m_bottomShooterPID.atSetpoint() && m_topShooterPID.atSetpoint()) {
 				m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
