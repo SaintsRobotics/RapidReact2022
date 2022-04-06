@@ -55,7 +55,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(
 			ShooterConstants.kTopFlywheelFeedforwardS, 0);
 
-	private Timer m_feederTimer = new Timer();
+	private final Timer m_feederTimer = new Timer();
 
 	/** Modes for the shooter. */
 	public enum ShootingMode {
