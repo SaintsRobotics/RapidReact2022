@@ -124,11 +124,10 @@ public final class Constants {
 		public static final int kBlueThreshold = 300;
 
 		public static final double kArmP = 0.008;
-		public static final double kBottomShooterPTarmac = 0.00025;
-		public static final double kTopShooterPTarmac = 0.000025;
-		// TODO: update these values with fender tuning
-		public static final double kBottomShooterPFender = 0.00025;
-		public static final double kTopShooterPFender = 0.00025;
+
+		// TODO tune
+		public static final double kBottomShooterP = 0.00025;
+		public static final double kTopShooterP = 0.000025;
 	}
 
 	/** Constants for the climber. */
