@@ -100,6 +100,11 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_arm.set(MathUtil.clamp(m_armPID.calculate(m_armEncoder.getDistance()), 0.1, 0.7));
 		}
 
+		// Disables intake if arm is raised enough.
+		if (m_armEncoder.getDistance() > ShooterConstants.kArmIntakeAngle) {
+			m_intake.set(0);
+		}
+
 		final boolean queueIsBlue = m_queueColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean queueIsRed = m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold;
 		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;

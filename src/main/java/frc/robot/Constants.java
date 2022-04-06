@@ -105,6 +105,10 @@ public final class Constants {
 		public static final double kLowerArmAngle = 49.5;
 		public static final double kUpperArmAngle = -54.6;
 
+		// TODO tune
+		/** Maximum angle that you can safely run the intake. */
+		public static final double kArmIntakeAngle = 0;
+
 		public static final boolean kArmReversed = true;
 		public static final boolean kIntakeReversed = true;
 		public static final boolean kLeftFeederReversed = true;
