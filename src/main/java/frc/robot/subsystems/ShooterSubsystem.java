@@ -236,12 +236,6 @@ public class ShooterSubsystem extends SubsystemBase {
 				m_topShooterPID.setSetpoint(0);
 				break;
 		}
-
-		if (m_bottomShooterPID.getSetpoint() == 0) {
-			m_sideFeeders.set(0);
-		} else {
-			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
-		}
 	}
 
 	private boolean isShooterPrimed() {
