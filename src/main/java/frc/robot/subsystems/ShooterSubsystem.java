@@ -179,21 +179,17 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	/** Runs the intake. */
 	public void intake() {
-		m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 		m_intake.set(ShooterConstants.kIntakeSpeed);
 	}
 
 	/** Runs the intake in reverse. */
 	public void intakeReverse() {
 		m_intake.set(-ShooterConstants.kIntakeSpeed);
-		m_sideFeeders.set(-ShooterConstants.kSideFeederSpeed);
-		m_topFeeder.set(-ShooterConstants.kTopFeederSpeedFast);
 	}
 
 	/** Turns off the intake. */
 	public void intakeOff() {
 		m_intake.set(0);
-		m_sideFeeders.set(0);
 	}
 
 	/**
