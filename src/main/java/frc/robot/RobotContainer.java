@@ -4,33 +4,39 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.GetBallCommand;
+import frc.robot.commands.ArmCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
+import frc.robot.commands.PathWeaverCommand;
+import frc.robot.commands.ShootTarmac;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -43,11 +49,16 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  */
 public class RobotContainer {
 	private final SwerveDriveSubsystem m_swerveDriveSubsystem = new SwerveDriveSubsystem();
+	private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+	private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
 	private final MoveCommand m_defaultMoveCommand;
 	private final MoveCommand m_aimingMoveCommand;
 
 	private final XboxController m_driveController = new XboxController(OIConstants.kDriverControllerPort);
+	private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+
+	private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -81,6 +92,29 @@ public class RobotContainer {
 		Limelight.setCameraMode(1);
 
 		m_swerveDriveSubsystem.setDefaultCommand(m_defaultMoveCommand);
+
+		final DoubleSupplier leftClimbSpeed = () -> -Utils
+				.oddSquare(MathUtil.applyDeadband(m_operatorController.getLeftY(), OIConstants.kControllerDeadband))
+				* 0.5;
+		final DoubleSupplier rightClimbSpeed = () -> -Utils
+				.oddSquare(MathUtil.applyDeadband(m_operatorController.getRightY(), OIConstants.kControllerDeadband))
+				* 0.5;
+
+		// Allows for independent control of climbers when enabled in test mode.
+		// Otherwise climbers are controlled together.
+		m_climberSubsystem.setDefaultCommand(new RunCommand(() -> {
+			if (DriverStation.isTest()) {
+				m_climberSubsystem.set(leftClimbSpeed.getAsDouble(), rightClimbSpeed.getAsDouble());
+			} else {
+				m_climberSubsystem.set(leftClimbSpeed.getAsDouble());
+			}
+		}, m_climberSubsystem));
+
+		m_chooser.addOption("BlueHangarTwoBall", "BlueHangar TwoBall");
+		m_chooser.addOption("BlueMidFourBall", "BlueMid FourBall");
+		m_chooser.addOption("BlueMidTwoBall", "BlueMid TwoBall");
+		m_chooser.addOption("BlueStationTwoBall", "BlueStation TwoBall");
+		SmartDashboard.putData(m_chooser);
 	}
 
 	/**
@@ -109,20 +143,51 @@ public class RobotContainer {
 				.whenHeld(new GetBallCommand(m_aimingMoveCommand,
 						DriverStation.getAlliance() == Alliance.Blue ? 1 : 2));
 
-		// Toggles the shooter when Y button is pressed.
-		new JoystickButton(m_driveController, Button.kY.value)
-				.toggleWhenPressed(new ShooterCommand(new ShooterSubsystem()));
-
 		// Allows the bot to drift while left bumper is held
 		new JoystickButton(m_driveController, Button.kLeftBumper.value)
 				.whileHeld(() -> m_swerveDriveSubsystem.setMotorIdle())
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
-
+//TODO replace X with the one bumpers wich you can press with your pinky (only on elite controlelr which tamjeed likes)
 		// Allows the bot to autonomously move towards a ball's location
-		new JoystickButton(m_driveController, Button.kX.value)
+		new JoystickButton(m_driveController, Button.k.value)
 				.whileHeld(new GetBallCommand(m_defaultMoveCommand, 1));
 				
+		// Slowly drives forward while X is held.
+		new JoystickButton(m_driveController, Button.kX.value)
+				.whileHeld(() -> m_swerveDriveSubsystem.drive(0.3, 0, 0, false), m_swerveDriveSubsystem)
+				.whenReleased(() -> m_swerveDriveSubsystem.drive(0, 0, 0, false), m_swerveDriveSubsystem);
 
+		// raises the arm while left bumper held
+		new JoystickButton(m_operatorController, Button.kLeftBumper.value)
+				.whileHeld(() -> m_shooterSubsystem.raiseArm())
+				.whenReleased(() -> m_shooterSubsystem.stopArm());
+
+		// lowers arm while right bumper held
+		new JoystickButton(m_operatorController, Button.kRightBumper.value)
+				.whileHeld(() -> m_shooterSubsystem.lowerArm())
+				.whenReleased(() -> m_shooterSubsystem.stopArm());
+
+		// Turns on shooter for tarmac shots when Y button is held.
+		new JoystickButton(m_operatorController, Button.kY.value)
+				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kTarmac));
+
+		// Turns on shooter for fender shots when B button is held.
+		new JoystickButton(m_operatorController, Button.kB.value)
+				.whenHeld(new ShooterCommand(m_shooterSubsystem, ShooterSubsystem.Mode.kFender));
+
+		// runs intake forward while left trigger is held
+		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
+				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intake()))
+				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
+
+		// runs intake backwards while right trigger is held
+		new Trigger(() -> m_operatorController.getRawAxis(Axis.kRightTrigger.value) > 0.5)
+				.whenActive(new InstantCommand(() -> m_shooterSubsystem.intakeReverse()))
+				.whenInactive(new InstantCommand(() -> m_shooterSubsystem.intakeOff()));
+
+		new JoystickButton(m_operatorController, Button.kA.value)
+				.whileHeld(() -> m_shooterSubsystem.topFeederOn())
+				.whenReleased(() -> m_shooterSubsystem.topFeederOff());
 	}
 
 	/**
@@ -131,48 +196,57 @@ public class RobotContainer {
 	 * @return the command to run in autonomous
 	 */
 	public Command getAutonomousCommand() {
-		// To use a PathWeaver path return pathFollowCommand instead of null
-		return null;
-	}
-
-	/**
-	 * Follows a path generated by PathWeaver.
-	 * 
-	 * @param trajectoryJSON The name of the json file containing the path. In the
-	 *                       format "paths/trajectory.wpilib.json". Should be stored
-	 *                       under deploy>paths.
-	 * @return {@link SwerveControllerCommand} that follows the given
-	 *         {@link Trajectory}.
-	 */
-	public SwerveControllerCommand pathFollowCommand(String trajectoryJSON) {
-		Trajectory trajectory = new Trajectory();
-
-		try {
-			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-			trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-		} catch (IOException ex) {
-			DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+		// Returns null if a path has not been selected.
+		String[] path;
+		if (m_chooser.getSelected() != null) {
+			// Splits the selection into a location and number of balls.
+			// Ex: {"BlueMid", "FourBall"}
+			path = m_chooser.getSelected().split(" ");
+		} else {
+			return null;
 		}
 
-		PIDController xPID = new PIDController(1, 0, 0);
-		PIDController yPID = new PIDController(1, 0, 0);
-		ProfiledPIDController rotPID = new ProfiledPIDController(1, 0, 0,
-				new TrapezoidProfile.Constraints(Constants.SwerveConstants.kMaxAngularSpeedRadiansPerSecond, 2.6));
-		xPID.setTolerance(0.05);
-		yPID.setTolerance(0.05);
-		rotPID.setTolerance(Math.PI / 24);
-		rotPID.enableContinuousInput(-Math.PI, Math.PI);
+		SequentialCommandGroup twoBallAuton = new SequentialCommandGroup(
+				new ParallelDeadlineGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "TwoBall1", true),
+						new SequentialCommandGroup(
+								new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+								new IntakeCommand(m_shooterSubsystem))),
+				new ParallelDeadlineGroup(
+						new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "TwoBall2", false),
+						new IntakeCommand(m_shooterSubsystem)),
+				new ShootTarmac(m_shooterSubsystem));
 
-		m_swerveDriveSubsystem.resetOdometry(trajectory.getInitialPose());
-
-		return new SwerveControllerCommand(
-				trajectory,
-				m_swerveDriveSubsystem::getPose,
-				SwerveConstants.kDriveKinematics,
-				xPID,
-				yPID,
-				rotPID,
-				m_swerveDriveSubsystem::setModuleStates,
-				m_swerveDriveSubsystem);
+		switch (path[1]) {
+			case ("TwoBall"):
+				return twoBallAuton;
+			case ("ThreeBall"):
+				return new SequentialCommandGroup(
+						new ShootTarmac(m_shooterSubsystem),
+						new ParallelDeadlineGroup(
+								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall1", true),
+								new SequentialCommandGroup(
+										new ArmCommand(m_shooterSubsystem, ShooterConstants.kLowerArmAngle),
+										new IntakeCommand(m_shooterSubsystem))),
+						new ParallelDeadlineGroup(
+								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall2", false),
+								new IntakeCommand(m_shooterSubsystem)),
+						new ParallelDeadlineGroup(
+								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "ThreeBall3", false),
+								new IntakeCommand(m_shooterSubsystem)),
+						new ShootTarmac(m_shooterSubsystem));
+			case ("FourBall"):
+				return new SequentialCommandGroup(
+						twoBallAuton,
+						new ParallelDeadlineGroup(
+								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall3", false),
+								new IntakeCommand(m_shooterSubsystem)),
+						new ParallelDeadlineGroup(
+								new PathWeaverCommand(m_swerveDriveSubsystem, path[0] + "FourBall4", false),
+								new IntakeCommand(m_shooterSubsystem)),
+						new ShootTarmac(m_shooterSubsystem));
+			default:
+				return null;
+		}
 	}
 }
