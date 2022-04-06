@@ -80,9 +80,9 @@ public class ShooterSubsystem extends SubsystemBase {
 		m_bottomFlywheel.setInverted(ShooterConstants.kBottomFlywheelReversed);
 		m_topFlywheel.setInverted(ShooterConstants.kTopFlywheelReversed);
 
-		m_bottomShooterPID.setTolerance(168, 5000);
-		m_topShooterPID.setTolerance(174.4, 5000);
-		m_armPID.setTolerance(2);
+		m_bottomShooterPID.setTolerance(ShooterConstants.kFlywheelToleranceRPM);
+		m_topShooterPID.setTolerance(ShooterConstants.kFlywheelToleranceRPM);
+		m_armPID.setTolerance(ShooterConstants.kArmToleranceDegrees);
 		m_armPID.enableContinuousInput(-180, 180);
 	}
 

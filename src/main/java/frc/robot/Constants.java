@@ -129,6 +129,10 @@ public final class Constants {
 		// TODO tune
 		public static final double kBottomFlywheelFeedforwardS = 0.36;
 		public static final double kTopFlywheelFeedforwardS = 0.4;
+
+		// TODO tune
+		public static final double kFlywheelToleranceRPM = 170;
+		public static final double kArmToleranceDegrees = 2;
 	}
 
 	/** Constants for the climber. */
