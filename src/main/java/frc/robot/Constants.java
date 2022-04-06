@@ -90,16 +90,13 @@ public final class Constants {
 		public static final Port kQueueColorSensorPort = Port.kTwo;
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
-		// Motor and shooter are the same for the bottom flywheel, as there is a 1:1
-		// ratio
-		public static final double kBottomMotorRPMTarmac = 2100;
-		public static final double kTopMotorRPMTarmac = (6300 * 18) / 52;
-		public static final double kBottomMotorRPMFender = 2750;
-		public static final double kTopMotorRPMFender = (4500 * 18) / 52;
-
-		// TODO tune
-		public static final double kBottomFlywheelFeedforwardS = 0.36;
-		public static final double kTopFlywheelFeedforwardS = 0.4;
+		public static final boolean kArmReversed = true;
+		public static final boolean kIntakeReversed = true;
+		public static final boolean kLeftFeederReversed = true;
+		public static final boolean kRightFeederReversed = false;
+		public static final boolean kTopFeederReversed = false;
+		public static final boolean kBottomFlywheelReversed = false;
+		public static final boolean kTopFlywheelReversed = true;
 
 		public static final double kLowerArmAngle = 49.5;
 		public static final double kUpperArmAngle = -54.6;
@@ -108,17 +105,17 @@ public final class Constants {
 		/** Maximum angle that you can safely run the intake. */
 		public static final double kArmIntakeAngle = 0;
 
-		public static final boolean kArmReversed = true;
-		public static final boolean kIntakeReversed = true;
-		public static final boolean kLeftFeederReversed = true;
-		public static final boolean kRightFeederReversed = false;
-		public static final boolean kTopFeederReversed = false;
-		public static final boolean kBottomFlywheelReversed = false;
-		public static final boolean kTopFlywheelReversed = true;
 		public static final double kIntakeSpeed = 0.7;
 		public static final double kTopFeederSpeedSlow = 0.1;
 		public static final double kTopFeederSpeedFast = 0.9;
 		public static final double kSideFeederSpeed = 0.6;
+
+		// Motor and shooter are the same for the bottom flywheel, as there is a 1:1
+		// ratio
+		public static final double kBottomMotorRPMTarmac = 2100;
+		public static final double kTopMotorRPMTarmac = (6300 * 18) / 52;
+		public static final double kBottomMotorRPMFender = 2750;
+		public static final double kTopMotorRPMFender = (4500 * 18) / 52;
 
 		public static final int kRedThreshold = 300;
 		public static final int kBlueThreshold = 300;
@@ -128,6 +125,10 @@ public final class Constants {
 		// TODO tune
 		public static final double kBottomShooterP = 0.00025;
 		public static final double kTopShooterP = 0.000025;
+
+		// TODO tune
+		public static final double kBottomFlywheelFeedforwardS = 0.36;
+		public static final double kTopFlywheelFeedforwardS = 0.4;
 	}
 
 	/** Constants for the climber. */
