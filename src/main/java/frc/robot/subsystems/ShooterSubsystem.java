@@ -57,6 +57,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	private Timer m_feederTimer = new Timer();
 
+	/** Modes for the shooter. */
 	public enum ShootingMode {
 		kFender,
 		kTarmac,
