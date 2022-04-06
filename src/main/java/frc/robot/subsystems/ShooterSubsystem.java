@@ -57,13 +57,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	private final Timer m_feederTimer = new Timer();
 
-	/** Modes for the shooter. */
-	public enum ShootingMode {
-		kFender,
-		kTarmac,
-		kStop;
-	}
-
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
 		// TODO change to getAngle if WPILib adds it
@@ -194,25 +187,14 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	/**
-	 * Sets the {@link ShootingMode mode} for the shooter.
+	 * Sets the RPM of the flywheels.
 	 * 
-	 * @param mode {@link ShootingMode Mode} for the shooter.
+	 * @param bottomRPM RPM for the bottom flywheel.
+	 * @param topRPM    RPM for the top flywheel.
 	 */
-	public void setShootingMode(ShootingMode mode) {
-		switch (mode) {
-			case kFender:
-				m_bottomShooterPID.setSetpoint(ShooterConstants.kBottomMotorRPMFender);
-				m_topShooterPID.setSetpoint(ShooterConstants.kTopMotorRPMFender);
-				break;
-			case kTarmac:
-				m_bottomShooterPID.setSetpoint(ShooterConstants.kBottomMotorRPMTarmac);
-				m_topShooterPID.setSetpoint(ShooterConstants.kTopMotorRPMTarmac);
-				break;
-			case kStop:
-				m_bottomShooterPID.setSetpoint(0);
-				m_topShooterPID.setSetpoint(0);
-				break;
-		}
+	public void setFlywheelRPM(double bottomRPM, double topRPM) {
+		m_bottomShooterPID.setSetpoint(bottomRPM);
+		m_topShooterPID.setSetpoint(topRPM);
 	}
 
 	private boolean isShooterPrimed() {

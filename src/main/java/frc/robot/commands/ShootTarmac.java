@@ -6,16 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.ShooterSubsystem.ShootingMode;
 
-/** Command that shoots up to two balls */
+/** Command that shoots from the tarmac. */
 public class ShootTarmac extends CommandBase {
 	private final ShooterSubsystem m_subsystem;
 	private final Timer m_timer = new Timer();
 
 	/**
-	 * Creates a new {@link ShootCommand}.
+	 * Creates a new {@link ShootTarmac}.
 	 * 
 	 * @param subsystem The required subsystem.
 	 */
@@ -32,12 +32,12 @@ public class ShootTarmac extends CommandBase {
 
 	@Override
 	public void execute() {
-		m_subsystem.setShootingMode(ShootingMode.kTarmac);
+		m_subsystem.setFlywheelRPM(ShooterConstants.kBottomMotorRPMTarmac, ShooterConstants.kTopMotorRPMTarmac);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		m_subsystem.setShootingMode(ShootingMode.kStop);
+		m_subsystem.setFlywheelRPM(0, 0);
 	}
 
 	@Override

@@ -6,10 +6,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.ShooterSubsystem.ShootingMode;
 
-/** Command that shoots up to two balls */
+/** Command that shoots from the fender. */
 public class ShootFender extends CommandBase {
 	private final ShooterSubsystem m_subsystem;
 	private final Timer m_timer = new Timer();
@@ -32,12 +32,12 @@ public class ShootFender extends CommandBase {
 
 	@Override
 	public void execute() {
-		m_subsystem.setShootingMode(ShootingMode.kFender);
+		m_subsystem.setFlywheelRPM(ShooterConstants.kBottomMotorRPMFender, ShooterConstants.kTopMotorRPMFender);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		m_subsystem.setShootingMode(ShootingMode.kStop);
+		m_subsystem.setFlywheelRPM(0, 0);
 	}
 
 	@Override
