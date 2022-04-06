@@ -4,11 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.Constants.OIConstants;
+
 /**
  * Class for holding utility methods that do not apply to any specific command
  * or subsystem.
  */
 public class Utils {
+	// Plugging a wire into DIO port 0 enables telemetry.
+	private static DigitalInput m_digitalInput = new DigitalInput(0);
+	
 	/**
 	 * Makes lower inputs smaller which allows for finer joystick control.
 	 * 
@@ -20,13 +27,11 @@ public class Utils {
 	}
 
 	/**
-	 * Converts the speed of a TalonFX from the default units of ticks per
-	 * decisecond to RPM.
+	 * Returns whether the robot should print values to {@link SmartDashboard}.
 	 * 
-	 * @param ticksPerDecisecond The speed in ticks per decisecond.
-	 * @return The speed in RPM.
+	 * @return Whether the robot should print values to {@link SmartDashboard}.
 	 */
-	public static double toRPM(double ticksPerDecisecond) {
-		return ticksPerDecisecond * 600 / 2048;
+	public static boolean isTelemetryEnabled() {
+		return !m_digitalInput.get() || DriverStation.isTest() || Robot.isSimulation() || OIConstants.kTelemetry;
 	}
 }

@@ -10,8 +10,9 @@ Here is a list of all the things the code can do.
 * Autonomous driving to absolute or relative positions.
 * Aiming at the shooting target and balls using the Limelight.
 * Unit tests for utility methods.
-* Controlling shooter speed with a bang bang controller.
+* Controlling shooter speeds with a PID controller and feedforward.
 * Following paths using PathWeaver.
+* 2 and 4 ball autonomous routines.
 
 ## Commit Message Prefixes
 
@@ -23,6 +24,7 @@ All commit messages must start with one of the following prefixes.
 * **"refactor:"** - Changes that affect code organization
 * **"style:"** - Changes that are formatting related (white-space, formatting, missing semi-colons, etc)
 * **"test:"** - New tests or correcting existing tests
+* **"perf:"** - Improves performance
 * **"chore:"** - Miscellaneous changes
 
 ### Examples
@@ -34,5 +36,3 @@ All commit messages must start with one of the following prefixes.
 * style: formatted the gradle file
 * test: fixed deadzone test
 * chore: licensing and credits
-
-Remember to add your name at the end of a commit when not using your own account. This will help us know who to talk to about commits.
