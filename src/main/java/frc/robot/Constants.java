@@ -94,13 +94,12 @@ public final class Constants {
 		// ratio
 		public static final double kBottomMotorRPMTarmac = 2100;
 		public static final double kTopMotorRPMTarmac = (6300 * 18) / 52;
-		public static final double kBottomFeedforwardTarmac = 0.36;
-		public static final double kTopFeedforwardTarmac = 0.4;
-
 		public static final double kBottomMotorRPMFender = 2750;
 		public static final double kTopMotorRPMFender = (4500 * 18) / 52;
-		public static final double kBottomFeedforwardFender = 0.45;
-		public static final double kTopFeedforwardFender = 0.3;
+
+		// TODO tune
+		public static final double kBottomFlywheelFeedforwardS = 0.36;
+		public static final double kTopFlywheelFeedforwardS = 0.4;
 
 		public static final double kLowerArmAngle = 49.5;
 		public static final double kUpperArmAngle = -54.6;
