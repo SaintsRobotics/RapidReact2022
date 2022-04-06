@@ -304,7 +304,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 	}
 
-	public void setShooterSpeed (Mode approximateMode, double topRPM, double bottomRPM) {
+	public void setShooterSpeed (Mode approximateMode, double bottomRPM, double topRPM) {
 		setShooterSpeed(approximateMode);
 		m_bottomShooterPID.setSetpoint(bottomRPM);
 		m_topShooterPID.setSetpoint(topRPM);
