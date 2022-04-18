@@ -24,7 +24,6 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.MUX;
 import frc.robot.REVColorSensorV3;
 import frc.robot.Robot;
-import frc.robot.Utils;
 
 /** Subsystem that controls the arm, intake, feeders, and shooter flywheel. */
 public class ShooterSubsystem extends SubsystemBase {
@@ -163,21 +162,6 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Current Bottom Flywheel", m_topFlywheel.getStatorCurrent());
 			SmartDashboard.putNumber("Current Top Flywheel", m_bottomFlywheel.getStatorCurrent());
 		}
-
-		if (Utils.isTelemetryEnabled()) {
-			SmartDashboard.putBoolean("Bottom Shooter At Setpoint", m_bottomShooterPID.atSetpoint());
-			SmartDashboard.putBoolean("Top Shooter At Setpoint", m_topShooterPID.atSetpoint());
-			SmartDashboard.putNumber("Bottom Target RPM", m_bottomShooterPID.getSetpoint());
-			SmartDashboard.putNumber("Top Target RPM", m_topShooterPID.getSetpoint());
-			SmartDashboard.putBoolean("Is shooter primed", isShooterPrimed());
-			SmartDashboard.putNumber("Shooter proximity", m_shooterColorSensor.getProximity());
-			SmartDashboard.putNumber("Bottom Shooter RPM", toRPM(m_bottomFlywheel.getSelectedSensorVelocity()));
-			SmartDashboard.putNumber("Top Shooter RPM", toRPM(m_topFlywheel.getSelectedSensorVelocity()));
-			SmartDashboard.putNumber("Top Feeder Speed", m_topFeeder.get());
-			SmartDashboard.putNumber("Top feedforward", m_topFeedforward.calculate(ShooterConstants.kTopFeedforwardTarmac));
-			SmartDashboard.putBoolean("Top at Setpoint", m_topShooterPID.atSetpoint());
-		}
-
 	}
 
 	/** Raises the arm. */
@@ -216,16 +200,8 @@ public class ShooterSubsystem extends SubsystemBase {
 		m_topShooterPID.setSetpoint(topRPM);
 	}
 
-	public void setShooterSpeed (Mode approximateMode, double bottomRPM, double topRPM) {
-		setShooterSpeed(approximateMode);
-		m_bottomShooterPID.setSetpoint(bottomRPM);
-		m_topShooterPID.setSetpoint(topRPM);
-		m_bottomShooterPID.setTolerance(0.08 * bottomRPM, 100 / 0.02);
-		m_topShooterPID.setTolerance(0.08 * topRPM, 100 / 0.02);
-	}
-
 	private boolean isShooterPrimed() {
-		return m_shooterColorSensor.getProximity() >= 140;
+		return m_shooterColorSensor.getProximity() >= 142;
 	}
 
 	public void topFeederOn() {
