@@ -209,18 +209,6 @@ public class ShooterSubsystem extends SubsystemBase {
 		m_topShooterPID.setSetpoint(topRPM);
 	}
 
-	private boolean isShooterPrimed() {
-		return m_shooterColorSensor.getProximity() >= 142;
-	}
-
-	public void topFeederOn() {
-		m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
-	}
-
-	public void topFeederOff() {
-		m_topFeeder.set(0);
-	}
-
 	/**
 	 * Converts the speed of a TalonFX from the default units of ticks per
 	 * decisecond to RPM.
