@@ -98,8 +98,8 @@ public final class Constants {
 		public static final boolean kBottomFlywheelReversed = false;
 		public static final boolean kTopFlywheelReversed = true;
 
-		public static final double kLowerArmAngle = 49.5;
-		public static final double kUpperArmAngle = -54.6;
+		public static final double kLowerArmAngle = 51;
+		public static final double kUpperArmAngle = -54;
 
 		// TODO tune
 		/** Maximum angle that you can safely run the intake. */
@@ -132,7 +132,7 @@ public final class Constants {
 
 		// TODO tune
 		public static final double kFlywheelToleranceRPM = 170;
-		public static final double kArmToleranceDegrees = 2;
+		public static final double kArmToleranceDegrees = 1;
 	}
 
 	/** Constants for the climber. */
