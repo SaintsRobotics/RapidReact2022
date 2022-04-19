@@ -104,13 +104,14 @@ public class ShooterSubsystem extends SubsystemBase {
 		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean shooterIsRed = m_shooterColorSensor.getRed() > ShooterConstants.kRedThreshold;
 
-		// Checks if the color of ball is opposite that of the alliance.
+		// Checks if the color of ball is opposite that of the alliance and spits it out
+		// if it is.
 		if ((queueIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
 				(queueIsRed && DriverStation.getAlliance() == Alliance.Blue) ||
 				(shooterIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
 				(shooterIsRed && DriverStation.getAlliance() == Alliance.Blue)) {
-			// TODO also run the feeders in reverse
 			intakeReverse();
+			m_sideFeeders.set(-ShooterConstants.kSideFeederSpeed);
 		}
 
 		// Disables flywheels if the setpoint is 0.
