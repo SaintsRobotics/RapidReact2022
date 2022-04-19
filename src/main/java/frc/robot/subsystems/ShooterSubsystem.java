@@ -126,22 +126,24 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_topFlywheel.set(0);
 		}
 
-		// TODO clean up this garbage
-		if (m_feederTimer.get() > 0) {
-			if (m_bottomShooterPID.atSetpoint() && m_topShooterPID.atSetpoint()) {
-				m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
-			}
-
-			if (m_feederTimer.get() > 3) {
-				m_feederTimer.stop();
-				m_feederTimer.reset();
-			}
-		} else if (m_bottomShooterPID.atSetpoint() && m_topShooterPID.atSetpoint() && isShooterPrimed()
-				&& m_bottomShooterPID.getSetpoint() > 0) {
-			m_feederTimer.start();
-		} else if (!isShooterPrimed() && m_intake.get() > 0) { // if we're trying to intake - prime the first ball
+		// Runs both feeders when shooter is at the setpoint.
+		if (m_bottomShooterPID.atSetpoint() && m_topShooterPID.atSetpoint() && m_bottomShooterPID.getSetpoint() != 0
+				&& m_topShooterPID.getSetpoint() != 0) {
+			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
+			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
+		}
+		// Moves a ball into the shooter position if it is empty.
+		else if (m_shooterColorSensor.getRed() < ShooterConstants.kRedThreshold
+				&& m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold) {
+			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
-		} else if (m_intake.get() == 0) { // as long as we're not trying to spit out the wrong color, set to zero
+		}
+		// Moves a ball into the queue position after running the intake.
+		else if (m_feederTimer.get() < 3 && m_queueColorSensor.getRed() < ShooterConstants.kRedThreshold) {
+			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
+			m_topFeeder.set(0);
+		} else {
+			m_sideFeeders.set(0);
 			m_topFeeder.set(0);
 		}
 
@@ -180,7 +182,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	/** Runs the intake. */
 	public void intake() {
+		m_feederTimer.reset();
+		m_feederTimer.start();
 		m_intake.set(ShooterConstants.kIntakeSpeed);
+		m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 	}
 
 	/** Runs the intake in reverse. */
