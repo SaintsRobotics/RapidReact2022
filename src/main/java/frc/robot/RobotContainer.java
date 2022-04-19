@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -33,7 +32,6 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimelightAimingCommand;
 import frc.robot.commands.MoveCommand;
 import frc.robot.commands.PathWeaverCommand;
-import frc.robot.commands.ShootFender;
 import frc.robot.commands.ShootTarmac;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -163,10 +161,6 @@ public class RobotContainer {
 		// Turns on shooter for tarmac shots when Y button is held.
 		new JoystickButton(m_operatorController, Button.kY.value)
 				.whenHeld(new ShootTarmac(m_shooterSubsystem));
-
-		// Turns on shooter for fender shots when B button is held.
-		new JoystickButton(m_operatorController, Button.kB.value)
-				.whenHeld(new ShootFender(m_shooterSubsystem));
 
 		// runs intake forward while left trigger is held
 		new Trigger(() -> m_operatorController.getRawAxis(Axis.kLeftTrigger.value) > 0.5)
