@@ -146,6 +146,10 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 
 		if (Robot.isReal()) {
+			if (DriverStation.isTest()) {
+				SmartDashboard.putNumber("Arm Angle", m_armEncoder.getDistance());
+			}
+
 			SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
 			SmartDashboard.putNumber("Temperature Intake", m_intake.getMotorTemperature());
 			SmartDashboard.putNumber("Temperature Left Feeder", m_leftFeeder.getMotorTemperature());
