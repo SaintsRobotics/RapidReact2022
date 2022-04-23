@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch cameraTest",
+      "request": "launch",
+      "mainClass": "frc.robot.subsystems.cameraTest",
+      "projectName": "RapidReact2022"
+    },
+    {
+      "type": "java",
       "name": "Launch test",
       "request": "launch",
       "mainClass": "frc.robot.test",

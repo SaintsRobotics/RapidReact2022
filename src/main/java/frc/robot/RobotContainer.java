@@ -149,7 +149,7 @@ public class RobotContainer {
 				.whenReleased(() -> m_swerveDriveSubsystem.setMotorBrake());
 //TODO replace X with the one bumpers wich you can press with your pinky (only on elite controlelr which tamjeed likes)
 		// Allows the bot to autonomously move towards a ball's location
-		new JoystickButton(m_driveController, Button.k.value)
+		new JoystickButton(m_driveController, Button.kB.value)
 				.whileHeld(new GetBallCommand(m_defaultMoveCommand, 1));
 				
 		// Slowly drives forward while X is held.
