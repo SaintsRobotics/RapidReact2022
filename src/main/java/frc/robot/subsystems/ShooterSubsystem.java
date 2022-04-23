@@ -56,6 +56,9 @@ public class ShooterSubsystem extends SubsystemBase {
 			ShooterConstants.kTopFlywheelFeedforwardS, 0);
 
 	private final Timer m_feederTimer = new Timer();
+	private final Timer m_queueTimer = new Timer();
+
+	private boolean queueTimerStarted = false;
 
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
@@ -106,14 +109,23 @@ public class ShooterSubsystem extends SubsystemBase {
 
 		// Checks if the color of ball is opposite that of the alliance and spits it out
 		// if it is.
-		if ((queueIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
-				(queueIsRed && DriverStation.getAlliance() == Alliance.Blue) ||
-				(shooterIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
-				(shooterIsRed && DriverStation.getAlliance() == Alliance.Blue)) {
-			intakeReverse();
-			m_sideFeeders.set(-ShooterConstants.kSideFeederSpeed);
+		// if ((queueIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
+		// (queueIsRed && DriverStation.getAlliance() == Alliance.Blue) ||
+		// (shooterIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
+		// (shooterIsRed && DriverStation.getAlliance() == Alliance.Blue)) {
+		// intakeReverse();
+		// m_sideFeeders.set(-ShooterConstants.kSideFeederSpeed);
+		// }
+		boolean ballInQueue = false;
+		if (m_queueColorSensor.getProximity() > 270 && !queueTimerStarted) {
+			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
+			m_queueTimer.reset();
+			m_queueTimer.start();
+			queueTimerStarted = true;
+		} else if (m_queueTimer.get() > 0.5) {
+			boolean ballInQueue = true;
+			queueTimerStarted = false;
 		}
-
 		// Disables flywheels if the setpoint is 0.
 		if (m_bottomShooterPID.getSetpoint() > 0) {
 			m_bottomFlywheel.set(
@@ -134,23 +146,26 @@ public class ShooterSubsystem extends SubsystemBase {
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
 		}
 		// Moves a ball into the shooter position if it is empty.
-		else if (m_shooterColorSensor.getRed() < ShooterConstants.kRedThreshold
-				&& m_queueColorSensor.getRed() > ShooterConstants.kRedThreshold) {
+		else if (m_shooterColorSensor.getProximity() < 500
+				&& m_queueColorSensor.getProximity() > 270) {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 			m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
 		}
 		// Moves a ball into the queue position after running the intake.
-		else if (m_feederTimer.get() < 3 && m_queueColorSensor.getRed() < ShooterConstants.kRedThreshold) {
+		else if (m_feederTimer.get() < 5 && !ballInQueue) {
 			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 			m_topFeeder.set(0);
 		} else {
 			m_sideFeeders.set(0);
 			m_topFeeder.set(0);
+			m_feederTimer.stop();
 		}
 
 		if (Robot.isReal()) {
 			if (DriverStation.isTest()) {
 				SmartDashboard.putNumber("Arm Angle", m_armEncoder.getDistance());
+				SmartDashboard.putNumber("Queue Proximity", m_queueColorSensor.getProximity());
+				SmartDashboard.putNumber("Shooter Proximity", m_shooterColorSensor.getProximity());
 			}
 
 			SmartDashboard.putNumber("Temperature Arm", m_arm.getMotorTemperature());
@@ -168,6 +183,11 @@ public class ShooterSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("Current Top Feeder", m_topFeeder.getOutputCurrent());
 			SmartDashboard.putNumber("Current Bottom Flywheel", m_topFlywheel.getStatorCurrent());
 			SmartDashboard.putNumber("Current Top Flywheel", m_bottomFlywheel.getStatorCurrent());
+
+			SmartDashboard.putBoolean("queue is blue", queueIsBlue);
+			SmartDashboard.putBoolean("queue is red", queueIsRed);
+			SmartDashboard.putBoolean("shooter is blue", shooterIsBlue);
+			SmartDashboard.putBoolean("shooter is red", shooterIsRed);
 		}
 	}
 
