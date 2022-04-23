@@ -14,7 +14,8 @@ public class MUX {
 	public enum Port {
 		kOne(new byte[] { (byte) 1 }),
 		kTwo(new byte[] { (byte) 2 }),
-		kThree(new byte[] { (byte) 4 });
+		kThree(new byte[] { (byte) 4 }),
+		kFour(new byte[] { (byte) 8 });
 
 		public final byte[] value;
 

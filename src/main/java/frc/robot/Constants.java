@@ -87,7 +87,7 @@ public final class Constants {
 		public static final int kBottomFlywheelPort = 9;
 		public static final int kTopFlywheelPort = 23;
 
-		public static final Port kQueueColorSensorPort = Port.kTwo;
+		public static final Port kQueueColorSensorPort = Port.kFour;
 		public static final Port kShooterColorSensorPort = Port.kThree;
 
 		public static final boolean kArmReversed = true;
