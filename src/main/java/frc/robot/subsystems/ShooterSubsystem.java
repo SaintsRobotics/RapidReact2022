@@ -55,10 +55,9 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final SimpleMotorFeedforward m_topFeedforward = new SimpleMotorFeedforward(
 			ShooterConstants.kTopFlywheelFeedforwardS, 0);
 
+	private final Timer m_shooterColorTimer = new Timer();
+	private final Timer m_intakeTimer = new Timer();
 	private final Timer m_feederTimer = new Timer();
-	private final Timer m_queueTimer = new Timer();
-
-	private boolean queueTimerStarted = false;
 
 	/** Creates a new {@link ShooterSubsystem}. */
 	public ShooterSubsystem() {
@@ -107,25 +106,38 @@ public class ShooterSubsystem extends SubsystemBase {
 		final boolean shooterIsBlue = m_shooterColorSensor.getBlue() > ShooterConstants.kBlueThreshold;
 		final boolean shooterIsRed = m_shooterColorSensor.getRed() > ShooterConstants.kRedThreshold;
 
-		// Checks if the color of ball is opposite that of the alliance and spits it out
-		// if it is.
-		// if ((queueIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
-		// (queueIsRed && DriverStation.getAlliance() == Alliance.Blue) ||
-		// (shooterIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
-		// (shooterIsRed && DriverStation.getAlliance() == Alliance.Blue)) {
-		// intakeReverse();
-		// m_sideFeeders.set(-ShooterConstants.kSideFeederSpeed);
-		// }
-		boolean ballInQueue = false;
-		if (m_queueColorSensor.getProximity() > 270 && !queueTimerStarted) {
-			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
-			m_queueTimer.reset();
-			m_queueTimer.start();
-			queueTimerStarted = true;
-		} else if (m_queueTimer.get() > 0.5) {
-			boolean ballInQueue = true;
-			queueTimerStarted = false;
+		// Spits out incorrect color of ball.
+		if ((shooterIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
+				(shooterIsRed && DriverStation.getAlliance() == Alliance.Blue)) {
+			m_shooterColorTimer.reset();
+			m_shooterColorTimer.start();
+			m_intake.set(-ShooterConstants.kIntakeSpeed);
+			m_topFeeder.set(-ShooterConstants.kTopFeederSpeedFast);
+			m_sideFeeders.set(-ShooterConstants.kSideFeederSpeed);
+		} else if ((queueIsBlue && DriverStation.getAlliance() == Alliance.Red) ||
+				(queueIsRed && DriverStation.getAlliance() == Alliance.Blue)) {
+			m_intake.set(-ShooterConstants.kIntakeSpeed);
+			m_sideFeeders.set(-ShooterConstants.kSideFeederSpeed);
 		}
+		// Runs both feeders when shooter is at the setpoint.
+		else if (m_bottomShooterPID.atSetpoint() &&
+				m_topShooterPID.atSetpoint() &&
+				m_bottomShooterPID.getSetpoint() != 0 &&
+				m_topShooterPID.getSetpoint() != 0) {
+			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
+			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
+		}
+		// If intaking.
+		else if (m_intakeTimer.get() < 1) {
+			if (m_shooterColorSensor.getProximity() < ShooterConstants.kShooterColorSensorProximity) {
+				m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
+			}
+			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
+		} else {
+			m_topFeeder.set(0);
+			m_sideFeeders.set(0);
+		}
+
 		// Disables flywheels if the setpoint is 0.
 		if (m_bottomShooterPID.getSetpoint() > 0) {
 			m_bottomFlywheel.set(
@@ -137,28 +149,6 @@ public class ShooterSubsystem extends SubsystemBase {
 		} else {
 			m_bottomFlywheel.set(0);
 			m_topFlywheel.set(0);
-		}
-
-		// Runs both feeders when shooter is at the setpoint.
-		if (m_bottomShooterPID.atSetpoint() && m_topShooterPID.atSetpoint() && m_bottomShooterPID.getSetpoint() != 0
-				&& m_topShooterPID.getSetpoint() != 0) {
-			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
-			m_topFeeder.set(ShooterConstants.kTopFeederSpeedFast);
-		}
-		// Moves a ball into the shooter position if it is empty.
-		else if (m_shooterColorSensor.getProximity() < 500
-				&& m_queueColorSensor.getProximity() > 270) {
-			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
-			m_topFeeder.set(ShooterConstants.kTopFeederSpeedSlow);
-		}
-		// Moves a ball into the queue position after running the intake.
-		else if (m_feederTimer.get() < 5 && !ballInQueue) {
-			m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
-			m_topFeeder.set(0);
-		} else {
-			m_sideFeeders.set(0);
-			m_topFeeder.set(0);
-			m_feederTimer.stop();
 		}
 
 		if (Robot.isReal()) {
@@ -205,6 +195,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	public void intake() {
 		m_feederTimer.reset();
 		m_feederTimer.start();
+		m_intakeTimer.reset();
+		m_intakeTimer.start();
 		m_intake.set(ShooterConstants.kIntakeSpeed);
 		m_sideFeeders.set(ShooterConstants.kSideFeederSpeed);
 	}

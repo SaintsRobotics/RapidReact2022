@@ -119,6 +119,8 @@ public final class Constants {
 
 		public static final int kRedThreshold = 300;
 		public static final int kBlueThreshold = 300;
+		public static final double kQueueColorSensorProximity = 200;
+		public static final double kShooterColorSensorProximity = 200;
 
 		public static final double kArmP = 0.008;
 
