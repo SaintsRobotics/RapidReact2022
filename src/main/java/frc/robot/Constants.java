@@ -101,9 +101,6 @@ public final class Constants {
 		public static final double kBottomFeedforwardFender = 0.45;
 		public static final double kTopFeedforwardFender = 0.3;
 
-		public static final double kLowerArmAngle = 50.55;
-		public static final double kUpperArmAngle = 309;
-
 		public static final boolean kArmReversed = true;
 		public static final boolean kIntakeReversed = true;
 		public static final boolean kLeftFeederReversed = true;
@@ -112,8 +109,8 @@ public final class Constants {
 		public static final boolean kBottomFlywheelReversed = false;
 		public static final boolean kTopFlywheelReversed = true;
 
-		public static final double kLowerArmAngle = 51;
-		public static final double kUpperArmAngle = -54;
+		public static final double kLowerArmAngle = 50.55;
+		public static final double kUpperArmAngle = 309;
 
 		// TODO tune
 		/** Maximum angle that you can safely run the intake. */
@@ -123,13 +120,6 @@ public final class Constants {
 		public static final double kTopFeederSpeedSlow = 0.1;
 		public static final double kTopFeederSpeedFast = 0.9;
 		public static final double kSideFeederSpeed = 0.6;
-
-		// Motor and shooter are the same for the bottom flywheel, as there is a 1:1
-		// ratio
-		public static final double kBottomMotorRPMTarmac = 2100;
-		public static final double kTopMotorRPMTarmac = (6300 * 18) / 52;
-		public static final double kBottomMotorRPMFender = 2750;
-		public static final double kTopMotorRPMFender = (4500 * 18) / 52;
 
 		public static final int kRedThreshold = 300;
 		public static final int kBlueThreshold = 300;
